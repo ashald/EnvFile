@@ -28,7 +28,17 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <a href="https://github.com/Ashald/EnvFile/tree/v1.0"><b>v1.0</b></a> (2015 Jul 18)
+      <br/>
+      <br/>
 
+      <b>Major Changes</b>:
+      <ul>
+        <li>Added support for .env file format</li>
+        <li>Added support for YAML dictionary format</li>
+        <li>Added support for JSON dictionary format (handled by YAML parser)</li>
+        <li>Initial Release</li>
+      </ul>
     ]]>
   </change-notes>
 
