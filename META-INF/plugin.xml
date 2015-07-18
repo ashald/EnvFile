@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>net.ashald.envfile</id>
   <name>Env File</name>
-  <version>dev</version>
+  <version>1.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
