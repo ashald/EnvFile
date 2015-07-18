@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.yaml:snakeyaml:1.15"
+}
+
+idea.project.ipr {
+    beforeMerged { project ->
+        project.modulePaths.clear()
+    }
+}
+
+idea.module.iml {
+    withXml {
+        it.node.@type = "PLUGIN_MODULE"
+    }
+}
+
+task setup {
+    dependsOn ideaModule, ideaProject
+    doLast {
+        copy {
+            from '.'
+            into '.idea/'
+            include '*.ipr'
+            rename { "modules.xml" }
+        }
+        project.delete "${project.name}.ipr"
+    }
+}

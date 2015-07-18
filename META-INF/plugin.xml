@@ -1,0 +1,88 @@
+<idea-plugin version="2">
+  <id>net.ashald.envfile</id>
+  <name>Env File</name>
+  <version>1.0</version>
+  <vendor email="envfile@ashald.net">Borys Pierov</vendor>
+
+  <description><![CDATA[
+      <h1>Env File</h1>
+      <b>Compiled with Java 1.6</b>
+      <h2>
+        <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
+        <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
+      </h2>
+
+      <b>Env File</b> is a plugin for PyCharm that allows you to set environment variables from files for Python-based
+      run configurations. <i>Works with all Python-based run configuration in PyCharm.</i>
+      <br/>
+
+      <h3>Supported formats:</h3>
+      <ul>
+        <li><b>.env</b></li>
+        <li><b>YAML</b> dictionary</li>
+        <li><b>JSON</b> dictionary</li>
+      </ul>
+      <br/>
+
+      All formats assume that both keys and values are strings.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      <a href="https://github.com/Ashald/EnvFile/tree/v1.0"><b>v1.0</b></a> (2015 Jul 18)
+      <br/>
+      <br/>
+
+      <b>Major Changes</b>:
+      <ul>
+        <li>Added support for .env file format</li>
+        <li>Added support for YAML dictionary format</li>
+        <li>Added support for JSON dictionary format (handled by YAML parser)</li>
+        <li>Initial Release</li>
+      </ul>
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="131"/>
+
+  <depends>com.intellij.modules.python</depends>
+
+  <extensionPoints>
+    <extensionPoint name="envfileParser" beanClass="net.ashald.envfile.parsers.EnvFileParserExtension">
+      <with attribute="implementationClass" implements="net.ashald.envfile.parsers.EnvFileParser"/>
+    </extensionPoint>
+    <extensionPoint name="envfileFormat" beanClass="net.ashald.envfile.formats.EnvFileFormatExtension"/>
+  </extensionPoints>
+
+  <extensions defaultExtensionNs="net.ashald.envfile">
+    <envfileParser id="env" implementationClass="net.ashald.envfile.parsers.DotEnvFileParser"/>
+    <envfileParser id="yaml" implementationClass="net.ashald.envfile.parsers.YamlFileParser"/>
+
+    <envfileFormat fileExtension="env" parserId="env"/>
+    <envfileFormat fileExtension="json" parserId="yaml"/>
+    <envfileFormat fileExtension="yaml" parserId="yaml"/>
+  </extensions>
+
+
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceInterface="com.jetbrains.python.run.PyCommonOptionsFormFactory"
+                        serviceImplementation="net.ashald.envfile.PyEnvFileCommonOptionsFormFactory" overrides="true" />
+
+  </extensions>
+
+  <extensions defaultExtensionNs="Pythonid">
+    <runConfigurationExtension implementation="net.ashald.envfile.PyEnvFileRunConfigurationExtension" id="envfile"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
