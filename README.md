@@ -52,7 +52,9 @@ VERSION 1.0
 
 ```yaml
 {
-    # This line is ignored since it's a comment
+    # JSON doesn't have comments but since JSON is subset of YAML
+    # We parse it with YAML parser and therefore have comments
+    # And even trialling commas in objects :)
     "SECRET_KEY": "hip-hip-env-files",
     "VERSION": "1.0", # All non-string literals should be enclosed in quotes; btw this is ignored too
 }

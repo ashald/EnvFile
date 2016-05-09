@@ -1,5 +1,6 @@
 package net.ashald.envfile;
 
+import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -11,7 +12,6 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.CollectionComboBoxModel;
-import com.intellij.uiDesigner.core.GridConstraints;
 import com.jetbrains.python.PyIdeCommonOptionsForm;
 import com.jetbrains.python.run.PyCommonOptionsFormData;
 import net.ashald.envfile.formats.EnvFileFormatExtension;
@@ -20,14 +20,19 @@ import net.ashald.envfile.parsers.EnvFileParserExtension;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 
 public class PyEnvFileIdeCommonOptionsForm extends PyIdeCommonOptionsForm {
 
     protected JCheckBox useEnvFileCheckBox;
+    protected JPanel envFileSelectorPanel;
     protected JPanel envFilePanel;
     protected TextFieldWithBrowseButton envFilePathTextField;
     protected JComboBox envFileFormatComboBox;
@@ -37,6 +42,20 @@ public class PyEnvFileIdeCommonOptionsForm extends PyIdeCommonOptionsForm {
     protected String envFilePath;
     protected String envFileParserId;
 
+    protected static <T> T findChildComponent(Container container, Class<T> clazz) {
+        Collection<Component> componentList = Arrays.asList(container.getComponents());
+        for (Object o : componentList) {
+            if (o != null && o.getClass() == clazz) {
+                return clazz.cast(o);
+            }
+        }
+
+        throw new NoSuchElementException(
+                String.format(
+                        "Cannot find '%s' among '%s' components", clazz.getName(), container.getClass().getName()
+                )
+        );
+    }
 
     public PyEnvFileIdeCommonOptionsForm(PyCommonOptionsFormData data) {
         super(data);
@@ -47,24 +66,28 @@ public class PyEnvFileIdeCommonOptionsForm extends PyIdeCommonOptionsForm {
 
     protected void initUI(final Project project) {
         JComponent mainPanel = getMainPanel();
+
         JPanel commonOptionsPanel = (JPanel) mainPanel.getComponent(1);  // Main PyCommonOptionsForm container
+        EnvironmentVariablesComponent envVarsComponent = findChildComponent(commonOptionsPanel, EnvironmentVariablesComponent.class);
+
 
         useEnvFileCheckBox = new JCheckBox("Read from file:");
-        commonOptionsPanel.add(useEnvFileCheckBox,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, 0, 3, 0, null, null, null, 0, false));
-
-        envFilePanel = new JPanel();
-        envFilePanel.setLayout(new BoxLayout(envFilePanel, BoxLayout.X_AXIS));
-
-        commonOptionsPanel.add(envFilePanel,
-                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, 1, 7, 0, null, null, null, 0, false));
-
         envFilePathTextField = new TextFieldWithBrowseButton();
-        envFilePanel.add(envFilePathTextField);
-
         envFileFormatComboBox = new ComboBox(
                 new CollectionComboBoxModel(EnvFileParserExtension.getParserExtensions()));
-        envFilePanel.add(envFileFormatComboBox);
+
+        envFileSelectorPanel = new JPanel();
+        envFileSelectorPanel.setLayout(new BorderLayout(2, 2));
+        envFileSelectorPanel.add(envFilePathTextField, BorderLayout.CENTER);
+        envFileSelectorPanel.add(envFileFormatComboBox, BorderLayout.EAST);
+
+        envFilePanel = new JPanel();
+
+        envFilePanel.setLayout(new BorderLayout(37, 2));
+        envFilePanel.add(useEnvFileCheckBox, BorderLayout.WEST);
+        envFilePanel.add(envFileSelectorPanel, BorderLayout.CENTER);
+
+        envVarsComponent.add(envFilePanel, BorderLayout.AFTER_LAST_LINE);
 
         useEnvFileCheckBox.addActionListener(new ActionListener() {
             @Override
