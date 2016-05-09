@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+
+- Fixed UI components overlap with multiple projects opened within same window
+
 ## v1.0 (2105 Jul 18)
 
 - Added support for .env file format
