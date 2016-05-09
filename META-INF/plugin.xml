@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>net.ashald.envfile</id>
   <name>Env File</name>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -28,16 +28,20 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v1.0"><b>v1.0</b></a> (2015 Jul 18)
+      <a href="https://github.com/Ashald/EnvFile/tree/v1.0"><b>v1.0.1</b></a> (2016-05-09)
       <br/>
       <br/>
 
-      <b>Major Changes</b>:
+      <b>Fixed</b>:
       <ul>
-        <li>Added support for .env file format</li>
-        <li>Added support for YAML dictionary format</li>
-        <li>Added support for JSON dictionary format (handled by YAML parser)</li>
-        <li>Initial Release</li>
+        <li>UI components overlap with multiple projects opened within same window</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <b>Changed</b>:
+      <ul>
+        <li>Change Log to 'Keep a CHANGELOG' format</li>
       </ul>
     ]]>
   </change-notes>
