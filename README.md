@@ -1,9 +1,17 @@
-# Introduction
+# EnvFile
 
-**Env File** is a plugin for PyCharm that allows you to set environment variables from files for Python-based run 
-configurations.  *Works with all Python-based run configuration in PyCharm.*
+## Description
 
-Supported formats:
+**Env File** is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations 
+from one or multiple files.
+
+## Version 2.0 Notice
+
+Please notice that `EnvFile` just received a major upgrade and was released as a new major version - `v2.0`.
+With the main goal of major update being support for more JetBrains platforms a lot of things changed, including UI,
+so please be sure to read the updated guide below, even if you already have used previous versions of `EnvFile`.
+
+### Supported Formats
 
 - **.env**
 - **YAML** dictionary
@@ -11,28 +19,183 @@ Supported formats:
 
 **All formats assume that both keys and values are strings.**
 
-# Installation
+### Supported Platforms
+
+<em>
+Expand to see supported run configuration types. Italic means that run configuration is only available in paid
+version of the product.
+</em>
+<br/>
+<br/>
+<details>
+    <summary><strong>PyCharm</strong></summary>
+    <ul>
+        <li><em>App Engine server</em></li>
+        <li><em>Behave</em></li>
+        <li><em>Django server</em></li>
+        <li><em>Django tests</em></li>
+        <li>Lettuce</li>
+        <li>Pyramid server</li>
+        <li>Python</li>
+        <li>
+            Python docs
+            <ul>
+                <li>Docutils task</li>
+                <li>Sphinx task</li>
+            </ul>
+        </li>
+        <li>
+            Python test
+            <ul>
+                <li>Unittests</li>
+                <li>Doctests</li>
+                <li>Nosetests</li>
+                <li>py.test</li>
+                <li>Attests</li>
+            </ul>
+        </li>        
+        <li>Tox</li>
+    </ul>
+</details>
+
+<details>
+    <summary><strong>IDEA</strong></summary>
+    <ul>
+        <li>Application</li>
+        <li><em>Arquillian JUnit</em></li>
+        <li><em>Arquillian TestNG</em></li>
+        <li><em>CloudBees Server</em></li>
+        <li><em>Cucumber Java</em></li>
+        <li><em>GWT Configuration</em></li>
+        <li>
+            <em>Geronimo Server<em/>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>GlassFish Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>        
+        <li><em>Google AppEngine Dev Server</em></li>
+        <li><em>Grails</em></li>
+        <li>JAR Application</li>
+        <li>
+            <em>JBoss Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>JSR45 Compatible Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>Jetty Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>JUnit</li>
+        <li>Kotlin</li>
+        <li>Kotlin script</li>
+        <li>
+            <em>Resin</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li><em>Spring Boot</em></li>
+        <li>
+            <em>Spring dmServer</em>
+            <ul>
+                <li><em>Spring dmServer (Local)</em></li>
+                <li><em>Spring dmServer (Remote)</em></li>
+            </ul>
+        </li>
+        <li>TestNG</li>
+        <li>
+            <em>TomEE Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>TomCat Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>WebLogic Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+        <li>
+            <em>WebSphere Server</em>
+            <ul>
+                <li><em>Local</em></li>
+                <li><em>Remote</em></li>
+            </ul>
+        </li>
+    </ul>
+</details>
+  
+<details>
+    <summary><strong>RubyMine</strong></summary>
+        <ul>
+            <li>Capistrano</li>
+            <li>Cucumber</li>
+            <li>Gem Command</li>
+            <li>IRB Console</li>
+            <li>RSpec</li>
+            <li>Rack</li>
+            <li>Rails</li>
+            <li>Rake</li>
+            <li>Ruby</li>
+            <li>Spork DRb</li>
+            <li>Test::Unit/Shoulda/Minitest</li>
+            <li>Zeus Server</li>  
+        </ul>
+</details>
+
+## Installation
 
 - Using IDE built-in plugin system:
-  - <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Browse repositories...</kbd> > <kbd>Search for "Env File"</kbd> 
-  > <kbd>Install Plugin</kbd>
+  - <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Browse repositories...</kbd> > <kbd>Search for "Env File"</kbd> > <kbd>Install Plugin</kbd>
   
 - Manually:
   - Download the [latest release][latest-release] and install it manually using <kbd>Preferences</kbd> > 
   <kbd>Plugins</kbd> > <kbd>Install plugin from disk...</kbd>
   
-Restart PyCharm.
+Restart IDE.
 
-# Usage
+## Usage
 
-- Add new *Run/Debug configuration*: <kbd>+</kbd> <kbd>Add new configuration</kbd> > <kbd>Python</kbd>
-- Enable <kbd>Read from file</kbd> checkbox, select a file and the file format
+- Add new *Run/Debug configuration*: <kbd>+</kbd> <kbd>Add new configuration</kbd> > <kbd>...</kbd>
+- Switch to <kbd>EnvFile</kbd> tab
+- Enable <kbd>EnvFile</kbd> checkbox
+- Click on <kbd>+</kbd> to add a file
 
 ![Read from file](./resources/example.png)
 
-## Examples
+### Examples
 
-### .env
+#### .env
 
 ```ini
 # This line is ignored since it's a comment
@@ -48,7 +211,7 @@ SECRET_KEY hip-hip-env-files
 VERSION 1.0
 ```
 
-### JSON
+#### JSON
 
 ```yaml
 {
@@ -60,7 +223,7 @@ VERSION 1.0
 }
 ```
     
-### YAML
+#### YAML
 
 ```yaml
 # This line is ignored since it's a comment
@@ -68,42 +231,42 @@ SECRET_KEY: hip-hip-env-files
 VERSION: "1.0" # All non-string literals should be enclosed in quotes; btw this is ignored too 
 ```
 
-# Extending Functionality
+#### Bash (workaround)
 
-PyCharm is based on the IDEA core and has awesome extensions engine. **Env File** plugin utilizes it for its own 
-purposes and designed to be highly extensible.
-
-If you want to extend it's functionality take a look at [plugin.xml](./META-INF/plugin.xml). 
-
-**Env File** defines two extension points that it uses by itself and that can be used by others:
-
-```xml
-<extensionPoints>
-    <extensionPoint name="envfileParser" beanClass="net.ashald.envfile.parsers.EnvFileParserExtension">
-        <with attribute="implementationClass" implements="net.ashald.envfile.parsers.EnvFileParser"/>
-    </extensionPoint>
-    <extensionPoint name="envfileFormat" beanClass="net.ashald.envfile.formats.EnvFileFormatExtension"/>
-</extensionPoints>
+There was a number of requests to support extracting environment variables from bash scripts like:
+ 
+```bash
+export SECRET_KEY="hip-hip-env-files"
+export VERSION="1.0"
 ```
 
-**Env File**'s own configuration is a good example of how it can be extended:
+The feasible way to do that is yet to be discovered (if any at all) so the plugin does not support that at the moment.
+On the other hand there is a simple workaround that can be used for the time being. The example bash script from above
+can be split into an `.env` file and a generic script that can be used to set environment variables on a command line:
 
-```xml
-<extensions defaultExtensionNs="net.ashald.envfile">
-    <envfileParser id="env" implementationClass="net.ashald.envfile.parsers.DotEnvFileParser"/>
-    <envfileParser id="yaml" implementationClass="net.ashald.envfile.parsers.YamlFileParser"/>
-    
-    <envfileFormat fileExtension="env" parserId="env"/>
-    <envfileFormat fileExtension="json" parserId="yaml"/>
-    <envfileFormat fileExtension="yaml" parserId="yaml"/>
-</extensions>
+**.env**
+```ini
+SECRET_KEY="hip-hip-env-files"
+VERSION="1.0"
+```
+
+**set-env.sh**
+```bash
+while read -r line; do export $line; done < .env
+```
+**usage**
+```
+$ . set-env.sh
+$ echo $VERSION
+1.0
 ```
 
 # Further Development
 
-- Add environment variables expansion
-- Add support for other JetBrains IDEs (upon requests)
-- Add unit tests
+- Add more formats (upon requests)
+- Add support for other JetBrains products/plugins (upon requests)
+- Add environment variables expansion (feasible?)
+- Add unit tests (¯\_(ツ)_/¯)
 
 # Feedback
 
@@ -112,34 +275,9 @@ Any feedback, bug reports and feature requests are highly appreciated!
 Feel free to create an issue, contact me using `Github` or just drop me an email to the address specified in 
 [plugin.xml](./META-INF/plugin.xml)`/idea-plugin/vendor@email`. 
 
-# Contributing
-
-If you willing to contribute to the project follow the steps bellow:
-
-- Fork the repo (for details check out the [guide][fork-guide])
-- Create a feature/bugfix brunch from the `develop` branch
-- Clone the fork to your machine
-- Install Gradle
-- Navigate into the local copy and execute `gradle setup`
-- Open the dir with IntelliJ IDEA
-- [Configure IntelliJ IDEA Plugin SDK][idea-sdk-configuration]
-- Set *Java Compiler* to **1.6**: go to <kbd>Settings</kbd> > <kbd>Build, Execution, Deployment</kbd> > 
-<kbd>Compiler</kbd> > <kbd>Java Compiler</kbd> and set *Project bytecode version* to **1.6**
-- Rebuild the project: <kbd>Build</kbd> > <kbd>Rebuild Project</kbd> 
-- Add new *Run/Debug configuration*: <kbd>+</kbd> <kbd>Add new configuration</kbd> > <kbd>Plugin</kbd> 
-- Run the project and check that Env File plugin is enabled in child PyCharm instance
-- Do your changes
-- Add yourself to *AUTHORS.md*
-- Commit & Push
-- Check that you up to date with the *upstream*
-- Do interactive rebase and ensure that your commits history is properly organized and has reasonable commit messages
-- Create a *Pull Request* into the `develop` branch of this repo
-
 # License
 
-Copyright (c) 2015 Borys Pierov. See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
+Copyright (c) 2017 Borys Pierov. See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
 
 [json-is-yaml]:           https://en.wikipedia.org/wiki/YAML#JSON
 [latest-release]:         https://github.com/Ashald/EnvFile/releases/latest
-[fork-guide]:             https://help.github.com/articles/fork-a-repo/
-[idea-sdk-configuration]: http://confluence.jetbrains.com/display/IntelliJIDEA/Prerequisites

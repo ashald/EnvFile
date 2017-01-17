@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+
+- Integration with IDEA
+- Integration with RubyMine
+- Support for multiple files
+
+### Changed
+
+- The `.env` parser now strips trailing `"` and `'`
+- UI is moved to a separate tab
+- API for extension point `envfileParser`
+- The way how plugin settings saved into project definition
+
+### Removed
+
+- Extension point `envfileFormat`
 
 ## 1.0.1 - 2016-05-09
 
