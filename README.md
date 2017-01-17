@@ -266,7 +266,7 @@ $ echo $VERSION
 - Add more formats (upon requests)
 - Add support for other JetBrains products/plugins (upon requests)
 - Add environment variables expansion (feasible?)
-- Add unit tests (¯\_(ツ)_/¯)
+- Add unit tests (¯\\\_(ツ)_/¯)
 
 # Feedback
 
