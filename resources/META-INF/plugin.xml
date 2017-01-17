@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>net.ashald.envfile</id>
   <name>Env File</name>
-  <version>1.0.1</version>
+  <version>2.0.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -23,33 +23,45 @@
         <li><b>JSON</b> dictionary</li>
       </ul>
 
+      <br/>
+      All formats assume that both keys and values are strings.
+      <br/>
+
       <h3>Supported Platforms:</h3>
       <ul>
         <li><b>PyCharm</b></li>
         <li><b>IDEA</b></li>
         <li><b>RubyMine</b></li>
       </ul>
-
-      <br/>
-
-      All formats assume that both keys and values are strings.
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v1.0"><b>v1.0.1</b></a> (2016-05-09)
+      <a href="https://github.com/Ashald/EnvFile/tree/v2.0.0"><b>v2.0.0</b></a> (2017-01-16)
       <br/>
       <br/>
 
-      <b>Fixed</b>:
+      <b>Added</b>:
       <ul>
-        <li>UI components overlap with multiple projects opened within same window</li>
+        <li>Integration with IDEA</li>
+        <li>Integration with RubyMine</li>
+        <li>Support for multiple files</li>
       </ul>
       <br/>
       <br/>
 
       <b>Changed</b>:
       <ul>
-        <li>Change Log to 'Keep a CHANGELOG' format</li>
+        <li>The <em>.env<em> parser now strips trailing <em>"</em> and <em>'</em></li>
+        <li>UI is moved to a separate tab</li>
+        <li>API for extension point <em>envfileParser</em></li>
+        <li>The way how plugin settings saved into project definition</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <b>Removed</b>:
+      <ul>
+        <li>Extension point <em>envfileFormat</em></li>
       </ul>
     ]]>
   </change-notes>
