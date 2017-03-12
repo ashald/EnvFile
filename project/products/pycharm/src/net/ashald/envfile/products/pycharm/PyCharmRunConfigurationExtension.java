@@ -50,7 +50,7 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
 
     @Override
     protected void patchCommandLine(@NotNull AbstractPythonRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        EnvFileConfigurationEditor.patchCommandLine(configuration, runnerSettings, cmdLine);
+        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, cmdLine.getEnvironment());
     }
 
     //

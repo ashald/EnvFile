@@ -108,15 +108,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static void patchCommandLine(@NotNull RunConfigurationBase configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine) throws ExecutionException {
-        patchEnvironmentVariables(configuration, cmdLine.getEnvironment());
-    }
-
-    public static void patchJavaParameters(@NotNull RunConfigurationBase configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        patchEnvironmentVariables(configuration, params.getEnv());
-    }
-
-    private static void patchEnvironmentVariables(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> environmentVariables) throws ExecutionException {
+    public static void patchEnvironmentVariables(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> environmentVariables) throws ExecutionException {
         EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
             Map<String, String> env = new HashMap<String, String>();

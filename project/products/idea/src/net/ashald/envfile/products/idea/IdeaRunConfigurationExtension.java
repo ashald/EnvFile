@@ -50,7 +50,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
 
     @Override
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        EnvFileConfigurationEditor.patchJavaParameters(configuration, params, runnerSettings);
+        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, params.getEnv());
     }
 
     //
