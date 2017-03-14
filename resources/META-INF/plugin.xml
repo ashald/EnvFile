@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>net.ashald.envfile</id>
   <name>Env File</name>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -36,33 +36,25 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v2.0.0"><b>v2.0.0</b></a> (2017-01-16)
+      <a href="https://github.com/Ashald/EnvFile/tree/v2.1.0"><b>v2.1.0</b></a> (2017-03-14)
       <br/>
       <br/>
 
       <b>Added</b>:
       <ul>
-        <li>Integration with IDEA</li>
-        <li>Integration with RubyMine</li>
-        <li>Support for multiple files</li>
+        <li>File paths can be edited manually with double-click</li>
+        <li>Display 5 most recently used files within current IDE session</li>
       </ul>
       <br/>
       <br/>
 
-      <b>Changed</b>:
+      <b>Fixed</b>:
       <ul>
-        <li>The <em>.env<em> parser now strips trailing <em>"</em> and <em>'</em></li>
-        <li>UI is moved to a separate tab</li>
-        <li>API for extension point <em>envfileParser</em></li>
-        <li>The way how plugin settings saved into project definition</li>
+        <li>Environment variables are not set in IDEA</li>
       </ul>
       <br/>
       <br/>
 
-      <b>Removed</b>:
-      <ul>
-        <li>Extension point <em>envfileFormat</em></li>
-      </ul>
     ]]>
   </change-notes>
 
