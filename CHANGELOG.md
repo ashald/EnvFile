@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 2.1.0 - 2017-03-14
 
 ### Added
 
@@ -12,7 +12,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Environment variables are not set in IDEA
-
 
 ## 2.0.0 - 2017-01-16
 
