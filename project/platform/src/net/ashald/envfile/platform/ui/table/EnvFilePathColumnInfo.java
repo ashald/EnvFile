@@ -1,6 +1,7 @@
 package net.ashald.envfile.platform.ui.table;
 
 import com.intellij.ui.JBColor;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.ColumnInfo;
 import net.ashald.envfile.platform.EnvFileEntry;
 import org.jetbrains.annotations.NotNull;
@@ -8,18 +9,35 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry> {
+public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
     public EnvFilePathColumnInfo() {
         super("Path");
     }
 
+    @Override
+    public boolean isCellEditable(EnvFileEntry envFileEntry) {
+        return envFileEntry.isEnabled();
+    }
+
     @Nullable
     @Override
-    public EnvFileEntry valueOf(EnvFileEntry envFileEntry) {
-        return envFileEntry;
+    public TableCellEditor getEditor(EnvFileEntry envFileEntry) {
+        return new DefaultCellEditor(new JBTextField());
+    }
+
+    @Override
+    public void setValue(EnvFileEntry envFileEntry, String value) {
+        envFileEntry.setPath(value == null ? "" : value);
+    }
+
+    @Nullable
+    @Override
+    public String valueOf(EnvFileEntry envFileEntry) {
+        return envFileEntry.getPath();
     }
 
     @Override
@@ -34,13 +52,12 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
                                                            int row,
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                EnvFileEntry entry = (EnvFileEntry) value;
-                setText(entry.getPath());
-                setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+                setText(p0.getPath());
+                setBackground(table.getBackground());
                 setBorder(null);
 
-                if (entry.isEnabled()) {
-                    if (!entry.validatePath()) {
+                if (p0.isEnabled()) {
+                    if (!p0.validatePath()) {
                         setForeground(JBColor.RED);
                         setToolTipText("File doesn't exist!");
                     }

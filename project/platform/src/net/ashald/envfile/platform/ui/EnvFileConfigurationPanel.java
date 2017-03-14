@@ -45,7 +45,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
 
         // Define Model
         ColumnInfo<EnvFileEntry, Boolean> IS_ACTIVE = new EnvFileIsActiveColumnInfo();
-        ColumnInfo<EnvFileEntry, EnvFileEntry> FILE = new EnvFilePathColumnInfo();
+        ColumnInfo<EnvFileEntry, String> FILE = new EnvFilePathColumnInfo();
         ColumnInfo<EnvFileEntry, EnvFileEntry> TYPE = new EnvFileTypeColumnInfo();
 
         envFilesModel = new ListTableModel<EnvFileEntry>(IS_ACTIVE, FILE, TYPE);

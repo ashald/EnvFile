@@ -1,6 +1,5 @@
 package net.ashald.envfile.platform;
 
-import com.intellij.execution.configuration.AbstractRunConfiguration;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -15,9 +14,9 @@ import java.util.Map;
 public class EnvFileEntry {
 
     private final RunConfigurationBase runConfig;
-    private final String parserId;
-    private final String path;
 
+    private final String parserId;
+    private String path;
     private boolean enabled;
 
     public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, Boolean envFileIsEnabled) {
@@ -42,6 +41,10 @@ public class EnvFileEntry {
 
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String value) {
+        path = value;
     }
 
     public String getParserId() {

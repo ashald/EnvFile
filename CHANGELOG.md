@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- File paths can be edited manually with double-click
+
 ### Fixed
 
 - Environment variables are not set in IDEA

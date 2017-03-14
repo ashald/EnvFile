@@ -193,6 +193,12 @@ Restart IDE.
 
 ![Read from file](./resources/example.png)
 
+### Caveats
+
+On `macOS` systems by default hidden files (starting with a dot) are not displayed. Thus it's nto possible to use the
+file dialog in order to select files like `.env`. In order to deal with this issue one can either tweak `macOS` to show
+hidden files or select any file using dialog and then manually edit path by double-clicking on the entry in the table.
+
 ### Examples
 
 #### .env
