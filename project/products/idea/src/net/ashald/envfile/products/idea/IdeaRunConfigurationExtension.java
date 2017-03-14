@@ -2,7 +2,6 @@ package net.ashald.envfile.products.idea;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.RunConfigurationExtension;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
@@ -44,15 +43,14 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         EnvFileConfigurationEditor.readExternal(runConfiguration, element);
     }
 
-
     @Override
     protected void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws Exception {
         EnvFileConfigurationEditor.validateConfiguration(configuration, isExecution);
     }
 
     @Override
-    protected void patchCommandLine(@NotNull RunConfigurationBase configuration, RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        EnvFileConfigurationEditor.patchCommandLine(configuration, runnerSettings, cmdLine);
+    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
+        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, params.getEnv());
     }
 
     //
@@ -65,13 +63,6 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     @Override
     protected boolean isEnabledFor(@NotNull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
         return true;
-    }
-
-    //
-
-    @Override
-    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-
     }
 
 }

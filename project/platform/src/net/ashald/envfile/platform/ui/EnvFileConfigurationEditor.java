@@ -2,6 +2,7 @@ package net.ashald.envfile.platform.ui;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.openapi.options.ConfigurationException;
@@ -107,11 +108,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static void patchCommandLine(@NotNull RunConfigurationBase configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine) throws ExecutionException {
-        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+    public static void patchEnvironmentVariables(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> environmentVariables) throws ExecutionException {
+        EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
-            Map<String, String> source = cmdLine.getEnvironment();
-
             Map<String, String> env = new HashMap<String, String>();
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
@@ -123,9 +122,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 }
             }
 
-            env.putAll(source);
-            source.clear();
-            source.putAll(env);
+            env.putAll(environmentVariables);
+            environmentVariables.clear();
+            environmentVariables.putAll(env);
         }
     }
 

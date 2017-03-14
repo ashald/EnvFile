@@ -50,7 +50,7 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
 
     @Override
     protected void patchCommandLine(@NotNull AbstractRubyRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        EnvFileConfigurationEditor.patchCommandLine(configuration, runnerSettings, cmdLine);
+        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, cmdLine.getEnvironment());
     }
 
     //
