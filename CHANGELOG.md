@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - File paths can be edited manually with double-click
+- Display 5 most recently used files within current IDE session
 
 ### Fixed
 

@@ -31,9 +31,12 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
+
 
 class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
+    private static final int MAX_RECENT = 5;
+    private static final LinkedList<EnvFileEntry> recent = new LinkedList<EnvFileEntry>();
     private final RunConfigurationBase runConfig;
 
     private final JCheckBox useEnvFileCheckBox;
@@ -147,16 +150,48 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
 
                     if (selectedFile != null) {
                         ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
-                        EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedFile.getPath(), true);
+                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedFile.getPath(), true);
                         newList.add(newOptions);
                         model.setItems(newList);
                         int index = model.getRowCount() - 1;
                         model.fireTableRowsInserted(index, index);
                         table.setRowSelectionInterval(index, index);
+
+                        synchronized (recent) {
+                            recent.remove(newOptions);
+                            recent.addFirst(newOptions);
+                            if (recent.size() > MAX_RECENT) recent.removeLast();
+                        }
                     }
                 }
             };
             actionGroup.add(anAction);
+        }
+        synchronized (recent) {
+            if (!recent.isEmpty()) {
+                actionGroup.addSeparator("Recent");
+
+                for (final EnvFileEntry entry : recent) {
+                    String title = String.format("%s -> %s", entry.getTypeTitle(), entry.getPath());
+                    String shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
+                    AnAction anAction = new AnAction(shortTitle, title, null) {
+                        @Override
+                        public void actionPerformed(AnActionEvent e) {
+                            ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
+                            newList.add(entry);
+                            model.setItems(newList);
+                            int index = model.getRowCount() - 1;
+                            model.fireTableRowsInserted(index, index);
+                            table.setRowSelectionInterval(index, index);
+                            synchronized (recent) {
+                                recent.remove(entry);
+                                recent.addFirst(entry);
+                            }
+                        }
+                    };
+                    actionGroup.add(anAction);
+                }
+            }
         }
 
         final ListPopup popup =
