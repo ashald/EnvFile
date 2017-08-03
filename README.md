@@ -195,10 +195,10 @@ Restart IDE.
 
 ### Caveats
 
-Hidden files (starting with a dot) are not displayed in Finder on `macOS` by default. Thus it's not possible to use the
-Finder file dialog to select files like `.env`. The proper solution for this issue is yet to be discovered but for the
-time being there two workarounds. One can either tweak `macOS` to show hidden files or select any file using standard 
-Finder dialog and then manually edit path by double-clicking on the entry in the table.
+Hidden files (starting with a dot) are not displayed in Finder on `macOS` by default. To toggle
+hidden files in the Open dialog, press <kbd>COMMAND</kbd> + <kbd>SHIFT</kbd> + <kbd>.</kbd>.
+Alternatively, one can either tweak `macOS` to show hidden files or select any file using
+standard Finder dialog and then manually edit path by double-clicking on the entry in the table.
 
 ### Examples
 
