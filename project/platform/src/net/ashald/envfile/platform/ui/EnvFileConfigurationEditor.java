@@ -105,23 +105,31 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     }
 
     public static void patchEnvironmentVariables(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> environmentVariables) throws ExecutionException {
+        Map<String, String> newEnv = new HashMap<>();
+        newEnv.putAll(collectEnvFromFiles(runConfigurationBase));
+        newEnv.putAll(environmentVariables);
+
+        environmentVariables.clear();
+        environmentVariables.putAll(newEnv);
+    }
+
+    public static Map<String, String> collectEnvFromFiles(@NotNull RunConfigurationBase runConfigurationBase) throws ExecutionException {
+        Map<String, String> result = new HashMap<>();
+
         EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
-            Map<String, String> env = new HashMap<String, String>();
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
-                    env = entry.process(env);
+                    result = entry.process(result);
                 } catch (EnvFileErrorException e) {
                     throw new ExecutionException(e);
                 } catch (IOException e) {
                     throw new ExecutionException(e);
                 }
             }
-
-            env.putAll(environmentVariables);
-            environmentVariables.clear();
-            environmentVariables.putAll(env);
         }
+
+        return result;
     }
 
     public static void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws ExecutionException {
