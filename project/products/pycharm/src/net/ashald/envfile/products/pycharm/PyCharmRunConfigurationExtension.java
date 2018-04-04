@@ -13,8 +13,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExtension {
 
     @Nullable
@@ -52,10 +50,7 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
 
     @Override
     protected void patchCommandLine(@NotNull AbstractPythonRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        Map<String, String> currentEnv = cmdLine.getEnvironment();
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, currentEnv);
-        currentEnv.clear();
-        currentEnv.putAll(newEnv);
+        EnvFileConfigurationEditor.patchEnv(configuration, cmdLine.getEnvironment());
     }
 
     //
