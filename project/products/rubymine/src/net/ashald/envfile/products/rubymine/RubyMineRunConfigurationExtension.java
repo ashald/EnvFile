@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.ruby.run.configuration.AbstractRubyRunConfiguration;
 import org.jetbrains.plugins.ruby.ruby.run.configuration.RubyRunConfigurationExtension;
 
+import java.util.Map;
+
 public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExtension {
 
     @Nullable
@@ -50,7 +52,10 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
 
     @Override
     protected void patchCommandLine(@NotNull AbstractRubyRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, cmdLine.getEnvironment());
+        Map<String, String> currentEnv = cmdLine.getEnvironment();
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, currentEnv);
+        currentEnv.clear();
+        currentEnv.putAll(newEnv);
     }
 
     //

@@ -13,7 +13,6 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
@@ -51,13 +50,14 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         EnvFileConfigurationEditor.validateConfiguration(configuration, isExecution);
     }
 
+    /**
+     * Unlike other extensions the IDEA extension
+     * calls this method instead of RunConfigurationExtensionBase#patchCommandLine method
+     * that we could have used to update environment variables.
+     */
     @Override
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        Map<String, String> newEnv = new HashMap<>();
-        newEnv.putAll(EnvFileConfigurationEditor.collectEnvFromFiles(configuration));
-        // user defined env vars from Run Configuration dialog override env files
-        newEnv.putAll(params.getEnv());
-
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, params.getEnv());
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(newEnv);
