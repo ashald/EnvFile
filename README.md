@@ -191,7 +191,7 @@ Restart IDE.
 - Enable <kbd>EnvFile</kbd> checkbox
 - Click on <kbd>+</kbd> to add a file
 
-![Read from file](./resources/example.png)
+![Read from file](./example.png)
 
 ### Caveats
 
@@ -275,12 +275,21 @@ $ echo $VERSION
 - Add environment variables expansion (feasible?)
 - Add unit tests (¯\\\_(ツ)_/¯)
 
+# Contributing guide
+
+1. Clone the plugin repository
+2. In the root project directory run the following shell command to generate an IDEA project `./gradlew cleanIdea idea`
+3. Ensure the `Gradle` plugin and `Plugin DevKit` plugin are [enabled](http://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system/prerequisites.html#ensure-the-gradle-plugin-and-plugin-devkit-plugin-are-enabled) in IDEA
+4. Open the project in IDEA and make changes
+5. Do testing and debugging
+5. Commit changes and open a pull request
+
 # Feedback
 
 Any feedback, bug reports and feature requests are highly appreciated!
 
 Feel free to create an issue, contact me using `Github` or just drop me an email to the address specified in 
-[plugin.xml](./META-INF/plugin.xml)`/idea-plugin/vendor@email`. 
+[plugin.xml](./src/main/resources/META-INF/plugin.xml)`/idea-plugin/vendor@email`. 
 
 # License
 

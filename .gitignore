@@ -1,6 +1,8 @@
 # Idea
 *.iml
-.idea
+/.idea
+*.ipr
+*.iws
 out
 *.zip
 
