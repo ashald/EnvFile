@@ -17,6 +17,12 @@ allprojects {
     }
 }
 
+subprojects {
+  intellij {
+    verifyPlugin.enabled = false
+  }
+}
+
 sourceCompatibility = 1.8
 
 repositories {
