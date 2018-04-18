@@ -1,0 +1,11 @@
+rootProject.name = 'EnvFile'
+
+include ':core',
+        ':platform',
+        ':products:idea',
+        ':products:pycharm',
+        ':products:rubymine'
+
+project(':products:idea').projectDir = new File(rootDir, "products/idea")
+project(':products:pycharm').projectDir = new File(rootDir, "products/pycharm")
+project(':products:rubymine').projectDir = new File(rootDir, "products/rubymine")

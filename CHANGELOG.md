@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.0 - 2018-04-04
+
+- Since version 2.2.0 the plugin now uses the [recommended](http://www.jetbrains.org/intellij/sdk/docs/tutorials/build_system.html) Gradle build system to make plugin development a lot easier for newcomers.
+
 ## 2.1.0 - 2017-03-14
 
 ### Added

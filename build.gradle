@@ -1,0 +1,72 @@
+plugins {
+    id 'org.jetbrains.intellij' version '0.3.1'
+}
+
+group 'net.ashald'
+version '2.2.0'
+
+apply plugin: 'idea'
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.jetbrains.intellij'
+
+    intellij {
+        version '2018.1'
+        pluginName 'EnvFile'
+    }
+}
+
+subprojects {
+  intellij {
+    verifyPlugin.enabled = false
+  }
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':products:idea')
+    compile project(':products:pycharm')
+    compile project(':products:rubymine')
+}
+
+project(':core') {
+
+}
+
+project(':platform') {
+    dependencies {
+        compile project(':core')
+    }
+}
+
+project(':products:idea') {
+    dependencies {
+        compile project(':platform')
+    }
+}
+
+project(':products:pycharm') {
+    dependencies {
+        compile project(':platform')
+    }
+
+    intellij {
+        plugins 'PythonCore:2018.1.181.4203.550'
+    }
+}
+
+project(':products:rubymine') {
+    dependencies {
+        compile project(':platform')
+    }
+
+    intellij {
+        plugins 'org.jetbrains.plugins.ruby:2018.1.20180327'
+    }
+}
