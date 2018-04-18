@@ -104,12 +104,6 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static void patchEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> currentEnv) throws ExecutionException {
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(runConfigurationBase, currentEnv);
-        currentEnv.clear();
-        currentEnv.putAll(newEnv);
-    }
-
     public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> userEnv) throws ExecutionException {
         Map<String, String> result = new HashMap<>();
         result.putAll(collectEnvFromFiles(runConfigurationBase));
