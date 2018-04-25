@@ -13,6 +13,8 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
 
     @Nullable
@@ -48,9 +50,17 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         EnvFileConfigurationEditor.validateConfiguration(configuration, isExecution);
     }
 
+    /**
+     * Unlike other extensions the IDEA extension
+     * calls this method instead of RunConfigurationExtensionBase#patchCommandLine method
+     * that we could have used to update environment variables.
+     */
     @Override
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        EnvFileConfigurationEditor.patchEnvironmentVariables(configuration, params.getEnv());
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, params.getEnv());
+        // there is a chance that env is an immutable map,
+        // that is why it is safer to replace it instead of updating it
+        params.setEnv(newEnv);
     }
 
     //
