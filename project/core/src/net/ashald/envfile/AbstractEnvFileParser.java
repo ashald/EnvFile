@@ -26,18 +26,18 @@ public abstract class AbstractEnvFileParser implements EnvFileParser {
         return expandEnvironmentVariables(sourceEnv);
     }
 
-    Map<String, String>  expandEnvironmentVariables(Map<String, String> map) {
+    Map<String, String> expandEnvironmentVariables(Map<String, String> map) {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             String value = entry.getValue();
 
             Matcher matcher = pattern.matcher(value);
             while (matcher.find()) {
-                String envValue = getSystemValue(matcher.group(1));
+                String envValue = getSystemValue(matcher.group(1), map);
                 if (envValue != null) {
                     envValue = envValue.replace("\\", "\\\\");
+                    Pattern subexpr = Pattern.compile(Pattern.quote(matcher.group(0)));
+                    value = subexpr.matcher(value).replaceAll(envValue);
                 }
-                Pattern subexpr = Pattern.compile(Pattern.quote(matcher.group(0)));
-                value = subexpr.matcher(value).replaceAll(envValue);
             }
 
             entry.setValue(value);
@@ -47,9 +47,11 @@ public abstract class AbstractEnvFileParser implements EnvFileParser {
     }
 
     // precedence System properties, those set via -D, then env properties
-    // Assumption is that environment variables are all UPPERCASE
-    private String getSystemValue(final String name) {
-        return System.getProperty(name, System.getenv(name.toUpperCase()));
+    // Assumption is that environment variables are all UPPERCASE, if still not
+    // found check for value in passed in map
+    private String getSystemValue(final String name, Map<String, String> map) {
+        String property = System.getProperty(name, System.getenv(name.toUpperCase()));
+        return property != null ? property : map.get(name);
     }
 
 }
