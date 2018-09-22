@@ -46,12 +46,10 @@ public abstract class AbstractEnvFileParser implements EnvFileParser {
         return map;
     }
 
-    // precedence System properties, those set via -D, then env properties
-    // Assumption is that environment variables are all UPPERCASE, if still not
-    // found check for value in passed in map
+    // precedence placeholder before System properties before environment variable
     private String getSystemValue(final String name, Map<String, String> map) {
-        String property = System.getProperty(name, System.getenv(name.toUpperCase()));
-        return property != null ? property : map.get(name);
+        String property = map.get(name);
+        return property != null ? property : System.getProperty(name, System.getenv(name.toUpperCase()));
     }
 
 }

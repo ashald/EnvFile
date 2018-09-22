@@ -89,4 +89,14 @@ public class EnvironmentVariableSubstitutionTest {
         Assert.assertEquals("Placeholder was not replaced with single var value", SINGLE_VAR_VALUE + ":/append/path", map.get(KEY));
     }
 
+    @Test
+    public void precedenceEnvVarTest() {
+        Map<String, String> map = new HashMap<>();
+        map.put(KEY, "preferred");
+        System.setProperty(KEY, "un-preferred");
+
+        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        Assert.assertEquals("Precedence was not followed", "preferred", map.get(KEY));
+    }
+
 }

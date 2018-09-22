@@ -19,6 +19,26 @@ so please be sure to read the updated guide below, even if you already have used
 
 **All formats assume that both keys and values are strings.**
 
+### Variable Expansion
+
+As of version 2.? `EnvFile` now supports placeholder / property / environment variable expansion. A placeholder
+refers to a variable defined within the same file, a property refers to a system property set via the `java -D`
+mechanism and an environment variable is, well obviously it is an environment variable. 
+
+#### Variable Format
+
+There are a few limitations that variables must adhere to if you want expansion to work. Placeholders and properties
+may be any case, consist of any alpha-numeric characters and may contain dots or underscores. Environment variables
+follow convention and may only consist of uppercase alpha-numeric characters and may contain dots or underscores. All
+variables MUST be wrapped in `${}`, e.g. `SECRET_KEY=${SSH_KEY}` would be expanded, `SECRET_KEY=$SSH_KEY` would not.
+
+#### Order of Precedence
+
+In the event that a variable exists more than once, e.g. is a placeholder and an environment variable then the
+applied order of precedence is placeholder, then property the environment variable.
+
+NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve a value from the environment.
+
 ### Supported Platforms
 
 <em>
