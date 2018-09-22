@@ -94,9 +94,16 @@ public class EnvironmentVariableSubstitutionTest {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, "preferred");
         System.setProperty(KEY, "un-preferred");
-
         map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Precedence was not followed", "preferred", map.get(KEY));
+    }
+
+    @Test
+    public void unchangedEnvVarTest() {
+        Map<String, String> map = new HashMap<>();
+        map.put(KEY, "${UNCHANGED}");
+        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        Assert.assertEquals("Property should have been unchanged", "${UNCHANGED}", map.get(KEY));
     }
 
 }
