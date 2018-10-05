@@ -1,0 +1,14 @@
+apply plugin: "java"
+
+dependencies {
+    compile "org.jetbrains:annotations:16.0.3"
+    compile "org.yaml:snakeyaml:1.23"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "src"
+        }
+    }
+}

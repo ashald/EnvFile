@@ -1,0 +1,52 @@
+plugins {
+    id "org.jetbrains.intellij" version "0.3.11"
+    id "pl.allegro.tech.build.axion-release" version "1.8.1"
+}
+apply plugin: "java"
+
+group "net.ashald"
+
+scmVersion {
+    tag {
+        prefix = "v"
+        versionSeparator = ""
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+    project.version = scmVersion.version
+
+    ext.jetbrains = [
+            'version' : "2018.2",
+            'pycharm' : "PythonCore:2018.2.182.3684.2",
+            'rubymine': "org.jetbrains.plugins.ruby:2018.2.20180716"
+    ]
+}
+
+intellij {
+    version jetbrains.version
+    pluginName "Env File"
+    sameSinceUntilBuild false
+    updateSinceUntilBuild false
+}
+
+dependencies {
+    compile project(":products/idea")
+    compile project(":products/pycharm")
+    compile project(":products/rubymine")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir "resources"
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "4.10.2"
+}
