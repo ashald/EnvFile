@@ -1,0 +1,14 @@
+rootProject.name = 'EnvFile'
+
+include (
+        'project/core',
+        'project/platform',
+        'project/products/idea',
+        'project/products/pycharm',
+        'project/products/rubymine',
+)
+
+// remove project/ prefix from all children for friendly consistent names
+rootProject.children.each {
+    it.name = (it.name.replaceFirst("project/", ""))
+}

@@ -191,7 +191,7 @@ Restart IDE.
 - Enable <kbd>EnvFile</kbd> checkbox
 - Click on <kbd>+</kbd> to add a file
 
-![Read from file](./resources/example.png)
+![Read from file](./doc/example.png)
 
 ### Caveats
 

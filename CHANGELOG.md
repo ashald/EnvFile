@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+
+- Gradle build system support
+- Automatic versioning from git tags
+
 ## 2.1.0 - 2017-03-14
 
 ### Added

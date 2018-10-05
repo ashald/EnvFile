@@ -1,0 +1,21 @@
+plugins {
+    id "org.jetbrains.intellij"
+}
+apply plugin: "java"
+
+intellij {
+    version jetbrains.version
+}
+
+dependencies {
+    compile project(":core")
+    compile "org.jetbrains:annotations:16.0.3"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "src"
+        }
+    }
+}
