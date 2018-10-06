@@ -8,4 +8,5 @@ who helped with testing and provided feedback during early stages of development
 # Contributors
 * [Yoan](https://github.com/yoanthiebault)
 * [Stanislav Savulchik](https://github.com/savulchik)
+* [Dmytro Kostiuchenko](https://github.com/edio)
 
