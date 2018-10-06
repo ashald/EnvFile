@@ -4,7 +4,7 @@ plugins {
 apply plugin: "java"
 
 intellij {
-    version "2018.2"
+    version jetbrains.version
 }
 
 dependencies {
