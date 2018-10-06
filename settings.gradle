@@ -10,5 +10,5 @@ include (
 
 // remove project/ prefix from all children for friendly consistent names
 rootProject.children.each {
-    it.name = (it.name.replaceFirst("project/", ""))
+    it.name = (it.name.replaceFirst("project/", "").replace("/", "-"))
 }

@@ -34,9 +34,9 @@ intellij {
 }
 
 dependencies {
-    compile project(":products/idea")
-    compile project(":products/pycharm")
-    compile project(":products/rubymine")
+    compile project(":products-idea")
+    compile project(":products-pycharm")
+    compile project(":products-rubymine")
 }
 
 sourceSets {
@@ -47,6 +47,6 @@ sourceSets {
     }
 }
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = "4.10.2"
 }
