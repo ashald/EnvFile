@@ -2,7 +2,7 @@
 
 ## Description
 
-**Env File** is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations 
+**Env File** is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
 from one or multiple files.
 
 ## Version 2.0 Notice
@@ -154,7 +154,7 @@ version of the product.
         </li>
     </ul>
 </details>
-  
+
 <details>
     <summary><strong>RubyMine</strong></summary>
         <ul>
@@ -177,11 +177,11 @@ version of the product.
 
 - Using IDE built-in plugin system:
   - <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Browse repositories...</kbd> > <kbd>Search for "Env File"</kbd> > <kbd>Install Plugin</kbd>
-  
+
 - Manually:
-  - Download the [latest release][latest-release] and install it manually using <kbd>Preferences</kbd> > 
+  - Download the [latest release][latest-release] and install it manually using <kbd>Preferences</kbd> >
   <kbd>Plugins</kbd> > <kbd>Install plugin from disk...</kbd>
-  
+
 Restart IDE.
 
 ## Usage
@@ -191,7 +191,7 @@ Restart IDE.
 - Enable <kbd>EnvFile</kbd> checkbox
 - Click on <kbd>+</kbd> to add a file
 
-![Read from file](./doc/example.png)
+![Read from file](./docs/example.png)
 
 ### Caveats
 
@@ -210,7 +210,7 @@ SECRET_KEY=hip-hip-env-files
 VERSION=1.0
 ```
 
-or 
+or
 
 ```ini
 # This line is ignored since it's a comment
@@ -229,19 +229,19 @@ VERSION 1.0
     "VERSION": "1.0", # All non-string literals should be enclosed in quotes; btw this is ignored too
 }
 ```
-    
+
 #### YAML
 
 ```yaml
 # This line is ignored since it's a comment
 SECRET_KEY: hip-hip-env-files
-VERSION: "1.0" # All non-string literals should be enclosed in quotes; btw this is ignored too 
+VERSION: "1.0" # All non-string literals should be enclosed in quotes; btw this is ignored too
 ```
 
 #### Bash (workaround)
 
 There was a number of requests to support extracting environment variables from bash scripts like:
- 
+
 ```bash
 export SECRET_KEY="hip-hip-env-files"
 export VERSION="1.0"
@@ -272,7 +272,7 @@ $ echo $VERSION
 
 As of version 2.? `EnvFile` now supports placeholder / property / environment variable expansion. A placeholder
 refers to a variable defined within the same file, a property refers to a system property set via the `java -D`
-mechanism and an environment variable is, well obviously it is an environment variable. 
+mechanism and an environment variable is, well obviously it is an environment variable.
 
 #### Variable Format
 
@@ -311,8 +311,8 @@ NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve 
 
 Any feedback, bug reports and feature requests are highly appreciated!
 
-Feel free to create an issue, contact me using `Github` or just drop me an email to the address specified in 
-[plugin.xml](./META-INF/plugin.xml)`/idea-plugin/vendor@email`. 
+Feel free to create an issue, contact me using `Github` or just drop me an email to the address specified in
+[plugin.xml](./META-INF/plugin.xml)`/idea-plugin/vendor@email`.
 
 # License
 

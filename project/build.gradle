@@ -1,8 +1,8 @@
 plugins {
+    id "java"
     id "org.jetbrains.intellij" version "0.3.11"
     id "pl.allegro.tech.build.axion-release" version "1.8.1"
 }
-apply plugin: "java"
 
 group "net.ashald"
 
@@ -35,18 +35,10 @@ intellij {
 }
 
 dependencies {
-    compile project(":products-idea")
-    compile project(":products-pycharm")
-    compile project(":products-rubymine")
-    compile project(":products-goland")
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir "resources"
-        }
-    }
+    compile project(":envfile-products-idea")
+    compile project(":envfile-products-pycharm")
+    compile project(":envfile-products-rubymine")
+    compile project(":envfile-products-goland")
 }
 
 wrapper {

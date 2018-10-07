@@ -1,7 +1,7 @@
 plugins {
+    id "java"
     id "org.jetbrains.intellij"
 }
-apply plugin: "java"
 
 intellij {
     version jetbrains.version
@@ -9,14 +9,6 @@ intellij {
 }
 
 dependencies {
-    compile project(":platform")
+    compile project(":envfile-platform")
     compile "org.jetbrains:annotations:16.0.3"
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir "src"
-        }
-    }
 }
