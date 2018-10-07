@@ -4,38 +4,34 @@ import net.ashald.envfile.AbstractEnvFileParser;
 import net.ashald.envfile.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class DotEnvFileParser extends AbstractEnvFileParser {
 
     @NotNull
     @Override
-    protected Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException, IOException {
-        Map<String, String> result = new HashMap<String, String>();
+    protected Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException {
+        Map<String, String> result = new HashMap<>();
 
-        InputStream input = null;
-        Properties prop = new Properties();
         try {
-            input = new FileInputStream(path);
-            prop.load(input);
+            List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
+            for (String l: lines) {
+                String strippedLine = l.trim();
+                if (!strippedLine.startsWith("#") && strippedLine.contains("=")) {
+                    String[] tokens = strippedLine.split("=", 2);
+                    String key = tokens[0];
+                    String value = trim(tokens[1]);
+                    result.put(key, value);
+                }
+            }
         } catch (IOException ex) {
             throw new EnvFileErrorException(ex);
-        } finally {
-            if (input != null) {
-                input.close();
-            }
-        }
-        Enumeration<?> e = prop.propertyNames();
-        while (e.hasMoreElements()) {
-            String key = trim((String) e.nextElement());
-            String value = trim(prop.getProperty(key));
-            result.put(key, value);
         }
 
         return result;
@@ -44,10 +40,10 @@ public class DotEnvFileParser extends AbstractEnvFileParser {
     private static String trim(String value) {
         String trimmed = value.trim();
 
-        if ( (trimmed.startsWith("\"") && trimmed.endsWith("\"")) || (trimmed.startsWith("'") && trimmed.endsWith("'")))
+        if ((trimmed.startsWith("\"") && trimmed.endsWith("\"")) || (trimmed.startsWith("'") && trimmed.endsWith("'")))
             return trimmed.substring(1, trimmed.length() - 1);
 
-        return trimmed;
+        return trimmed.replaceAll("\\s#.*$", "").replaceAll("(\\s)\\\\#", "$1#").trim();
     }
 
     @NotNull
