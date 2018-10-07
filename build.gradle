@@ -11,9 +11,6 @@ scmVersion {
         prefix = "v"
         versionSeparator = ""
     }
-    repository {
-        directory = project.rootProject.file('../')
-    }
 }
 
 allprojects {

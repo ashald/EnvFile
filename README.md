@@ -321,9 +321,7 @@ NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve 
 EnvFile uses Gradle for building.
 
 ```bash
-$ cd project
-
-$ ./gradlew clean build
+$ ./gradlew clean test build
   
   BUILD SUCCESSFUL in 22s
   59 actionable tasks: 59 executed

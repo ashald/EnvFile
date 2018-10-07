@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Unicode sequences handling in `.env` files (#38)
+- Unicode sequence handling in `.env` files (#38)
 
 ## 2.1.0 - 2017-03-14
 
