@@ -9,4 +9,5 @@ who helped with testing and provided feedback during early stages of development
 * [Yoan](https://github.com/yoanthiebault)
 * [Stanislav Savulchik](https://github.com/savulchik)
 * [Dmytro Kostiuchenko](https://github.com/edio)
-* [Kelnor277]()
+* [Kelnor277](https://github.com/Kelnor277)
+* [Andy Elliott](https://github.com/andye2004)
