@@ -4,6 +4,7 @@ include (
         'project/core',
         'project/platform',
         'project/products/idea',
+        'project/products/goland',
         'project/products/pycharm',
         'project/products/rubymine',
 )

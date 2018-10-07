@@ -22,7 +22,8 @@ allprojects {
     ext.jetbrains = [
             'version' : "2018.2",
             'pycharm' : "PythonCore:2018.2.182.3684.2",
-            'rubymine': "org.jetbrains.plugins.ruby:2018.2.20180716"
+            'rubymine': "org.jetbrains.plugins.ruby:2018.2.20180716",
+            'goland'  : "org.jetbrains.plugins.go:182.3684.59.834"
     ]
 }
 
@@ -37,6 +38,7 @@ dependencies {
     compile project(":products-idea")
     compile project(":products-pycharm")
     compile project(":products-rubymine")
+    compile project(":products-goland")
 }
 
 sourceSets {
