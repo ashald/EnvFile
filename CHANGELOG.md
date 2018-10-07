@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Gradle build system support
 - Automatic versioning from git tags
 - Goland support
+- Announce support for `.env` file extension
 
 ## 2.1.0 - 2017-03-14
 

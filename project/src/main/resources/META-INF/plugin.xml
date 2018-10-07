@@ -73,6 +73,10 @@
     <envfileParser id="yaml" implementationClass="net.ashald.envfile.parsers.YamlFileParser"/>
   </extensions>
 
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
+  </extensions>
+
   <depends optional="true" config-file="envfie-idea.xml">com.intellij.modules.lang</depends>
   <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
