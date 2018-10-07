@@ -173,6 +173,15 @@ version of the product.
         </ul>
 </details>
 
+<details>
+    <summary><strong>GoLand</strong></summary>
+        <ul>
+            <li>Go App Engine</li>
+            <li>Go Build</li>
+            <li>Go Test</li>  
+        </ul>
+</details>
+
 ## Installation
 
 - Using IDE built-in plugin system:
