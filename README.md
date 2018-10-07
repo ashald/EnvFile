@@ -268,11 +268,43 @@ $ echo $VERSION
 1.0
 ```
 
+### Variable Expansion
+
+As of version 2.? `EnvFile` now supports placeholder / property / environment variable expansion. A placeholder
+refers to a variable defined within the same file, a property refers to a system property set via the `java -D`
+mechanism and an environment variable is, well obviously it is an environment variable. 
+
+#### Variable Format
+
+There are a few limitations that variables must adhere to if you want expansion to work. Placeholders and properties
+may be any case, consist of any alpha-numeric characters and may contain dots or underscores. Environment variables
+follow convention and may only consist of uppercase alpha-numeric characters and may contain dots or underscores. All
+variables MUST be wrapped in `${}`, e.g.
+
+```ini
+# This line is ignored since it's a comment
+SECRET_KEY=${WOULD_BE_EXPANDED}
+```
+
+would be expanded, however the example below would not.
+
+```ini
+# This line is ignored since it's a comment
+SECRET_KEY=$WOULD_NOT_BE_EXPANDED
+```
+
+#### Order of Precedence
+
+In the event that a variable exists more than once, e.g. is a placeholder and an environment variable then the
+applied order of precedence is placeholder, then system property and then environment variable. If no expanded
+value can be found in any of the three locations then the property will remain unchanged.
+
+NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve a value from the environment.
+
 # Further Development
 
 - Add more formats (upon requests)
 - Add support for other JetBrains products/plugins (upon requests)
-- Add environment variables expansion (feasible?)
 - Add unit tests (¯\\\_(ツ)_/¯)
 
 # Feedback
