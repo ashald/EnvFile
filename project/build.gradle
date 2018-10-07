@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "org.jetbrains.intellij" version "0.3.11"
-    id "pl.allegro.tech.build.axion-release" version "1.8.1"
+    id "pl.allegro.tech.build.axion-release" version "1.9.3"
 }
 
 group "net.ashald"
@@ -10,6 +10,9 @@ scmVersion {
     tag {
         prefix = "v"
         versionSeparator = ""
+    }
+    repository {
+        directory = project.rootProject.file('../')
     }
 }
 
@@ -29,7 +32,7 @@ allprojects {
 
 intellij {
     version jetbrains.version
-    pluginName "Env File"
+    pluginName "EnvFile"
     sameSinceUntilBuild false
     updateSinceUntilBuild false
 }
