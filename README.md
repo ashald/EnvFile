@@ -316,6 +316,22 @@ NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve 
 - Add support for other JetBrains products/plugins (upon requests)
 - Add unit tests (¯\\\_(ツ)_/¯)
 
+# Building
+
+EnvFile uses Gradle for building.
+
+```bash
+$ cd project
+
+$ ./gradlew clean build
+  
+  BUILD SUCCESSFUL in 22s
+  59 actionable tasks: 59 executed
+  
+$ ls -1 build/distributions
+  Env File-2.1.1-SNAPSHOT.zip
+```
+
 # Feedback
 
 Any feedback, bug reports and feature requests are highly appreciated!
