@@ -1,4 +1,4 @@
-package net.ashald.envfile.parsers;
+package net.ashald.envfile.providers.yaml;
 
 import net.ashald.envfile.AbstractEnvFileParser;
 import net.ashald.envfile.EnvFileErrorException;
@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YamlFileParser extends AbstractEnvFileParser {
+public class YamlEnvFileParser extends AbstractEnvFileParser {
 
     @NotNull
     @Override
@@ -27,10 +27,5 @@ public class YamlFileParser extends AbstractEnvFileParser {
             result = new HashMap<>();
         }
         return result;
-    }
-
-    @NotNull
-    public String getTitle() {
-        return "JSON/YAML";
     }
 }

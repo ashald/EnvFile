@@ -1,4 +1,4 @@
-package net.ashald.envfile.parsers;
+package net.ashald.envfile.providers.dotenv;
 
 import net.ashald.envfile.AbstractEnvFileParser;
 import net.ashald.envfile.EnvFileErrorException;
@@ -44,10 +44,5 @@ public class DotEnvFileParser extends AbstractEnvFileParser {
             return trimmed.substring(1, trimmed.length() - 1);
 
         return trimmed.replaceAll("\\s#.*$", "").replaceAll("(\\s)\\\\#", "$1#").trim();
-    }
-
-    @NotNull
-    public String getTitle() {
-        return ".env";
     }
 }

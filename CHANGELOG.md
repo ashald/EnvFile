@@ -15,6 +15,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Unicode sequence handling in `.env` files (#38)
 
+### Changed
+
+- Core API extension `envfileParser` replaced with `envFileProvider` 
+
 ## 2.1.0 - 2017-03-14
 
 ### Added

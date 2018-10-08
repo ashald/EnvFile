@@ -4,7 +4,7 @@ import com.intellij.lang.Language;
 import org.jetbrains.annotations.NotNull;
 
 public class EnvFileLanguage extends Language {
-    public static final EnvFileLanguage INSTANCE = new EnvFileLanguage();
+    static final EnvFileLanguage INSTANCE = new EnvFileLanguage();
 
     private EnvFileLanguage() {
         super(".env");

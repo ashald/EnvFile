@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class EnvFileType extends LanguageFileType {
-    public static final EnvFileType INSTANCE = new EnvFileType();
+    static final EnvFileType INSTANCE = new EnvFileType();
 
     private EnvFileType() {
         super(EnvFileLanguage.INSTANCE);

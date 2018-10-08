@@ -19,7 +19,7 @@ import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
 import net.ashald.envfile.platform.EnvFileEntry;
-import net.ashald.envfile.platform.EnvFileParserExtension;
+import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.EnvFileSettings;
 import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
@@ -133,10 +133,10 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
-        for (final EnvFileParserExtension extension : EnvFileParserExtension.getParserExtensions()) {
+        for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
             extension.getId();
 
-            final String title = String.format("%s file", extension.getParser().getTitle());
+            final String title = String.format("%s file", extension.getFactory().getTitle());
             AnAction anAction = new AnAction(title) {
                 @Override
                 public void actionPerformed(AnActionEvent e) {
@@ -208,6 +208,6 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     void setState(EnvFileSettings state) {
         useEnvFileCheckBox.setSelected(state.isEnabled());
         envFilesTable.setEnabled(state.isEnabled());
-        envFilesModel.setItems(new ArrayList<EnvFileEntry>(state.getEntries()));
+        envFilesModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }

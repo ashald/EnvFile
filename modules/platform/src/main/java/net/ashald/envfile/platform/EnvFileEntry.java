@@ -5,6 +5,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvFileErrorException;
 import net.ashald.envfile.EnvFileParser;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -17,26 +18,26 @@ public class EnvFileEntry {
 
     private final String parserId;
     private String path;
-    private boolean enabled;
+    private boolean isEnabled;
 
-    public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, Boolean envFileIsEnabled) {
+    public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, boolean enabled) {
         runConfig = envFileRunConfig;
         parserId = envFileParserId;
         path = envFilePath;
-        setEnable(envFileIsEnabled);
+        setEnable(enabled);
     }
 
     public boolean isEnabled() {
-        return enabled;
+        return isEnabled;
     }
 
     public void setEnable(boolean enable) {
-        enabled = enable;
+        isEnabled = enable;
     }
 
     public String getTypeTitle() {
-        EnvFileParser parser = getParser();
-        return parser == null ? String.format("<%s>", parserId) : parser.getTitle();
+        EnvVarsProviderFactory factory = getParserFactory();
+        return factory == null ? String.format("<%s>", parserId) : factory.getTitle();
     }
 
     public String getPath() {
@@ -70,9 +71,15 @@ public class EnvFileEntry {
     }
 
     @Nullable
+    private EnvVarsProviderFactory getParserFactory() {
+        EnvVarsProviderExtension extension = EnvVarsProviderExtension.getParserExtensionById(parserId);
+        return extension == null ? null : extension.getFactory();
+    }
+
+    @Nullable
     private EnvFileParser getParser() {
-        EnvFileParserExtension extension = EnvFileParserExtension.getParserExtensionById(parserId);
-        return extension == null ? null : extension.getParser();
+        EnvVarsProviderFactory factory = getParserFactory();
+        return factory == null ? null : factory.createParser();
     }
 
     private File getFile(VirtualFile baseDir, String systemPath) {

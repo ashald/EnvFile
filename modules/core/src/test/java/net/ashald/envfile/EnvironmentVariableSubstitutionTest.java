@@ -3,7 +3,7 @@ package net.ashald.envfile;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.ashald.envfile.parsers.DotEnvFileParser;
+import net.ashald.envfile.providers.dotenv.DotEnvFileParser;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;

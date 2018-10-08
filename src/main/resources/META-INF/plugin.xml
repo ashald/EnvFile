@@ -63,14 +63,14 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensionPoints>
-    <extensionPoint name="envfileParser" beanClass="net.ashald.envfile.platform.EnvFileParserExtension">
-      <with attribute="implementationClass" implements="net.ashald.envfile.EnvFileParser"/>
+    <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
+      <with attribute="factory" implements="net.ashald.envfile.EnvVarsProviderFactory"/>
     </extensionPoint>
   </extensionPoints>
 
   <extensions defaultExtensionNs="net.ashald.envfile">
-    <envfileParser id="env" implementationClass="net.ashald.envfile.parsers.DotEnvFileParser"/>
-    <envfileParser id="yaml" implementationClass="net.ashald.envfile.parsers.YamlFileParser"/>
+    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
+    <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
