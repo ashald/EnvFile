@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Unicode sequence handling in `.env` files (#38)
+- White text on white background when `Light` theme is used ([#61])
 
 ### Changed
 
@@ -65,3 +66,5 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added support for YAML dictionary format
 - Added support for JSON dictionary format (handled by YAML parser)
 - Initial Release
+
+[61]: https://github.com/Ashald/EnvFile/issues/61

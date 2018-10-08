@@ -46,9 +46,7 @@ public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvFileEntry, Boolean>
                                                            boolean hasFocus,
                                                            int row,
                                                            int column) {
-                final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setBackground(table.getBackground()); // Hide selection
-                return renderer;
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         };
     }

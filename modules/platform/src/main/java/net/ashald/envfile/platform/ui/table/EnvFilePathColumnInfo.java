@@ -3,6 +3,7 @@ package net.ashald.envfile.platform.ui.table;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.UIUtil;
 import net.ashald.envfile.platform.EnvFileEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +54,6 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 setText(p0.getPath());
-                setBackground(table.getBackground());
                 setBorder(null);
 
                 if (p0.isEnabled()) {
@@ -62,7 +62,7 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
                         setToolTipText("File doesn't exist!");
                     }
                 } else {
-                    setForeground(JBColor.GRAY);
+                    setForeground(UIUtil.getLabelDisabledForeground());
                 }
 
                 return renderer;

@@ -36,7 +36,6 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 EnvFileEntry entry = (EnvFileEntry) value;
                 setText(entry.getTypeTitle());
-                setBackground(table.getBackground()); // Hide selection
                 setBorder(null);
 
                 if (entry.isEnabled()) {
