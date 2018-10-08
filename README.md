@@ -330,6 +330,16 @@ $ ls -1 build/distributions
   Env File-2.1.1-SNAPSHOT.zip
 ```
 
+In order to open plugin's project in IDE one should generate skeleton and then open it and import Gradle project:
+```bash
+$ ./gradlew setup
+  
+  BUILD SUCCESSFUL in 1s
+  3 actionable tasks: 3 executed
+```
+This generates a very basic `.idea` project definition that is sufficient enough to ensure that IDEA would recognize
+this as a plugin after Gradle import.
+
 # Feedback
 
 Any feedback, bug reports and feature requests are highly appreciated!

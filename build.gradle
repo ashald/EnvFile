@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "idea"
     id "org.jetbrains.intellij" version "0.3.11"
     id "pl.allegro.tech.build.axion-release" version "1.9.3"
 }
@@ -20,10 +21,10 @@ allprojects {
     project.version = scmVersion.version
 
     ext.jetbrains = [
-            'version' : "2018.2",
-            'pycharm' : "PythonCore:2018.2.182.3684.2",
-            'rubymine': "org.jetbrains.plugins.ruby:2018.2.20180716",
-            'goland'  : "org.jetbrains.plugins.go:182.3684.59.834"
+            version : "2018.2",
+            pycharm : "PythonCore:2018.2.182.3684.2",
+            rubymine: "org.jetbrains.plugins.ruby:2018.2.20180716",
+            goland  : "org.jetbrains.plugins.go:182.3684.59.834"
     ]
 }
 
@@ -43,4 +44,31 @@ dependencies {
 
 wrapper {
     gradleVersion = "4.10.2"
+}
+
+def prj = ".idea/"
+
+idea {
+    module.iml {
+      generateTo = file(prj)
+
+      withXml {
+          it.node.@type = "PLUGIN_MODULE"
+          it.node.appendNode('component', [name: 'DevKit.ModuleBuildProperties', url: 'file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml'])
+      }
+    }
+}
+
+task setup {
+    dependsOn ideaModule, ideaProject
+    // overriding idea.project.outputFile changes relative path calculation so it's easier to just move a file
+    doLast {
+       copy {
+          from '.'
+          into prj
+          include "${project.name}.ipr"
+          rename { "modules.xml" }
+       }
+       project.delete "${project.name}.ipr"
+     }
 }
