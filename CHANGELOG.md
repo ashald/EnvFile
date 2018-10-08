@@ -13,7 +13,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Unicode sequence handling in `.env` files (#38)
+- Unicode sequence handling in `.env` files ([#38])
+- Backslash being removed from values in `.env` files ([#52]) 
 - White text on white background when `Light` theme is used ([#61])
 
 ### Changed
@@ -67,4 +68,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added support for JSON dictionary format (handled by YAML parser)
 - Initial Release
 
+[38]: https://github.com/Ashald/EnvFile/issues/38
+[52]: https://github.com/Ashald/EnvFile/issues/52
 [61]: https://github.com/Ashald/EnvFile/issues/61
