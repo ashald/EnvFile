@@ -8,7 +8,7 @@ public class DotEnvFileParserFactory implements EnvVarsProviderFactory {
 
     @Override
     public @NotNull
-    EnvVarsProvider createParser() {
+    EnvVarsProvider createProvider() {
         return new DotEnvFileParser();
     }
 

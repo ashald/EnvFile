@@ -36,7 +36,7 @@ public class EnvFileEntry {
     }
 
     public String getTypeTitle() {
-        EnvVarsProviderFactory factory = getParserFactory();
+        EnvVarsProviderFactory factory = getProviderFactory();
         return factory == null ? String.format("<%s>", parserId) : factory.getTitle();
     }
 
@@ -71,15 +71,15 @@ public class EnvFileEntry {
     }
 
     @Nullable
-    private EnvVarsProviderFactory getParserFactory() {
+    private EnvVarsProviderFactory getProviderFactory() {
         EnvVarsProviderExtension extension = EnvVarsProviderExtension.getParserExtensionById(parserId);
         return extension == null ? null : extension.getFactory();
     }
 
     @Nullable
     private EnvVarsProvider getProvider() {
-        EnvVarsProviderFactory factory = getParserFactory();
-        return factory == null ? null : factory.createParser();
+        EnvVarsProviderFactory factory = getProviderFactory();
+        return factory == null ? null : factory.createProvider();
     }
 
     private File getFile(VirtualFile baseDir, String systemPath) {
