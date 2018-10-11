@@ -17,8 +17,8 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
 
     @NotNull
     @Override
-    public Map<String, String> process(@NotNull String path, @NotNull Map<String, String> source) throws EnvFileErrorException, IOException {
-        Map<String, String> sourceEnv = new HashMap<>(source);
+    public Map<String, String> process(@NotNull Map<String, String> runConfigEnv, @NotNull String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException {
+        Map<String, String> sourceEnv = new HashMap<>(aggregatedEnv);
         Map<String, String> overrides = readFile(path);
 
         sourceEnv.putAll(overrides);

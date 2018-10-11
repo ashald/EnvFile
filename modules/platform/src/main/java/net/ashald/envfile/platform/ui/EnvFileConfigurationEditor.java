@@ -106,23 +106,13 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
 
     public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> userEnv) throws ExecutionException {
         Map<String, String> result = new HashMap<>();
-        result.putAll(collectEnvFromFiles(runConfigurationBase));
-        // user defined env vars override env files
-        result.putAll(userEnv);
-        return result;
-    }
-
-    private static Map<String, String> collectEnvFromFiles(@NotNull RunConfigurationBase runConfigurationBase) throws ExecutionException {
-        Map<String, String> result = new HashMap<>();
 
         EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
-                    result = entry.process(result);
-                } catch (EnvFileErrorException e) {
-                    throw new ExecutionException(e);
-                } catch (IOException e) {
+                    result = entry.process(userEnv, result);
+                } catch (EnvFileErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
             }

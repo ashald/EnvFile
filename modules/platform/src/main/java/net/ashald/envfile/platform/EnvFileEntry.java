@@ -60,14 +60,14 @@ public class EnvFileEntry {
         return getProvider() != null;
     }
 
-    public Map<String, String> process(Map<String, String> source) throws IOException, EnvFileErrorException {
+    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv) throws IOException, EnvFileErrorException {
         EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
-            return parser.process(path, source);
+            return parser.process(runConfigEnv, path, aggregatedEnv);
         }
 
-        return source;
+        return aggregatedEnv;
     }
 
     @Nullable
