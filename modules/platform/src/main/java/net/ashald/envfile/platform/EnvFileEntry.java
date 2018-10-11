@@ -4,7 +4,7 @@ import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvFileErrorException;
-import net.ashald.envfile.EnvFileParser;
+import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,11 +57,11 @@ public class EnvFileEntry {
     }
 
     public boolean validateType() {
-        return getParser() != null;
+        return getProvider() != null;
     }
 
     public Map<String, String> process(Map<String, String> source) throws IOException, EnvFileErrorException {
-        EnvFileParser parser = getParser();
+        EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
             return parser.process(path, source);
@@ -77,7 +77,7 @@ public class EnvFileEntry {
     }
 
     @Nullable
-    private EnvFileParser getParser() {
+    private EnvVarsProvider getProvider() {
         EnvVarsProviderFactory factory = getParserFactory();
         return factory == null ? null : factory.createParser();
     }

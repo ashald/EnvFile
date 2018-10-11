@@ -37,7 +37,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void singleEnvVarTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, SINGLE_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Placeholder was not replaced with single var value", SINGLE_VAR_VALUE, map.get(KEY));
     }
 
@@ -45,7 +45,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void snakeCaseEnvironmentVariables() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, SNAKE_CASE_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Placeholder was not replaced with snake case var value", SNAKE_CASE_VAR_VALUE, map.get(KEY));
     }
 
@@ -53,7 +53,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void dotSeparatedEnvVar() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, DOT_SEP_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Placeholder was not replaced with dot separated case var value", DOT_SEP_VAR_VALUE, map.get(KEY));
     }
 
@@ -61,7 +61,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void forwardSlashPathTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, SINGLE_VAR_PLACE_HOLDER + "/" + SNAKE_CASE_VAR_PLACE_HOLDER + "/" + DOT_SEP_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals(SINGLE_VAR_VALUE + "/" + SNAKE_CASE_VAR_VALUE + "/" + DOT_SEP_VAR_VALUE, map.get(KEY));
     }
 
@@ -69,7 +69,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void backSlashPathTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, SINGLE_VAR_PLACE_HOLDER + "\\" + SNAKE_CASE_VAR_PLACE_HOLDER + "\\" + DOT_SEP_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals(SINGLE_VAR_VALUE + "\\" + SNAKE_CASE_VAR_VALUE + "\\" + DOT_SEP_VAR_VALUE, map.get(KEY));
     }
 
@@ -77,7 +77,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void prependEnvVarTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, "/prepend/path:" + SINGLE_VAR_PLACE_HOLDER);
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Placeholder was not replaced with single var value", "/prepend/path:" + SINGLE_VAR_VALUE, map.get(KEY));
     }
 
@@ -85,7 +85,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void appendEnvVarTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, SINGLE_VAR_PLACE_HOLDER + ":/append/path");
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Placeholder was not replaced with single var value", SINGLE_VAR_VALUE + ":/append/path", map.get(KEY));
     }
 
@@ -94,7 +94,7 @@ public class EnvironmentVariableSubstitutionTest {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, "preferred");
         System.setProperty(KEY, "un-preferred");
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Precedence was not followed", "preferred", map.get(KEY));
     }
 
@@ -102,7 +102,7 @@ public class EnvironmentVariableSubstitutionTest {
     public void unchangedEnvVarTest() {
         Map<String, String> map = new HashMap<>();
         map.put(KEY, "${UNCHANGED}");
-        map = ((AbstractEnvFileParser)parser).expandEnvironmentVariables(map);
+        map = ((AbstractEnvVarsProvider)parser).expandEnvironmentVariables(map);
         Assert.assertEquals("Property should have been unchanged", "${UNCHANGED}", map.get(KEY));
     }
 

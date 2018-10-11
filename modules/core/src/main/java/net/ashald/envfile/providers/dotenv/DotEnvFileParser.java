@@ -1,6 +1,6 @@
 package net.ashald.envfile.providers.dotenv;
 
-import net.ashald.envfile.AbstractEnvFileParser;
+import net.ashald.envfile.AbstractEnvVarsProvider;
 import net.ashald.envfile.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DotEnvFileParser extends AbstractEnvFileParser {
+public class DotEnvFileParser extends AbstractEnvVarsProvider {
 
     @NotNull
     @Override

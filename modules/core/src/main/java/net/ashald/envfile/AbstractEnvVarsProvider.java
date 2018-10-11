@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AbstractEnvFileParser implements EnvFileParser {
+public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
 
     private static final Pattern pattern = Pattern.compile("\\$\\{([A-Za-z0-9._]+)}");
 

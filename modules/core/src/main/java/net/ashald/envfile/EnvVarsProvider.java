@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 
-public interface EnvFileParser {
+public interface EnvVarsProvider {
 
     @NotNull Map<String, String> process(@NotNull String path, @NotNull Map<String, String> source) throws EnvFileErrorException, IOException;
 

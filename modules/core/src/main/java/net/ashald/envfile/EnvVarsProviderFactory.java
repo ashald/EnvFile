@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 public interface EnvVarsProviderFactory {
 
-    @NotNull EnvFileParser createParser();
+    @NotNull
+    EnvVarsProvider createParser();
 
     @NotNull String getTitle();
 
