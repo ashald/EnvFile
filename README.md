@@ -5,12 +5,6 @@
 **Env File** is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
 from one or multiple files.
 
-## Version 2.0 Notice
-
-Please notice that `EnvFile` just received a major upgrade and was released as a new major version - `v2.0`.
-With the main goal of major update being support for more JetBrains platforms a lot of things changed, including UI,
-so please be sure to read the updated guide below, even if you already have used previous versions of `EnvFile`.
-
 ### Supported Formats
 
 - **.env**
