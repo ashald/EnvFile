@@ -1,12 +1,12 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>2.1.0</version>
+  <version>3.0.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
-      <h1>Env File</h1>
-      <b>Compiled with Java 1.6</b>
+      <h1>EnvFile</h1>
+      <b>Compiled with Java 1.8</b>
       <h2>
         <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
         <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
@@ -32,25 +32,38 @@
         <li><b>PyCharm</b></li>
         <li><b>IDEA</b></li>
         <li><b>RubyMine</b></li>
+        <li><b>GoLand</b></li>
       </ul>
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v2.1.0"><b>v2.1.0</b></a> (2017-03-14)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.0"><b>v3.0.0</b></a> (2018-10-11)
       <br/>
       <br/>
 
       <b>Added</b>:
       <ul>
-        <li>File paths can be edited manually with double-click</li>
-        <li>Display 5 most recently used files within current IDE session</li>
+        <li>Integration with Goland</li>
+        <li>Announce support for `.env` file extension</li>
+        <li>Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry</li>
+        <li>Optional environment variable substitution</li>
       </ul>
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Environment variables are not set in IDEA</li>
+        <li>Unicode sequence handling in .env files</li>
+        <li>Backslash being removed from values in .env files</li>
+        <li>White text on white background when Light theme is used</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <b>Changed</b>:
+      <ul>
+        <li>Core API extension "envfileParser" replaced with "envFileProvider"</li>
+        <li>Shorten path to relative for files within project dir</li>
       </ul>
       <br/>
       <br/>
