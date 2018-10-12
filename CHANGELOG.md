@@ -1,14 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
+This project adheres to [Semantic Versioning].
 
 ## Unreleased
 
 ### Added
 
-- Gradle build system support (#68)
-- Automatic versioning from git tags (#68)
-- Integration with Goland (#67)
+- Gradle build system support ([#68])
+- Automatic versioning from git tags ([#68])
+- Integration with Goland ([#67])
 - Announce support for `.env` file extension
 - Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry 
 - Optional environment variable Substitution ([#16]) using [StringSubstitutor]
@@ -60,7 +60,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - UI components overlap with multiple projects opened within same window
 
 ### Changed
-- Change Log to [Keep a CHANGELOG](http://keepachangelog.com) format
+- Change Log to [Keep a CHANGELOG] format
 
 
 ## 1.0.0 - 2015-07-18
@@ -75,5 +75,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [38]: https://github.com/Ashald/EnvFile/issues/38
 [52]: https://github.com/Ashald/EnvFile/issues/52
 [61]: https://github.com/Ashald/EnvFile/issues/61
+[67]: https://github.com/Ashald/EnvFile/issues/67
+[68]: https://github.com/Ashald/EnvFile/issues/68
 
-[StringSubstitutor]: https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
+[Keep a CHANGELOG]:     http://keepachangelog.com
+[Semantic Versioning]:  http://semver.org/
+[StringSubstitutor]:    https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
