@@ -195,10 +195,13 @@ Restart IDE.
 
 ## Usage
 
-- Add new *Run/Debug configuration*: <kbd>+</kbd> <kbd>Add new configuration</kbd> > <kbd>...</kbd>
-- Switch to <kbd>EnvFile</kbd> tab
-- Enable <kbd>EnvFile</kbd> checkbox
-- Click on <kbd>+</kbd> to add a file
+0) Add new *Run/Debug configuration*: <kbd>+</kbd> <kbd>Add new configuration</kbd> > <kbd>...</kbd>
+1) Switch to <kbd>EnvFile</kbd> tab
+2) Select <kbd>Enable EnvFile</kbd> checkbox
+3) Select <kbd>Substitute Environment Variables</kbd> checkbox (if needed)
+4) Click on <kbd>+</kbd> to add a file
+5) Adjust order as needed
+6) Even variables defined within run configuration can be processed, ordered and substituted 
 
 ![Read from file](./docs/example.png)
 
