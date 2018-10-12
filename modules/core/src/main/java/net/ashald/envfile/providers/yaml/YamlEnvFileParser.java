@@ -11,9 +11,13 @@ import java.util.Map;
 
 public class YamlEnvFileParser extends AbstractEnvVarsProvider {
 
+    public YamlEnvFileParser(boolean shouldSubstituteEnvVar) {
+        super(shouldSubstituteEnvVar);
+    }
+
     @NotNull
     @Override
-    public Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException, IOException {
+    public Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, @NotNull String path) throws EnvFileErrorException, IOException {
         Map<String, String> result;
         try (InputStream input = new FileInputStream(new File(path))) {
             result = new Yaml().load(input);

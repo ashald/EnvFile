@@ -40,6 +40,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private final RunConfigurationBase runConfig;
 
     private final JCheckBox useEnvFileCheckBox;
+    private final JCheckBox substituteEnvVarsCheckBox;
     private final ListTableModel<EnvFileEntry> envFilesModel;
     private final TableView<EnvFileEntry> envFilesTable;
 
@@ -51,10 +52,10 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         ColumnInfo<EnvFileEntry, String> FILE = new EnvFilePathColumnInfo();
         ColumnInfo<EnvFileEntry, EnvFileEntry> TYPE = new EnvFileTypeColumnInfo();
 
-        envFilesModel = new ListTableModel<EnvFileEntry>(IS_ACTIVE, FILE, TYPE);
+        envFilesModel = new ListTableModel<>(IS_ACTIVE, FILE, TYPE);
 
         // Create Table
-        envFilesTable = new TableView<EnvFileEntry>(envFilesModel);
+        envFilesTable = new TableView<>(envFilesModel);
         envFilesTable.getEmptyText().setText("No environment variables files selected");
 
         setUpColumnWidth(envFilesTable, 0, IS_ACTIVE, 20);
@@ -73,11 +74,14 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 envFilesTable.setEnabled(useEnvFileCheckBox.isSelected());
+                substituteEnvVarsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
             }
         });
+        substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
+        substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
 
         // TODO: come up with a generic approach for this
-        envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true));
+        envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
 
         // Create Toolbar - Add/Remove/Move actions
         final ToolbarDecorator envFilesTableDecorator = ToolbarDecorator.createDecorator(envFilesTable);
@@ -116,6 +120,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         // Compose UI
         JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, JBUI.scale(5), JBUI.scale(5)));
         checkboxPanel.add(useEnvFileCheckBox);
+        checkboxPanel.add(substituteEnvVarsCheckBox);
 
         JPanel envFilesTableDecoratorPanel = envFilesTableDecorator.createPanel();
         Dimension size = new Dimension(-1, 150);
@@ -146,7 +151,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
         for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
-            if (!extension.getFactory().createProvider().isEditable()) {
+            if (!extension.getFactory().createProvider(substituteEnvVarsCheckBox.isSelected()).isEditable()) {
                 continue;
             }
 
@@ -170,7 +175,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                         }
 
                         ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
-                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true);
+                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true, substituteEnvVarsCheckBox.isSelected());
                         newList.add(newOptions);
                         model.setItems(newList);
                         int index = model.getRowCount() - 1;
@@ -222,12 +227,14 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     }
 
     EnvFileSettings getState() {
-        return new EnvFileSettings(useEnvFileCheckBox.isSelected(), envFilesModel.getItems());
+        return new EnvFileSettings(useEnvFileCheckBox.isSelected(), substituteEnvVarsCheckBox.isSelected(), envFilesModel.getItems());
     }
 
     void setState(EnvFileSettings state) {
         useEnvFileCheckBox.setSelected(state.isEnabled());
+        substituteEnvVarsCheckBox.setSelected(state.isSubstituteEnvVarsEnabled());
         envFilesTable.setEnabled(state.isEnabled());
+        substituteEnvVarsCheckBox.setEnabled(state.isEnabled());
         envFilesModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }

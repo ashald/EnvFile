@@ -30,6 +30,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     @NonNls private static final String ELEMENT_ENTRY_SINGLE = "ENTRY";
 
     @NonNls private static final String FIELD_IS_ENABLED = "IS_ENABLED";
+    @NonNls private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
     @NonNls private static final String FIELD_PATH = "PATH";
     @NonNls private static final String FIELD_PARSER = "PARSER";
 
@@ -66,6 +67,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String isEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_IS_ENABLED);
         boolean isEnabled = Boolean.parseBoolean(isEnabledStr);
 
+        String envVarsSubstEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_SUBSTITUTE_VARS, "false");
+        boolean envVarsSubstEnabled  = Boolean.parseBoolean(envVarsSubstEnabledStr);
+
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
@@ -79,7 +83,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 String parserId = envElement.getAttributeValue(FIELD_PARSER, "~");
                 String path = envElement.getAttributeValue(FIELD_PATH);
 
-                entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled));
+                entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled, envVarsSubstEnabled));
             }
         }
 
@@ -92,11 +96,11 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
             }
         }
         if (!hasConfigEntry) {
-            entries.add(new EnvFileEntry(configuration, "runconfig", null, true));
+            entries.add(new EnvFileEntry(configuration, "runconfig", null, true, envVarsSubstEnabled));
         }
         // For a while to migrate old users - end
 
-        EnvFileSettings state = new EnvFileSettings(isEnabled, entries);
+        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, entries);
         configuration.putUserData(USER_DATA_KEY, state);
     }
 
@@ -104,6 +108,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
         if (state != null) {
             JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
+            JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
 
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {

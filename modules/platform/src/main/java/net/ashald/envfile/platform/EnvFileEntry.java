@@ -19,12 +19,18 @@ public class EnvFileEntry {
     private final String parserId;
     private String path;
     private boolean isEnabled;
+    private boolean isSubstitutionEnabled;
 
-    public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, boolean enabled) {
+    public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, boolean enabled, boolean substitutionEnabled) {
         runConfig = envFileRunConfig;
         parserId = envFileParserId;
         path = envFilePath;
         setEnable(enabled);
+        setSubstitutionEnabled(substitutionEnabled);
+    }
+
+    public void setSubstitutionEnabled(boolean enable) {
+        isSubstitutionEnabled = enable;
     }
 
     public boolean isEnabled() {
@@ -86,7 +92,7 @@ public class EnvFileEntry {
     @Nullable
     private EnvVarsProvider getProvider() {
         EnvVarsProviderFactory factory = getProviderFactory();
-        return factory == null ? null : factory.createProvider();
+        return factory == null ? null : factory.createProvider(isSubstitutionEnabled);
     }
 
     private File getFile() {

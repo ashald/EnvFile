@@ -1,19 +1,21 @@
 package net.ashald.envfile;
 
+import org.apache.commons.text.StringSubstitutor;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
+    private boolean isEnvVarSubstitutionEnabled;
 
-    private static final Pattern pattern = Pattern.compile("\\$\\{([A-Za-z0-9._]+)}");
+    public AbstractEnvVarsProvider(boolean shouldSubstituteEnvVar) {
+        isEnvVarSubstitutionEnabled = shouldSubstituteEnvVar;
+    }
 
     @NotNull
-    protected abstract Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException, IOException;
+    protected abstract Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, String path) throws EnvFileErrorException, IOException;
 
     @Override
     public boolean isEditable() {
@@ -23,38 +25,26 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
     @NotNull
     @Override
     public Map<String, String> process(@NotNull Map<String, String> runConfigEnv, String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException {
-        Map<String, String> sourceEnv = new HashMap<>(aggregatedEnv);
-        Map<String, String> overrides = readFile(path);
+        Map<String, String> result = new HashMap<>(aggregatedEnv);
+        Map<String, String> overrides = getEnvVars(runConfigEnv, path);
 
-        sourceEnv.putAll(overrides);
-
-        return expandEnvironmentVariables(sourceEnv);
-    }
-
-    Map<String, String> expandEnvironmentVariables(Map<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            String value = entry.getValue();
-
-            Matcher matcher = pattern.matcher(value);
-            while (matcher.find()) {
-                String envValue = getSystemValue(matcher.group(1), map);
-                if (envValue != null) {
-                    envValue = envValue.replace("\\", "\\\\");
-                    Pattern subexpr = Pattern.compile(Pattern.quote(matcher.group(0)));
-                    value = subexpr.matcher(value).replaceAll(envValue);
-                }
-            }
-
-            entry.setValue(value);
+        for (Map.Entry<String, String> entry : overrides.entrySet()) {
+            result.put(entry.getKey(), renderValue(entry.getValue(), result));
         }
 
-        return map;
+        return result;
     }
 
-    // precedence placeholder before System properties before environment variable
-    private String getSystemValue(final String name, Map<String, String> map) {
-        String property = map.get(name);
-        return property != null ? property : System.getProperty(name, System.getenv(name.toUpperCase()));
-    }
+    @NotNull
+    private String renderValue(String template, @NotNull Map<String, String> context) {
+        if (!isEnvVarSubstitutionEnabled) {
+            return template;
+        }
+        // resolve taking into account default values
+        String stage1 = new StringSubstitutor(context).replace(template);
+        // if ${FOO} was not resolved - replace it with empty string as it would've worked in bash
+        String stage2 = new StringSubstitutor(key -> context.getOrDefault(key, "")).replace(stage1);
 
+        return stage2;
+    }
 }

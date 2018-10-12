@@ -9,15 +9,20 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DotEnvFileParser extends AbstractEnvVarsProvider {
 
+    public DotEnvFileParser(boolean shouldSubstituteEnvVar) {
+        super(shouldSubstituteEnvVar);
+    }
+
     @NotNull
     @Override
-    protected Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException {
-        Map<String, String> result = new HashMap<>();
+    protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, @NotNull String path) throws EnvFileErrorException {
+        Map<String, String> result = new LinkedHashMap<>();
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);

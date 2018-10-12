@@ -279,42 +279,34 @@ $ echo $VERSION
 
 ### Variable Expansion
 
-As of version 2.? `EnvFile` now supports placeholder / property / environment variable expansion. A placeholder
-refers to a variable defined within the same file, a property refers to a system property set via the `java -D`
-mechanism and an environment variable is, well obviously it is an environment variable.
+`EnvFile` also supports environment variable substitution. It's optional and disabled by default.
+Implementation is based on [StringSubstitutor] so it's the best reference for how it works.
 
-#### Variable Format
+#### Examples
 
-There are a few limitations that variables must adhere to if you want expansion to work. Placeholders and properties
-may be any case, consist of any alpha-numeric characters and may contain dots or underscores. Environment variables
-follow convention and may only consist of uppercase alpha-numeric characters and may contain dots or underscores. All
-variables MUST be wrapped in `${}`, e.g.
-
-```ini
-# This line is ignored since it's a comment
-SECRET_KEY=${WOULD_BE_EXPANDED}
+Syntax is *_derived_* from Bash but is way more primitive:
+```
+A=${FOO}            # A=""        <- unknown variables replaced by empty strings
+B=${FOO:-default}   # B="default" <- default values can be set as in Bash
+C=${B}              # C="default" <- it's possible to refer to other variables that were previously evaluated
+D=$${C}             # D="$${C}"   <- double dollar serves as ane scape character
+E=$C                $ E="$C"      <- curly brackets are required
 ```
 
-would be expanded, however the example below would not.
+#### Precedence
 
-```ini
-# This line is ignored since it's a comment
-SECRET_KEY=$WOULD_NOT_BE_EXPANDED
-```
+Environment variables are evaluated in the order they are defined in files.
+Files are evaluated in the order defined in EnvFile UI.
+Environment variables defined in run configuration can be ordered relatively to files.
+Order between environment variables defined in run configuration is not defined.  
 
-#### Order of Precedence
-
-In the event that a variable exists more than once, e.g. is a placeholder and an environment variable then the
-applied order of precedence is placeholder, then system property and then environment variable. If no expanded
-value can be found in any of the three locations then the property will remain unchanged.
-
-NOTE: Any variable will be converted to UPPERCASE before attempting to retrieve a value from the environment.
+It is possible to refer to any environment variables that were evaluated previously - within same file or from other sources.  
 
 # Further Development
 
 - Add more formats (upon requests)
 - Add support for other JetBrains products/plugins (upon requests)
-- Add unit tests (¯\\\_(ツ)_/¯)
+- Add more tests (¯\\\_(ツ)_/¯)
 
 # Building
 
@@ -353,3 +345,4 @@ Copyright (c) 2017 Borys Pierov. See the [LICENSE](./LICENSE) file for license r
 
 [json-is-yaml]:           https://en.wikipedia.org/wiki/YAML#JSON
 [latest-release]:         https://github.com/Ashald/EnvFile/releases/latest
+[StringSubstitutor]:      https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html

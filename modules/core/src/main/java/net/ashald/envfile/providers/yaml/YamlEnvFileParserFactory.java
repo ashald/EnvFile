@@ -8,8 +8,8 @@ public class YamlEnvFileParserFactory implements EnvVarsProviderFactory {
 
     @Override
     public @NotNull
-    EnvVarsProvider createProvider() {
-        return new YamlEnvFileParser();
+    EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar) {
+        return new YamlEnvFileParser(shouldSubstituteEnvVar);
     }
 
     @NotNull

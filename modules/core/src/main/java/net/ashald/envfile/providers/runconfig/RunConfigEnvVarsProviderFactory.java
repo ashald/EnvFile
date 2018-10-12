@@ -10,8 +10,8 @@ public class RunConfigEnvVarsProviderFactory implements EnvVarsProviderFactory {
 
     @NotNull
     @Override
-    public EnvVarsProvider createProvider() {
-        return new RunConfigEnvVarsProvider();
+    public EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar) {
+        return new RunConfigEnvVarsProvider(shouldSubstituteEnvVar);
     }
 
     @Override

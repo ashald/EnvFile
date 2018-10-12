@@ -11,6 +11,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Integration with Goland (#67)
 - Announce support for `.env` file extension
 - Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry 
+- Optional environment variable Substitution ([#16]) using [StringSubstitutor]
 
 ### Fixed
 
@@ -70,6 +71,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Added support for JSON dictionary format (handled by YAML parser)
 - Initial Release
 
+[16]: https://github.com/Ashald/EnvFile/issues/16
 [38]: https://github.com/Ashald/EnvFile/issues/38
 [52]: https://github.com/Ashald/EnvFile/issues/52
 [61]: https://github.com/Ashald/EnvFile/issues/61
+
+[StringSubstitutor]: https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
