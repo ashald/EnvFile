@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
-## Unreleased
+## 3.0.0 - 2018-10-11
 
 ### Added
 
@@ -11,7 +11,7 @@ This project adheres to [Semantic Versioning].
 - Integration with Goland ([#67])
 - Announce support for `.env` file extension
 - Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry 
-- Optional environment variable Substitution ([#16]) using [StringSubstitutor]
+- Optional environment variable substitution ([#16]) using [StringSubstitutor]
 
 ### Fixed
 
