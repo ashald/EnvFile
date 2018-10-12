@@ -21,6 +21,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Core API extension `envfileParser` replaced with `envFileProvider` 
+- Shorten path to relative for files within project dir
 
 ## 2.1.0 - 2017-03-14
 

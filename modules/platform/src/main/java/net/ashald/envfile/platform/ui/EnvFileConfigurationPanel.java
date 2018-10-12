@@ -163,8 +163,14 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                     VirtualFile selectedFile = FileChooser.chooseFile(chooserDescriptor, project, null);
 
                     if (selectedFile != null) {
+                        String selectedPath = selectedFile.getPath();
+                        String baseDir = runConfig.getProject().getBaseDir().getPath();
+                        if (selectedPath.startsWith(baseDir)) {
+                            selectedPath = selectedPath.substring(baseDir.length() + 1);
+                        }
+
                         ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
-                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedFile.getPath(), true);
+                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true);
                         newList.add(newOptions);
                         model.setItems(newList);
                         int index = model.getRowCount() - 1;

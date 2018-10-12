@@ -53,7 +53,8 @@ public class EnvFileEntry {
     }
 
     public boolean validatePath() {
-        return path == null || getFile(runConfig.getProject().getBaseDir(), path).exists();
+        File file = getFile();
+        return file == null || file.exists();
     }
 
     public boolean validateType() {
@@ -64,7 +65,8 @@ public class EnvFileEntry {
         EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
-            return parser.process(runConfigEnv, path, aggregatedEnv);
+            File file = getFile();
+            return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);
         }
 
         return aggregatedEnv;
@@ -87,14 +89,17 @@ public class EnvFileEntry {
         return factory == null ? null : factory.createProvider();
     }
 
-    private File getFile(VirtualFile baseDir, String systemPath) {
-        if (!FileUtil.isAbsolute(systemPath)) {
-            VirtualFile virtualFile = baseDir.findFileByRelativePath(systemPath);
+    private File getFile() {
+        if (path == null) {
+            return null;
+        }
+        String resolvedPath = path;
+        if (!FileUtil.isAbsolute(resolvedPath)) {
+            VirtualFile virtualFile = runConfig.getProject().getBaseDir().findFileByRelativePath(resolvedPath);
             if (virtualFile != null) {
-                systemPath = virtualFile.getPath();
+                resolvedPath = virtualFile.getPath();
             }
         }
-        return new File(systemPath);
+        return new File(resolvedPath);
     }
-
 }
