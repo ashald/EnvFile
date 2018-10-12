@@ -64,7 +64,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
 
     public static void readExternal(@NotNull RunConfigurationBase configuration, @NotNull Element element) {
         String isEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_IS_ENABLED);
-        boolean isEnabled = isEnabledStr != null && Boolean.parseBoolean(isEnabledStr);
+        boolean isEnabled = Boolean.parseBoolean(isEnabledStr);
 
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
 
@@ -74,14 +74,27 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 Element envElement = (Element) o;
 
                 String isEntryEnabledStr = envElement.getAttributeValue(FIELD_IS_ENABLED);
-                boolean isEntryEnabled = isEntryEnabledStr != null && Boolean.parseBoolean(isEntryEnabledStr);
+                boolean isEntryEnabled = Boolean.parseBoolean(isEntryEnabledStr);
 
                 String parserId = envElement.getAttributeValue(FIELD_PARSER, "~");
-                String path = envElement.getAttributeValue(FIELD_PATH, "~");
+                String path = envElement.getAttributeValue(FIELD_PATH);
 
                 entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled));
             }
         }
+
+        // For a while to migrate old users - begin
+        boolean hasConfigEntry = false;
+        for (EnvFileEntry e : entries) {
+            if (e.getParserId().equals("runconfig")) {
+                hasConfigEntry = true;
+                break;
+            }
+        }
+        if (!hasConfigEntry) {
+            entries.add(new EnvFileEntry(configuration, "runconfig", null, true));
+        }
+        // For a while to migrate old users - end
 
         EnvFileSettings state = new EnvFileSettings(isEnabled, entries);
         configuration.putUserData(USER_DATA_KEY, state);
@@ -97,28 +110,31 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 final Element entryElement = new Element(ELEMENT_ENTRY_SINGLE);
                 entryElement.setAttribute(FIELD_IS_ENABLED, Boolean.toString(entry.isEnabled()));
                 entryElement.setAttribute(FIELD_PARSER, entry.getParserId());
-                entryElement.setAttribute(FIELD_PATH, entry.getPath());
+                String path = entry.getPath();
+                if (path != null) {
+                    entryElement.setAttribute(FIELD_PATH, entry.getPath());
+                }
                 entriesElement.addContent(entryElement);
             }
             element.addContent(entriesElement);
         }
     }
 
-    public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> userEnv) throws ExecutionException {
-        Map<String, String> result = new HashMap<>();
-
+    public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> runConfigEnv) throws ExecutionException {
         EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
+            Map<String, String> result = new HashMap<>();
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
-                    result = entry.process(userEnv, result);
+                    result = entry.process(runConfigEnv, result);
                 } catch (EnvFileErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
             }
+            return result;
+        } else {
+            return runConfigEnv;
         }
-
-        return result;
     }
 
     public static void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws ExecutionException {

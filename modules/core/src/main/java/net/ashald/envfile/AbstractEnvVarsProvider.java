@@ -15,9 +15,14 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
     @NotNull
     protected abstract Map<String, String> readFile(@NotNull String path) throws EnvFileErrorException, IOException;
 
+    @Override
+    public boolean isEditable() {
+        return true;
+    }
+
     @NotNull
     @Override
-    public Map<String, String> process(@NotNull Map<String, String> runConfigEnv, @NotNull String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException {
+    public Map<String, String> process(@NotNull Map<String, String> runConfigEnv, String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException {
         Map<String, String> sourceEnv = new HashMap<>(aggregatedEnv);
         Map<String, String> overrides = readFile(path);
 

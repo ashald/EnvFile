@@ -31,7 +31,7 @@ public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvFileEntry, Boolean>
 
     @Override
     public boolean isCellEditable(EnvFileEntry envFileEntry) {
-        return true;
+        return envFileEntry.isEditable();
     }
 
     @Nullable

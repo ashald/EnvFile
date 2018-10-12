@@ -21,7 +21,7 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
 
     @Override
     public boolean isCellEditable(EnvFileEntry envFileEntry) {
-        return envFileEntry.isEnabled();
+        return envFileEntry.isEditable() && envFileEntry.isEnabled();
     }
 
     @Nullable
@@ -53,16 +53,21 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
                                                            int row,
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setText(p0.getPath());
                 setBorder(null);
-
-                if (p0.isEnabled()) {
-                    if (!p0.validatePath()) {
-                        setForeground(JBColor.RED);
-                        setToolTipText("File doesn't exist!");
-                    }
-                } else {
+                if (p0.getParserId().equals("runconfig")) { // TODO make generic
+                    setText("<Run Configuration Env Vars>");
                     setForeground(UIUtil.getLabelDisabledForeground());
+                } else {
+                    setText(p0.getPath());
+
+                    if (p0.isEnabled()) {
+                        if (!p0.validatePath()) {
+                            setForeground(JBColor.RED);
+                            setToolTipText("File doesn't exist!");
+                        }
+                    } else {
+                        setForeground(UIUtil.getLabelDisabledForeground());
+                    }
                 }
 
                 return renderer;
@@ -70,4 +75,3 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
         };
     }
 }
-

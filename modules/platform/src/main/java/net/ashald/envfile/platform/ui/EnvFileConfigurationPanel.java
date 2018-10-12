@@ -76,6 +76,9 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             }
         });
 
+        // TODO: come up with a generic approach for this
+        envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true));
+
         // Create Toolbar - Add/Remove/Move actions
         final ToolbarDecorator envFilesTableDecorator = ToolbarDecorator.createDecorator(envFilesTable);
 
@@ -97,7 +100,16 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 .setRemoveActionUpdater(new AnActionButtonUpdater() {
                     @Override
                     public boolean isEnabled(AnActionEvent e) {
-                        return updater.isEnabled(e) && envFilesTable.getSelectedRowCount() >= 1;
+                        boolean allEditable = true;
+
+                        for (EnvFileEntry entry : envFilesTable.getSelectedObjects()) {
+                            if (!entry.isEditable()) {
+                                allEditable = false;
+                                break;
+                            }
+                        }
+
+                        return updater.isEnabled(e) && envFilesTable.getSelectedRowCount() >= 1 && allEditable;
                     }
                 });
 
@@ -134,7 +146,9 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
         for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
-            extension.getId();
+            if (!extension.getFactory().createProvider().isEditable()) {
+                continue;
+            }
 
             final String title = String.format("%s file", extension.getFactory().getTitle());
             AnAction anAction = new AnAction(title) {

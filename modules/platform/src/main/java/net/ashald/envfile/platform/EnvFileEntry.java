@@ -53,7 +53,7 @@ public class EnvFileEntry {
     }
 
     public boolean validatePath() {
-        return getFile(runConfig.getProject().getBaseDir(), path).exists();
+        return path == null || getFile(runConfig.getProject().getBaseDir(), path).exists();
     }
 
     public boolean validateType() {
@@ -68,6 +68,11 @@ public class EnvFileEntry {
         }
 
         return aggregatedEnv;
+    }
+
+    public boolean isEditable() {
+        EnvVarsProvider provider = getProvider();
+        return provider != null && getProvider().isEditable();
     }
 
     @Nullable

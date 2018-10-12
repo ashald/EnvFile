@@ -11,6 +11,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class GolandRunConfigurationExtension extends GoRunConfigurationExtension {
@@ -24,7 +25,7 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
     @Override
     protected void patchCommandLine(@NotNull GoRunConfigurationBase goRunConfigurationBase, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine generalCommandLine, @NotNull String s) throws ExecutionException {
         Map<String, String> currentEnv = generalCommandLine.getEnvironment();
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(goRunConfigurationBase, currentEnv);
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(goRunConfigurationBase, new HashMap<>(currentEnv));
         currentEnv.clear();
         currentEnv.putAll(newEnv);
     }

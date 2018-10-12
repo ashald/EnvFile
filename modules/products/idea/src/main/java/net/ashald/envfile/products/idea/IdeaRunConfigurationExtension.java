@@ -13,6 +13,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
@@ -57,7 +58,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
      */
     @Override
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, params.getEnv());
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(params.getEnv()));
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(newEnv);

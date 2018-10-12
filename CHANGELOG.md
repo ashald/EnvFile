@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Automatic versioning from git tags (#68)
 - Integration with Goland (#67)
 - Announce support for `.env` file extension
+- Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry 
 
 ### Fixed
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 public interface EnvVarsProvider {
 
-    @NotNull Map<String, String> process(@NotNull Map<String, String> runConfigEnv, @NotNull String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException;
+    @NotNull Map<String, String> process(@NotNull Map<String, String> runConfigEnv, String path, @NotNull Map<String, String> aggregatedEnv) throws EnvFileErrorException, IOException;
 
+    boolean isEditable();
 }

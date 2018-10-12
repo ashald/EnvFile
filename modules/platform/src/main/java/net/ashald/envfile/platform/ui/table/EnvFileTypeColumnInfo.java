@@ -2,6 +2,7 @@ package net.ashald.envfile.platform.ui.table;
 
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.ColumnInfo;
+import com.intellij.util.ui.UIUtil;
 import net.ashald.envfile.platform.EnvFileEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +45,7 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
                         setToolTipText("Parser not found!");
                     }
                 } else {
-                    setForeground(JBColor.GRAY);
+                    setForeground(UIUtil.getLabelDisabledForeground());
                 }
 
                 return renderer;
