@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.0.0</version>
+  <version>3.0.1</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -37,6 +37,17 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.1"><b>v3.0.1</b></a> (2018-10-15)
+      <br/>
+      <br/>
+
+      <b>Fixed</b>:
+      <ul>
+        <li>Fix language support announcement</li>
+      </ul>
+      <br/>
+      <br/>
+
       <a href="https://github.com/Ashald/EnvFile/tree/v3.0.0"><b>v3.0.0</b></a> (2018-10-11)
       <br/>
       <br/>
