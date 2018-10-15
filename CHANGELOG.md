@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Fixed
+
+- Fix language support announcement
+
 ## 3.0.0 - 2018-10-11
 
 ### Added
