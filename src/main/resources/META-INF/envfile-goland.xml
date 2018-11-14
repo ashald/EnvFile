@@ -1,0 +1,5 @@
+<idea-plugin version="2">
+    <extensions defaultExtensionNs="com.goide">
+        <runConfigurationExtension implementation="net.ashald.envfile.products.goland.GolandRunConfigurationExtension" id="envfileGoland"/>
+    </extensions>
+</idea-plugin>

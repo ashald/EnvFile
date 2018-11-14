@@ -1,0 +1,110 @@
+<idea-plugin>
+  <id>net.ashald.envfile</id>
+  <name>EnvFile</name>
+  <version>3.0.1</version>
+  <vendor email="envfile@ashald.net">Borys Pierov</vendor>
+
+  <description><![CDATA[
+      <h1>EnvFile</h1>
+      <b>Compiled with Java 1.8</b>
+      <h2>
+        <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
+        <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
+      </h2>
+
+      <b>Env File</b> is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
+      from one or multiple files.
+      <br/>
+
+      <h3>Supported formats:</h3>
+      <ul>
+        <li><b>.env</b></li>
+        <li><b>YAML</b> dictionary</li>
+        <li><b>JSON</b> dictionary</li>
+      </ul>
+
+      <br/>
+      All formats assume that both keys and values are strings.
+      <br/>
+
+      <h3>Supported Platforms:</h3>
+      <ul>
+        <li><b>PyCharm</b></li>
+        <li><b>IDEA</b></li>
+        <li><b>RubyMine</b></li>
+        <li><b>GoLand</b></li>
+      </ul>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.1"><b>v3.0.1</b></a> (2018-10-15)
+      <br/>
+      <br/>
+
+      <b>Fixed</b>:
+      <ul>
+        <li>Fix language support announcement</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.0"><b>v3.0.0</b></a> (2018-10-11)
+      <br/>
+      <br/>
+
+      <b>Added</b>:
+      <ul>
+        <li>Integration with Goland</li>
+        <li>Announce support for `.env` file extension</li>
+        <li>Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry</li>
+        <li>Optional environment variable substitution</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <b>Fixed</b>:
+      <ul>
+        <li>Unicode sequence handling in .env files</li>
+        <li>Backslash being removed from values in .env files</li>
+        <li>White text on white background when Light theme is used</li>
+      </ul>
+      <br/>
+      <br/>
+
+      <b>Changed</b>:
+      <ul>
+        <li>Core API extension "envfileParser" replaced with "envFileProvider"</li>
+        <li>Shorten path to relative for files within project dir</li>
+      </ul>
+      <br/>
+      <br/>
+
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="131"/>
+
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensionPoints>
+    <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
+      <with attribute="factory" implements="net.ashald.envfile.EnvVarsProviderFactory"/>
+    </extensionPoint>
+  </extensionPoints>
+
+  <extensions defaultExtensionNs="net.ashald.envfile">
+    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
+    <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
+    <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
+  </extensions>
+
+  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
+  <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
+  <depends optional="true" config-file="envfile-goland.xml">org.jetbrains.plugins.go</depends>
+
+</idea-plugin>

@@ -1,0 +1,11 @@
+plugins {
+    id "java"
+}
+
+dependencies {
+    compile "org.jetbrains:annotations:16.0.3"
+    compile "org.yaml:snakeyaml:1.23"
+    compile "org.apache.commons:commons-text:1.5"
+
+    testCompile 'junit:junit:4.12'
+}

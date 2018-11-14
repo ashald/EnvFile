@@ -1,0 +1,6 @@
+A: ${X}           # should be empty
+B: ${X:-default}  # should be 'default'
+C: ${FOO}         # should be 'BAR'
+D: ${C} ${B}      # should be 'BAR default'
+E: $${FOO}        # should be '${FOO}'
+F: ${${X:-FOO}}   # should be 'BAR'

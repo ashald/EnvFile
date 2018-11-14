@@ -1,0 +1,14 @@
+plugins {
+    id "java"
+    id "org.jetbrains.intellij"
+}
+
+intellij {
+    version jetbrains.version
+    plugins jetbrains.rubymine
+}
+
+dependencies {
+    compile project(":envfile-platform")
+    compile "org.jetbrains:annotations:16.0.3"
+}
