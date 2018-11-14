@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class DotEnvFileParserTest {
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+
+public class DotEnvFileParserTest extends LightPlatformCodeInsightFixtureTestCase {
 
     private DotEnvFileParser parser = new DotEnvFileParser(true);
 
@@ -53,7 +54,7 @@ public class DotEnvFileParserTest {
             put("FOO", "BAR");
         }};
 
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("substitutions.env"), context);
+        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("substitutions.env"), context, this.getProject());
         Assert.assertEquals("", result.get("A"));
         Assert.assertEquals("default", result.get("B"));
         Assert.assertEquals("BAR", result.get("C"));
@@ -63,7 +64,7 @@ public class DotEnvFileParserTest {
 
     @Test
     public void testOrder() throws EnvFileErrorException, IOException {
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("order.env"), Collections.emptyMap());
+        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("order.env"), Collections.emptyMap(), this.getProject());
         Assert.assertEquals("A(B(C))", result.get("A"));
     }
 

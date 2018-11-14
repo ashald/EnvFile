@@ -131,7 +131,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
             Map<String, String> result = new HashMap<>();
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
-                    result = entry.process(runConfigEnv, result);
+                    result = entry.process(runConfigEnv, result, runConfigurationBase.getProject());
                 } catch (EnvFileErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
