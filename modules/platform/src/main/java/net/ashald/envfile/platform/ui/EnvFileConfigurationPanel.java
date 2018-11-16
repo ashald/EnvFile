@@ -41,6 +41,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
 
     private final JCheckBox useEnvFileCheckBox;
     private final JCheckBox substituteEnvVarsCheckBox;
+    private final JCheckBox supportPathMacroCheckBox;
     private final ListTableModel<EnvFileEntry> envFilesModel;
     private final TableView<EnvFileEntry> envFilesTable;
 
@@ -75,10 +76,13 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 envFilesTable.setEnabled(useEnvFileCheckBox.isSelected());
                 substituteEnvVarsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
+                supportPathMacroCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
             }
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
         substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
+        supportPathMacroCheckBox = new JCheckBox("Support path macro");
+        supportPathMacroCheckBox.setToolTipText("Support native JetBrains path macro like $PROJECT_DIR$");
 
         // TODO: come up with a generic approach for this
         envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
@@ -121,6 +125,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, JBUI.scale(5), JBUI.scale(5)));
         checkboxPanel.add(useEnvFileCheckBox);
         checkboxPanel.add(substituteEnvVarsCheckBox);
+        checkboxPanel.add(supportPathMacroCheckBox);
 
         JPanel envFilesTableDecoratorPanel = envFilesTableDecorator.createPanel();
         Dimension size = new Dimension(-1, 150);
@@ -227,12 +232,13 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     }
 
     EnvFileSettings getState() {
-        return new EnvFileSettings(useEnvFileCheckBox.isSelected(), substituteEnvVarsCheckBox.isSelected(), envFilesModel.getItems());
+        return new EnvFileSettings(useEnvFileCheckBox.isSelected(), substituteEnvVarsCheckBox.isSelected(), supportPathMacroCheckBox.isSelected(), envFilesModel.getItems());
     }
 
     void setState(EnvFileSettings state) {
         useEnvFileCheckBox.setSelected(state.isEnabled());
         substituteEnvVarsCheckBox.setSelected(state.isSubstituteEnvVarsEnabled());
+        supportPathMacroCheckBox.setSelected(state.isPathMacroSupported());
         envFilesTable.setEnabled(state.isEnabled());
         substituteEnvVarsCheckBox.setEnabled(state.isEnabled());
         envFilesModel.setItems(new ArrayList<>(state.getEntries()));
