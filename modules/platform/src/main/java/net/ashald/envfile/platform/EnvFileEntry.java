@@ -1,7 +1,6 @@
 package net.ashald.envfile.platform;
 
 import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvFileErrorException;
@@ -68,12 +67,12 @@ public class EnvFileEntry {
         return getProvider() != null;
     }
 
-    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, Project project) throws IOException, EnvFileErrorException {
+    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv) throws IOException, EnvFileErrorException {
         EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
             File file = getFile();
-            return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv, project);
+            return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);
         }
 
         return aggregatedEnv;
