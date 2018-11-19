@@ -73,7 +73,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String envVarsSubstEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_SUBSTITUTE_VARS, "false");
         boolean envVarsSubstEnabled  = Boolean.parseBoolean(envVarsSubstEnabledStr);
 
-        String pathMacroSupportedStr = JDOMExternalizerUtil.readField(element, FIELD_PATH_MACRO_VARS, "true");
+        String pathMacroSupportedStr = JDOMExternalizerUtil.readField(element, FIELD_PATH_MACRO_VARS, "false");
         boolean pathMacroSupported = Boolean.parseBoolean(pathMacroSupportedStr);
 
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
