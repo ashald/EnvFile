@@ -2,6 +2,7 @@ package net.ashald.envfile.platform.ui;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunConfigurationBase;
+import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends SettingsEditor<T> {
     private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<EnvFileSettings>("EnvFile Settings");
@@ -31,6 +33,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
 
     @NonNls private static final String FIELD_IS_ENABLED = "IS_ENABLED";
     @NonNls private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
+    @NonNls private static final String FIELD_PATH_MACRO_VARS = "IS_PATH_MACRO_SUPPORTED";
     @NonNls private static final String FIELD_PATH = "PATH";
     @NonNls private static final String FIELD_PARSER = "PARSER";
 
@@ -70,6 +73,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String envVarsSubstEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_SUBSTITUTE_VARS, "false");
         boolean envVarsSubstEnabled  = Boolean.parseBoolean(envVarsSubstEnabledStr);
 
+        String pathMacroSupportedStr = JDOMExternalizerUtil.readField(element, FIELD_PATH_MACRO_VARS, "false");
+        boolean pathMacroSupported = Boolean.parseBoolean(pathMacroSupportedStr);
+
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
@@ -100,7 +106,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
         // For a while to migrate old users - end
 
-        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, entries);
+        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries);
         configuration.putUserData(USER_DATA_KEY, state);
     }
 
@@ -109,6 +115,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         if (state != null) {
             JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
+            JDOMExternalizerUtil.writeField(element, FIELD_PATH_MACRO_VARS, Boolean.toString(state.isPathMacroSupported()));
 
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {
@@ -135,6 +142,11 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 } catch (EnvFileErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
+            }
+            if (state.isPathMacroSupported()) {
+                // replace $PROJECT_DIR$ by project path
+                PathMacroManager macroManager = PathMacroManager.getInstance(runConfigurationBase.getProject());
+                result = result.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, o -> macroManager.expandPath(o.getValue())));
             }
             return result;
         } else {

@@ -7,11 +7,13 @@ public class EnvFileSettings {
 
     private final boolean pluginEnabled;
     private final boolean envVarsSubstitutionEnabled;
+    private final boolean pathMacroSupported;
     private final List<EnvFileEntry> entries;
 
-    public EnvFileSettings(boolean isEnabled, boolean substituteVars, List<EnvFileEntry> envFileEntries) {
+    public EnvFileSettings(boolean isEnabled, boolean substituteVars, boolean pathMacroSupported, List<EnvFileEntry> envFileEntries) {
         pluginEnabled = isEnabled;
         envVarsSubstitutionEnabled = substituteVars;
+        this.pathMacroSupported = pathMacroSupported;
         entries = envFileEntries;
     }
 
@@ -21,6 +23,10 @@ public class EnvFileSettings {
 
     public boolean isSubstituteEnvVarsEnabled() {
         return envVarsSubstitutionEnabled;
+    }
+
+    public boolean isPathMacroSupported() {
+        return pathMacroSupported;
     }
 
     public List<EnvFileEntry> getEntries() {
