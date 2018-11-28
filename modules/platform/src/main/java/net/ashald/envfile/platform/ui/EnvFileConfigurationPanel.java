@@ -26,6 +26,7 @@ import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import java.awt.*;
@@ -81,8 +82,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
         substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
-        supportPathMacroCheckBox = new JCheckBox("Support path macro");
-        supportPathMacroCheckBox.setToolTipText("Support native JetBrains path macro like $PROJECT_DIR$");
+        supportPathMacroCheckBox = new JCheckBox("Process JetBrains path macro references ($PROJECT_DIR$)");
 
         // TODO: come up with a generic approach for this
         envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
@@ -121,11 +121,20 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                     }
                 });
 
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setBorder(JBUI.Borders.empty(5, 22, 5, 5));
+        optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
+
+        optionsPanel.add(substituteEnvVarsCheckBox);
+        optionsPanel.add(supportPathMacroCheckBox);
+
         // Compose UI
-        JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, JBUI.scale(5), JBUI.scale(5)));
+        JPanel checkboxPanel = new JPanel();
+        checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
         checkboxPanel.add(useEnvFileCheckBox);
-        checkboxPanel.add(substituteEnvVarsCheckBox);
-        checkboxPanel.add(supportPathMacroCheckBox);
+        checkboxPanel.add(optionsPanel);
+
+        optionsPanel.setLocation(100, 100);
 
         JPanel envFilesTableDecoratorPanel = envFilesTableDecorator.createPanel();
         Dimension size = new Dimension(-1, 150);

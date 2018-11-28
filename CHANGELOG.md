@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Added
+
+- EnvFile can substitute Jet Brains path macro references ([#70])
+
 ## 3.0.1 - 2018-10-15
 
 ### Fixed
@@ -21,7 +27,7 @@ This project adheres to [Semantic Versioning].
 
 ### Fixed
 
-- Unicode sequence handling in `.env` files ([#38])
+- Unicode sequence handling in `.env` files [(#38)]
 - Backslash being removed from values in `.env` files ([#52]) 
 - White text on white background when `Light` theme is used ([#61])
 
