@@ -250,6 +250,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         supportPathMacroCheckBox.setSelected(state.isPathMacroSupported());
         envFilesTable.setEnabled(state.isEnabled());
         substituteEnvVarsCheckBox.setEnabled(state.isEnabled());
+        supportPathMacroCheckBox.setEnabled(state.isEnabled());
         envFilesModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }
