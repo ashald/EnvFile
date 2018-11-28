@@ -84,14 +84,14 @@ This project adheres to [Semantic Versioning].
 - Added support for JSON dictionary format (handled by YAML parser)
 - Initial Release
 
-[16]: https://github.com/Ashald/EnvFile/issues/16
-[38]: https://github.com/Ashald/EnvFile/issues/38
-[52]: https://github.com/Ashald/EnvFile/issues/52
-[61]: https://github.com/Ashald/EnvFile/issues/61
-[67]: https://github.com/Ashald/EnvFile/issues/67
-[68]: https://github.com/Ashald/EnvFile/issues/68
-[70]: https://github.com/Ashald/EnvFile/issues/70
-[72]: https://github.com/Ashald/EnvFile/issues/72
+[#16]: https://github.com/Ashald/EnvFile/issues/16
+[#38]: https://github.com/Ashald/EnvFile/issues/38
+[#52]: https://github.com/Ashald/EnvFile/issues/52
+[#61]: https://github.com/Ashald/EnvFile/issues/61
+[#67]: https://github.com/Ashald/EnvFile/issues/67
+[#68]: https://github.com/Ashald/EnvFile/issues/68
+[#70]: https://github.com/Ashald/EnvFile/issues/70
+[#72]: https://github.com/Ashald/EnvFile/issues/72
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/
