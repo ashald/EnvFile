@@ -37,44 +37,14 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.1"><b>v3.0.1</b></a> (2018-10-15)
-      <br/>
-      <br/>
-
-      <b>Fixed</b>:
-      <ul>
-        <li>Fix language support announcement</li>
-      </ul>
-      <br/>
-      <br/>
-
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.0.0"><b>v3.0.0</b></a> (2018-10-11)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.1.0"><b>v3.1.0</b></a> (2018-11-28)
       <br/>
       <br/>
 
       <b>Added</b>:
       <ul>
-        <li>Integration with Goland</li>
-        <li>Announce support for `.env` file extension</li>
-        <li>Run Configuration defined environment variables are now displayed in EnvFile tab as individual entry</li>
-        <li>Optional environment variable substitution</li>
-      </ul>
-      <br/>
-      <br/>
-
-      <b>Fixed</b>:
-      <ul>
-        <li>Unicode sequence handling in .env files</li>
-        <li>Backslash being removed from values in .env files</li>
-        <li>White text on white background when Light theme is used</li>
-      </ul>
-      <br/>
-      <br/>
-
-      <b>Changed</b>:
-      <ul>
-        <li>Core API extension "envfileParser" replaced with "envFileProvider"</li>
-        <li>Shorten path to relative for files within project dir</li>
+        <li>EnvFile can substitute Jet Brains path macro references</li>
+        <li>Add an option to ignore missing files</li>
       </ul>
       <br/>
       <br/>
@@ -82,7 +52,7 @@
     ]]>
   </change-notes>
 
-  <idea-version since-build="131"/>
+  <idea-version since-build="181"/>
 
   <depends>com.intellij.modules.lang</depends>
 
