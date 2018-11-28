@@ -297,7 +297,12 @@ Files are evaluated in the order defined in EnvFile UI.
 Environment variables defined in run configuration can be ordered relatively to files.
 Order between environment variables defined in run configuration is not defined.  
 
-It is possible to refer to any environment variables that were evaluated previously - within same file or from other sources.  
+It is possible to refer to any environment variables that were evaluated previously - within same file or from other sources.
+
+### Path Macro Substitution
+
+`EnvFile` can substitute JetBrains path macro references such as `$PROJECT_DIR$` etc. It's optional and disabled by default.
+For details - see ["Working with $PROJECT_DIR$ in plugin configuration options"].  
 
 # Further Development
 
@@ -340,6 +345,7 @@ Feel free to create an issue, contact me using `Github` or just drop me an email
 
 Copyright (c) 2017 Borys Pierov. See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
 
-[json-is-yaml]:           https://en.wikipedia.org/wiki/YAML#JSON
-[latest-release]:         https://github.com/Ashald/EnvFile/releases/latest
-[StringSubstitutor]:      https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
+[json-is-yaml]:                                               https://en.wikipedia.org/wiki/YAML#JSON
+[latest-release]:                                             https://github.com/Ashald/EnvFile/releases/latest
+[StringSubstitutor]:                                          https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
+[Working with $PROJECT_DIR$ in plugin configuration options]: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206781805-Working-with-PROJECT-DIR-in-plugin-configuration-options
