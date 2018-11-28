@@ -34,6 +34,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     @NonNls private static final String FIELD_IS_ENABLED = "IS_ENABLED";
     @NonNls private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
     @NonNls private static final String FIELD_PATH_MACRO_VARS = "IS_PATH_MACRO_SUPPORTED";
+    @NonNls private static final String FIELD_IGNORE_MISSING = "IS_IGNORE_MISSING_FILES";
     @NonNls private static final String FIELD_PATH = "PATH";
     @NonNls private static final String FIELD_PARSER = "PARSER";
 
@@ -76,6 +77,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String pathMacroSupportedStr = JDOMExternalizerUtil.readField(element, FIELD_PATH_MACRO_VARS, "false");
         boolean pathMacroSupported = Boolean.parseBoolean(pathMacroSupportedStr);
 
+        String ignoreMissingStr = JDOMExternalizerUtil.readField(element, FIELD_IGNORE_MISSING, "false");
+        boolean ignoreMissing = Boolean.parseBoolean(ignoreMissingStr);
+
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
@@ -106,7 +110,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
         // For a while to migrate old users - end
 
-        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries);
+        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries, ignoreMissing);
         configuration.putUserData(USER_DATA_KEY, state);
     }
 
@@ -116,6 +120,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
             JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_PATH_MACRO_VARS, Boolean.toString(state.isPathMacroSupported()));
+            JDOMExternalizerUtil.writeField(element, FIELD_IGNORE_MISSING, Boolean.toString(state.isIgnoreMissing()));
 
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {
@@ -138,7 +143,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
             Map<String, String> result = new HashMap<>();
             for (EnvFileEntry entry : state.getEntries()) {
                 try {
-                    result = entry.process(runConfigEnv, result);
+                    result = entry.process(runConfigEnv, result, state.isIgnoreMissing());
                 } catch (EnvFileErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
@@ -159,7 +164,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         if (state != null && state.isEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
                 if (entry.isEnabled()) {
-                    if (!entry.validatePath()) {
+                    if (!entry.validatePath() && !state.isIgnoreMissing()) {
                         throw new ExecutionException(String.format("EnvFile: invalid path - %s", entry.getPath()));
                     }
 

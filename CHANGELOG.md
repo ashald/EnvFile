@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning].
 ### Added
 
 - EnvFile can substitute Jet Brains path macro references ([#70])
+- Add an option to ignore missing files ([#72])
 
 ## 3.0.1 - 2018-10-15
 
@@ -89,6 +90,8 @@ This project adheres to [Semantic Versioning].
 [61]: https://github.com/Ashald/EnvFile/issues/61
 [67]: https://github.com/Ashald/EnvFile/issues/67
 [68]: https://github.com/Ashald/EnvFile/issues/68
+[70]: https://github.com/Ashald/EnvFile/issues/70
+[72]: https://github.com/Ashald/EnvFile/issues/72
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/

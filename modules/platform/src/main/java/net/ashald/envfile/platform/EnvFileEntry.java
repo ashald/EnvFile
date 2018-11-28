@@ -67,12 +67,16 @@ public class EnvFileEntry {
         return getProvider() != null;
     }
 
-    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv) throws IOException, EnvFileErrorException {
+    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException {
         EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
             File file = getFile();
-            return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);
+            if (ignoreMissing && (file == null || !file.exists())) {
+                return aggregatedEnv;
+            } else {
+                return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);
+            }
         }
 
         return aggregatedEnv;

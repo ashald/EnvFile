@@ -43,6 +43,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private final JCheckBox useEnvFileCheckBox;
     private final JCheckBox substituteEnvVarsCheckBox;
     private final JCheckBox supportPathMacroCheckBox;
+    private final JCheckBox ignoreMissingCheckBox;
     private final ListTableModel<EnvFileEntry> envFilesModel;
     private final TableView<EnvFileEntry> envFilesTable;
 
@@ -78,11 +79,13 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 envFilesTable.setEnabled(useEnvFileCheckBox.isSelected());
                 substituteEnvVarsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
                 supportPathMacroCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
+                ignoreMissingCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
             }
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
         substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
         supportPathMacroCheckBox = new JCheckBox("Process JetBrains path macro references ($PROJECT_DIR$)");
+        ignoreMissingCheckBox = new JCheckBox("Ignore missing files");
 
         // TODO: come up with a generic approach for this
         envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
@@ -127,6 +130,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
 
         optionsPanel.add(substituteEnvVarsCheckBox);
         optionsPanel.add(supportPathMacroCheckBox);
+        optionsPanel.add(ignoreMissingCheckBox);
 
         // Compose UI
         JPanel checkboxPanel = new JPanel();
@@ -241,16 +245,26 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     }
 
     EnvFileSettings getState() {
-        return new EnvFileSettings(useEnvFileCheckBox.isSelected(), substituteEnvVarsCheckBox.isSelected(), supportPathMacroCheckBox.isSelected(), envFilesModel.getItems());
+        return new EnvFileSettings(
+                useEnvFileCheckBox.isSelected(),
+                substituteEnvVarsCheckBox.isSelected(),
+                supportPathMacroCheckBox.isSelected(),
+                envFilesModel.getItems(),
+                ignoreMissingCheckBox.isSelected()
+        );
     }
 
     void setState(EnvFileSettings state) {
         useEnvFileCheckBox.setSelected(state.isEnabled());
         substituteEnvVarsCheckBox.setSelected(state.isSubstituteEnvVarsEnabled());
         supportPathMacroCheckBox.setSelected(state.isPathMacroSupported());
+        ignoreMissingCheckBox.setSelected(state.isIgnoreMissing());
+
         envFilesTable.setEnabled(state.isEnabled());
         substituteEnvVarsCheckBox.setEnabled(state.isEnabled());
         supportPathMacroCheckBox.setEnabled(state.isEnabled());
+        ignoreMissingCheckBox.setEnabled(state.isEnabled());
+
         envFilesModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }
