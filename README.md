@@ -176,6 +176,15 @@ version of the product.
         </ul>
 </details>
 
+<details>
+    <summary><strong>Cursive</strong> (>=1.8.2)</summary>
+        <ul>
+            <li>Local Clojure REPL</li>
+            <li>Clojure Application</li>
+            <li>Leiningen</li>
+        </ul>
+</details>
+
 ## Installation
 
 - Using IDE built-in plugin system:
