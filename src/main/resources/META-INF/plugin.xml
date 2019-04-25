@@ -33,18 +33,18 @@
         <li><b>IDEA</b></li>
         <li><b>RubyMine</b></li>
         <li><b>GoLand</b></li>
+        <li><b>Cursive</b></li>
       </ul>
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.1.0"><b>v3.1.0</b></a> (2018-11-28)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.1.1"><b>v3.1.1</b></a> (2019-04-24)
       <br/>
       <br/>
 
-      <b>Added</b>:
+      <b>Fixed</b>:
       <ul>
-        <li>EnvFile can substitute Jet Brains path macro references</li>
-        <li>Add an option to ignore missing files</li>
+        <li>Substitute parent process env vars in IDEA - wasn't working before</li>
       </ul>
       <br/>
       <br/>
