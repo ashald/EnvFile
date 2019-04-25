@@ -72,7 +72,7 @@ public class EnvFileEntry {
 
         if (isEnabled() && parser != null) {
             File file = getFile();
-            if (ignoreMissing && (file == null || !file.exists())) {
+            if (!parser.isFileLocationValid(file) && ignoreMissing) {
                 return aggregatedEnv;
             } else {
                 return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);

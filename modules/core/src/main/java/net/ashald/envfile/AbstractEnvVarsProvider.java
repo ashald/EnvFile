@@ -3,6 +3,7 @@ package net.ashald.envfile;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,5 +47,10 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
         String stage2 = new StringSubstitutor(key -> context.getOrDefault(key, "")).replace(stage1);
 
         return stage2;
+    }
+
+    @Override
+    public boolean isFileLocationValid(File file) {
+        return file != null && file.exists();
     }
 }

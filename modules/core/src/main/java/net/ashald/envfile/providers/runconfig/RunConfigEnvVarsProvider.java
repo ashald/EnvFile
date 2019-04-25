@@ -3,6 +3,7 @@ package net.ashald.envfile.providers.runconfig;
 import net.ashald.envfile.AbstractEnvVarsProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,4 +24,8 @@ public class RunConfigEnvVarsProvider extends AbstractEnvVarsProvider {
         return false;
     }
 
+    @Override
+    public boolean isFileLocationValid(File file) {
+        return true; // no file needed
+    }
 }

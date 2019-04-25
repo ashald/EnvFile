@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Fixed
+
+- Substitute parent process env vars in IDEA - wasn't working before ([#81])
+
 ## 3.1.0 - 2018-11-28
 
 ### Added
@@ -92,6 +98,7 @@ This project adheres to [Semantic Versioning].
 [#68]: https://github.com/Ashald/EnvFile/issues/68
 [#70]: https://github.com/Ashald/EnvFile/issues/70
 [#72]: https://github.com/Ashald/EnvFile/issues/72
+[#81]: https://github.com/Ashald/EnvFile/issues/81
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/

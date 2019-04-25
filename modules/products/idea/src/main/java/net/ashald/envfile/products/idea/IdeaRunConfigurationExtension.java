@@ -2,10 +2,12 @@ package net.ashald.envfile.products.idea;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.RunConfigurationExtension;
+import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.openapi.options.SettingsEditor;
+import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
@@ -58,7 +60,15 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
      */
     @Override
     public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(params.getEnv()));
+        // Borrowed from com.intellij.openapi.projectRoots.JdkUtil
+        Map<String, String> sourceEnv = new GeneralCommandLine()
+                .withEnvironment(params.getEnv())
+                .withParentEnvironmentType(
+                        params.isPassParentEnvs() ? GeneralCommandLine.ParentEnvironmentType.CONSOLE : GeneralCommandLine.ParentEnvironmentType.NONE
+                )
+                .getEffectiveEnvironment();
+
+        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(sourceEnv));
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(newEnv);
