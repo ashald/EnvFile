@@ -105,7 +105,12 @@ public class EnvFileEntry {
         }
         String resolvedPath = path;
         if (!FileUtil.isAbsolute(resolvedPath)) {
-            VirtualFile virtualFile = runConfig.getProject().getBaseDir().findFileByRelativePath(resolvedPath);
+            VirtualFile virtualFile;
+            try {
+                virtualFile = runConfig.getProject().getBaseDir().findFileByRelativePath(resolvedPath);
+            } catch (AssertionError ignored) { // can bee thrown deep from IoC implementation
+                virtualFile = null;
+            }
             if (virtualFile != null) {
                 resolvedPath = virtualFile.getPath();
             }

@@ -38,13 +38,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.1.1"><b>v3.1.1</b></a> (2019-04-24)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.1.2"><b>v3.1.2</b></a> (2019-05-21)
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Substitute parent process env vars in IDEA - wasn't working before</li>
+        <li>Try to recover from 'AssertionError: Already disposed: Project', reported via email and in</li>
       </ul>
       <br/>
       <br/>

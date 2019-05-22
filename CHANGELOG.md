@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 3.1.2 - 2019-05-21
+
+### Fixed
+
+- Try to recover from `AssertionError: Already disposed: Project`, reported via email and in ([#83])
+
 ## 3.1.1 - 2019-04-24
 
 ### Fixed
@@ -99,6 +105,7 @@ This project adheres to [Semantic Versioning].
 [#70]: https://github.com/Ashald/EnvFile/issues/70
 [#72]: https://github.com/Ashald/EnvFile/issues/72
 [#81]: https://github.com/Ashald/EnvFile/issues/81
+[#81]: https://github.com/Ashald/EnvFile/issues/83
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/
