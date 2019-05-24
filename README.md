@@ -60,6 +60,7 @@ version of the product.
         <li><em>Arquillian TestNG</em></li>
         <li><em>CloudBees Server</em></li>
         <li><em>Cucumber Java</em></li>
+        <li>Gradle (requires "Enable Experimental Integrations")</li>
         <li><em>GWT Configuration</em></li>
         <li>
             <em>Geronimo Server</em>
@@ -202,18 +203,30 @@ Restart IDE.
 1) Switch to <kbd>EnvFile</kbd> tab
 2) Select <kbd>Enable EnvFile</kbd> checkbox
 3) Select <kbd>Substitute Environment Variables</kbd> checkbox (if needed)
-4) Click on <kbd>+</kbd> to add a file
-5) Adjust order as needed
+4) Select <kbd>Process JetBrains path macro references</kbd> checkbox (if needed)
+5) Select <kbd>Ignore missing files</kbd> checkbox (if needed)
+6) Select <kbd>Enable experimental integrations</kbd> checkbox (if needed)
+7) Click on <kbd>+</kbd> to add a file
+8) Adjust order as needed
 6) Even variables defined within run configuration can be processed, ordered and substituted 
 
 ![Read from file](./docs/example.png)
 
 ### Caveats
 
+#### Hidden files 
 Hidden files (starting with a dot) are not displayed in Finder on `macOS` by default. To toggle
 hidden files in the Open dialog, press <kbd>COMMAND</kbd> + <kbd>SHIFT</kbd> + <kbd>.</kbd>.
 Alternatively, one can either tweak `macOS` to show hidden files or select any file using
 standard Finder dialog and then manually edit path by double-clicking on the entry in the table.
+
+#### Experimental Integrations
+Not all run configurations available in IDEA-based IDEs are implemented similarly. Some of them differ significantly.
+In certain cases (so far, only `Gradle` has been confirmed) the implementation exposes interfaces to integrate the EnvFile UI
+but doesn't provide interfaces for it to actually make its work. Luckily, it was possible to make few assumptions about
+IDEA's internal implementation and make it work. Such integration is very fragile and it's not immediately clear if it
+will affect any existing integrations and when it will break. For that reason there is a special option to
+`Enable Experimental Integrations` that can be enabled when desired and should prevent other integrations from breaking. 
 
 ### Examples
 

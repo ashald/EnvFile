@@ -9,14 +9,23 @@ public class EnvFileSettings {
     private final boolean envVarsSubstitutionEnabled;
     private final boolean pathMacroSupported;
     private final boolean ignoreMissing;
+    private final boolean enableExperimentalIntegrations;
     private final List<EnvFileEntry> entries;
 
-    public EnvFileSettings(boolean isEnabled, boolean substituteVars, boolean pathMacroSupported, List<EnvFileEntry> envFileEntries, boolean ignoreMissing) {
+    public EnvFileSettings(
+            boolean isEnabled,
+            boolean substituteVars,
+            boolean pathMacroSupported,
+            List<EnvFileEntry> envFileEntries,
+            boolean ignoreMissing,
+            boolean experimentalInegrations
+    ) {
         pluginEnabled = isEnabled;
         envVarsSubstitutionEnabled = substituteVars;
         this.pathMacroSupported = pathMacroSupported;
         this.ignoreMissing = ignoreMissing;
         entries = envFileEntries;
+        enableExperimentalIntegrations = experimentalInegrations;
     }
 
     public boolean isEnabled() {
@@ -33,6 +42,10 @@ public class EnvFileSettings {
 
     public boolean isIgnoreMissing() {
         return ignoreMissing;
+    }
+
+    public boolean isEnableExperimentalIntegrations() {
+        return enableExperimentalIntegrations;
     }
 
     public List<EnvFileEntry> getEntries() {

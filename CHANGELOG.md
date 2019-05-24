@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Added
+
+- Experimental integration for external system run configurations (such as Gradle) ([#38])
+
 ## 3.1.2 - 2019-05-21
 
 ### Fixed
@@ -40,7 +46,7 @@ This project adheres to [Semantic Versioning].
 
 ### Fixed
 
-- Unicode sequence handling in `.env` files [(#38)]
+- Unicode sequence handling in `.env` files [(#32)]
 - Backslash being removed from values in `.env` files ([#52]) 
 - White text on white background when `Light` theme is used ([#61])
 
@@ -97,6 +103,7 @@ This project adheres to [Semantic Versioning].
 - Initial Release
 
 [#16]: https://github.com/Ashald/EnvFile/issues/16
+[#38]: https://github.com/Ashald/EnvFile/issues/32
 [#38]: https://github.com/Ashald/EnvFile/issues/38
 [#52]: https://github.com/Ashald/EnvFile/issues/52
 [#61]: https://github.com/Ashald/EnvFile/issues/61

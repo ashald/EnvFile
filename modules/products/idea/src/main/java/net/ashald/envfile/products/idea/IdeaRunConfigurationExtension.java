@@ -6,11 +6,12 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
+import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfiguration;
 import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
+import net.ashald.envfile.utils.ReadOnceMap;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,17 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(newEnv);
+
+        // The code below works based on assumptions about internal implementation of
+        // ExternalSystemExecuteTaskTask and ExternalSystemExecutionSettings and therefore may break any time may it change
+        // It seems to be the only way to get things working for run configurations such as Gradle, at least for now
+        if (EnvFileConfigurationEditor.isEnableExperimentalIntegrations(configuration)) {
+            if (configuration instanceof ExternalSystemRunConfiguration) {
+                ExternalSystemRunConfiguration ext = (ExternalSystemRunConfiguration) configuration;
+
+                ext.getSettings().setEnv(new ReadOnceMap<>(newEnv, ext.getSettings().getEnv()));
+            }
+        }
     }
 
     //

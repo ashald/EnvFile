@@ -35,6 +35,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     @NonNls private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
     @NonNls private static final String FIELD_PATH_MACRO_VARS = "IS_PATH_MACRO_SUPPORTED";
     @NonNls private static final String FIELD_IGNORE_MISSING = "IS_IGNORE_MISSING_FILES";
+    @NonNls private static final String FIELD_EXPERIMENTAL_INTEGRATIONS = "IS_ENABLE_EXPERIMENTAL_INTEGRATIONS";
     @NonNls private static final String FIELD_PATH = "PATH";
     @NonNls private static final String FIELD_PARSER = "PARSER";
 
@@ -80,6 +81,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String ignoreMissingStr = JDOMExternalizerUtil.readField(element, FIELD_IGNORE_MISSING, "false");
         boolean ignoreMissing = Boolean.parseBoolean(ignoreMissingStr);
 
+        String experimentalIntegrationsStr = JDOMExternalizerUtil.readField(element, FIELD_EXPERIMENTAL_INTEGRATIONS, "false");
+        boolean experimentalIntegrations = Boolean.parseBoolean(experimentalIntegrationsStr);
+
         List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
@@ -110,7 +114,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
         // For a while to migrate old users - end
 
-        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries, ignoreMissing);
+        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries, ignoreMissing, experimentalIntegrations);
         configuration.putUserData(USER_DATA_KEY, state);
     }
 
@@ -121,6 +125,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
             JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_PATH_MACRO_VARS, Boolean.toString(state.isPathMacroSupported()));
             JDOMExternalizerUtil.writeField(element, FIELD_IGNORE_MISSING, Boolean.toString(state.isIgnoreMissing()));
+            JDOMExternalizerUtil.writeField(element, FIELD_EXPERIMENTAL_INTEGRATIONS, Boolean.toString(state.isEnableExperimentalIntegrations()));
 
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {
@@ -174,6 +179,11 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
                 }
             }
         }
+    }
+
+    public static boolean isEnableExperimentalIntegrations(@NotNull RunConfigurationBase configuration) {
+        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+        return state != null && state.isEnableExperimentalIntegrations();
     }
 
     @NotNull
