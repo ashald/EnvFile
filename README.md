@@ -367,7 +367,7 @@ Feel free to create an issue, contact me using `Github` or just drop me an email
 
 Copyright (c) 2017 Borys Pierov. See the [LICENSE](./LICENSE) file for license rights and limitations (MIT).
 
-[json-is-yaml]:                                               https://en.wikipedia.org/wiki/YAML#JSON
+[json-is-yaml]:                                               https://en.wikipedia.org/wiki/YAML#Comparison_with_JSON
 [latest-release]:                                             https://github.com/Ashald/EnvFile/releases/latest
 [StringSubstitutor]:                                          https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
 [Working with $PROJECT_DIR$ in plugin configuration options]: https://intellij-support.jetbrains.com/hc/en-us/community/posts/206781805-Working-with-PROJECT-DIR-in-plugin-configuration-options
