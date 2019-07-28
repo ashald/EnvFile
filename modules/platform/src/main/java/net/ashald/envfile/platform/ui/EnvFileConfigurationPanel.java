@@ -9,6 +9,8 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.Conditions;
@@ -18,12 +20,14 @@ import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
+import net.ashald.envfile.EnvVarsFileProvider;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.EnvFileSettings;
 import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,6 +37,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 
 
 class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
@@ -176,41 +181,64 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 continue;
             }
 
-            final String title = String.format("%s file", extension.getFactory().getTitle());
-            AnAction anAction = new AnAction(title) {
-                @Override
-                public void actionPerformed(AnActionEvent e) {
-                    final FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory
-                            .createSingleFileNoJarsDescriptor()
-                            .withTitle(String.format("Select %s", title));
+            final String title;
+            AnAction anAction;
 
-                    Project project = runConfig.getProject();
+            if (extension.getFactory().createProvider(false) instanceof EnvVarsFileProvider) {
+                title = String.format("%s file", extension.getFactory().getTitle());
 
-                    VirtualFile selectedFile = FileChooser.chooseFile(chooserDescriptor, project, null);
+                anAction = new AnAction(title) {
+                    @Override
+                    public void actionPerformed(AnActionEvent e) {
+                        final FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory
+                                .createSingleFileNoJarsDescriptor()
+                                .withTitle(String.format("Select %s", title));
 
-                    if (selectedFile != null) {
-                        String selectedPath = selectedFile.getPath();
-                        String baseDir = runConfig.getProject().getBaseDir().getPath();
-                        if (selectedPath.startsWith(baseDir)) {
-                            selectedPath = selectedPath.substring(baseDir.length() + 1);
-                        }
+                        Project project = runConfig.getProject();
 
-                        ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
-                        final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true, substituteEnvVarsCheckBox.isSelected());
-                        newList.add(newOptions);
-                        model.setItems(newList);
-                        int index = model.getRowCount() - 1;
-                        model.fireTableRowsInserted(index, index);
-                        table.setRowSelectionInterval(index, index);
+                        VirtualFile selectedFile = FileChooser.chooseFile(chooserDescriptor, project, null);
 
-                        synchronized (recent) {
-                            recent.remove(newOptions);
-                            recent.addFirst(newOptions);
-                            if (recent.size() > MAX_RECENT) recent.removeLast();
+                        if (selectedFile != null) {
+                            String selectedPath = selectedFile.getPath();
+                            String baseDir = runConfig.getProject().getBaseDir().getPath();
+                            if (selectedPath.startsWith(baseDir)) {
+                                selectedPath = selectedPath.substring(baseDir.length() + 1);
+                            }
+
+                            ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
+                            final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true, substituteEnvVarsCheckBox.isSelected());
+                            newList.add(newOptions);
+                            model.setItems(newList);
+                            int index = model.getRowCount() - 1;
+                            model.fireTableRowsInserted(index, index);
+                            table.setRowSelectionInterval(index, index);
+
+                            synchronized (recent) {
+                                recent.remove(newOptions);
+                                recent.addFirst(newOptions);
+                                if (recent.size() > MAX_RECENT) recent.removeLast();
+                            }
                         }
                     }
-                }
-            };
+                };
+            } else {
+                title = extension.getFactory().getTitle();
+
+                anAction = new AnAction(title) {
+                    @Override
+                    public void actionPerformed(AnActionEvent e) {
+                        List list = new LinkedList<String>();
+                        list.add("A");
+                        list.add("B");
+
+                        if(new EnvVarDialog(extension.getFactory().getTitle(), "Description", list).showAndGet()) {
+                            // user pressed ok
+                        }
+                    }
+                };
+            }
+
+
             actionGroup.add(anAction);
         }
         synchronized (recent) {
@@ -274,3 +302,5 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         envFilesModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }
+
+

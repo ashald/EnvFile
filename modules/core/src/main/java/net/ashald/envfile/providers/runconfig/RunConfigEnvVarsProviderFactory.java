@@ -1,16 +1,15 @@
 package net.ashald.envfile.providers.runconfig;
 
-
-import net.ashald.envfile.EnvVarsProvider;
-import net.ashald.envfile.EnvVarsProviderFactory;
+import net.ashald.envfile.EnvProviderFactory;
+import net.ashald.envfile.EnvVarsFileProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class RunConfigEnvVarsProviderFactory implements EnvVarsProviderFactory {
+public class RunConfigEnvVarsProviderFactory implements EnvProviderFactory {
 
 
     @NotNull
     @Override
-    public EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar) {
+    public EnvVarsFileProvider createProvider(boolean shouldSubstituteEnvVar) {
         return new RunConfigEnvVarsProvider(shouldSubstituteEnvVar);
     }
 
