@@ -2,14 +2,14 @@ package net.ashald.envfile.platform;
 
 import com.intellij.execution.configurations.RunConfigurationBase;
 import net.ashald.envfile.EnvFileErrorException;
-import net.ashald.envfile.EnvProvider;
-import net.ashald.envfile.EnvProviderFactory;
+import net.ashald.envfile.EnvVarsProvider;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Map;
 
-public abstract class EnvEntry<T extends EnvProvider> {
+public abstract class EnvVarsEntry<T extends EnvVarsProvider> {
 
     private final RunConfigurationBase runConfig;
 
@@ -18,7 +18,7 @@ public abstract class EnvEntry<T extends EnvProvider> {
     private final String parserId;
 
 
-    public EnvEntry(RunConfigurationBase runConfig, String envFileParserId, boolean enabled, boolean substitutionEnabled) {
+    public EnvVarsEntry(RunConfigurationBase runConfig, String envFileParserId, boolean enabled, boolean substitutionEnabled) {
         this.runConfig = runConfig;
         parserId = envFileParserId;
         setEnable(enabled);
@@ -52,7 +52,7 @@ public abstract class EnvEntry<T extends EnvProvider> {
     public abstract Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException;
 
     public String getTypeTitle() {
-        EnvProviderFactory factory = getProviderFactory();
+        EnvVarsProviderFactory factory = getProviderFactory();
         return factory == null ? String.format("<%s>", parserId) : factory.getTitle();
     }
 
@@ -62,14 +62,14 @@ public abstract class EnvEntry<T extends EnvProvider> {
     }
 
     @Nullable
-    private EnvProviderFactory getProviderFactory() {
+    private EnvVarsProviderFactory getProviderFactory() {
         EnvVarsProviderExtension extension = EnvVarsProviderExtension.getParserExtensionById(parserId);
         return extension == null ? null : extension.getFactory();
     }
 
     @Nullable
     protected T getProvider() {
-        EnvProviderFactory factory = getProviderFactory();
+        EnvVarsProviderFactory factory = getProviderFactory();
         return factory == null ? null : (T) factory.createProvider(isSubstitutionEnabled);
     }
 

@@ -63,10 +63,10 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="net.ashald.envfile">
-    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
+    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvVarsFileParserFactory"/>
     <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
     <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
-    <envVarsProvider id="ip" factory="net.ashald.envfile.providers.ip.IpEnvVarProviderFactory"/>
+    <envVarsProvider id="ip" factory="net.ashald.envfile.providers.ip.IpEnvSingleProviderFactory"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">

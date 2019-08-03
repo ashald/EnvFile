@@ -2,10 +2,8 @@ package net.ashald.envfile;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 
-
-public interface EnvProviderFactory<T extends  EnvProvider> {
+public interface EnvVarsProviderFactory<T extends EnvVarsProvider> {
 
     @NotNull
     T createProvider(boolean shouldSubstituteEnvVar);

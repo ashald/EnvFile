@@ -18,13 +18,13 @@ import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
-import net.ashald.envfile.EnvVarProviderFactory;
-import net.ashald.envfile.EnvVarsFileProvider;
+import net.ashald.envfile.EnvSingleProviderFactory;
+import net.ashald.envfile.EnvFileProvider;
 import net.ashald.envfile.platform.*;
-import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
-import net.ashald.envfile.platform.ui.table.EnvFileSourceColumnInfo;
-import net.ashald.envfile.platform.ui.table.EnvFileNameColumnInfo;
-import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvVarsActiveColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvVarsSourceColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvVarsNameColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvVarsTypeColumnInfo;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
@@ -36,9 +36,9 @@ import java.util.*;
 import java.util.List;
 
 
-class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
+class EnvVarsConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private static final int MAX_RECENT = 5;
-    private static final LinkedList<EnvEntry> recent = new LinkedList<EnvEntry>();
+    private static final LinkedList<EnvVarsEntry> recent = new LinkedList<EnvVarsEntry>();
     private final RunConfigurationBase runConfig;
 
     private final JCheckBox useEnvFileCheckBox;
@@ -46,17 +46,17 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private final JCheckBox supportPathMacroCheckBox;
     private final JCheckBox ignoreMissingCheckBox;
     private final JCheckBox experimentalIntegrationsCheckBox;
-    private final ListTableModel<EnvEntry> envModel;
-    private final TableView<EnvEntry> envTable;
+    private final ListTableModel<EnvVarsEntry> envModel;
+    private final TableView<EnvVarsEntry> envTable;
 
-    EnvFileConfigurationPanel(T configuration) {
+    EnvVarsConfigurationPanel(T configuration) {
         runConfig = configuration;
 
         // Define Model
-        ColumnInfo<EnvEntry, Boolean> IS_ACTIVE = new EnvFileIsActiveColumnInfo();
-        ColumnInfo<EnvEntry, String> SOURCE = new EnvFileSourceColumnInfo();
-        ColumnInfo<EnvEntry, EnvEntry> TYPE = new EnvFileTypeColumnInfo();
-        ColumnInfo<EnvEntry, EnvEntry> NAME = new EnvFileNameColumnInfo();
+        ColumnInfo<EnvVarsEntry, Boolean> IS_ACTIVE = new EnvVarsActiveColumnInfo();
+        ColumnInfo<EnvVarsEntry, String> SOURCE = new EnvVarsSourceColumnInfo();
+        ColumnInfo<EnvVarsEntry, EnvVarsEntry> TYPE = new EnvVarsTypeColumnInfo();
+        ColumnInfo<EnvVarsEntry, EnvVarsEntry> NAME = new EnvVarsNameColumnInfo();
 
         envModel = new ListTableModel<>(IS_ACTIVE, TYPE, NAME, SOURCE);
 
@@ -117,7 +117,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                     public boolean isEnabled(AnActionEvent e) {
                         boolean allEditable = true;
 
-                        for (EnvEntry entry : envTable.getSelectedObjects()) {
+                        for (EnvVarsEntry entry : envTable.getSelectedObjects()) {
                             if (!entry.isEditable()) {
                                 allEditable = false;
                                 break;
@@ -155,7 +155,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         add(envFilesTableDecoratorPanel, BorderLayout.CENTER);
     }
 
-    private void setUpColumnWidth(TableView<EnvEntry> table, int columnIdx, ColumnInfo columnInfo, int extend) {
+    private void setUpColumnWidth(TableView<EnvVarsEntry> table, int columnIdx, ColumnInfo columnInfo, int extend) {
         JTableHeader tableHeader = table.getTableHeader();
         FontMetrics fontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
 
@@ -169,7 +169,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         tableColumn.setMaxWidth(preferredWidth);
     }
 
-    private void doAddAction(AnActionButton button, final TableView<EnvEntry> table, final ListTableModel<EnvEntry> model) {
+    private void doAddAction(AnActionButton button, final TableView<EnvVarsEntry> table, final ListTableModel<EnvVarsEntry> model) {
         final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
@@ -181,7 +181,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             final String title;
             AnAction anAction;
 
-            if (extension.getFactory().createProvider(false) instanceof EnvVarsFileProvider) {
+            if (extension.getFactory().createProvider(false) instanceof EnvFileProvider) {
                 title = String.format("%s file", extension.getFactory().getTitle());
 
                 anAction = new AnAction(title) {
@@ -213,13 +213,13 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 anAction = new AnAction(title) {
                     @Override
                     public void actionPerformed(AnActionEvent e) {
-                        EnvVarProviderFactory factory = (EnvVarProviderFactory) extension.getFactory();
+                        EnvSingleProviderFactory factory = (EnvSingleProviderFactory) extension.getFactory();
                         List list = factory.getOptions();
                         String description = factory.getDescription();
 
-                        EnvVarDialog dialog = new EnvVarDialog(extension.getFactory().getTitle(), description, list);
+                        EnvSingleDialog dialog = new EnvSingleDialog(extension.getFactory().getTitle(), description, list);
                         if(dialog.showAndGet()) {
-                            final EnvVarEntry newOptions = new EnvVarEntry(runConfig, extension.getId(),
+                            final EnvSingleEntry newOptions = new EnvSingleEntry(runConfig, extension.getId(),
                                     dialog.getEnvVarName(), dialog.getSelectedOption(), true,
                                     substituteEnvVarsCheckBox.isSelected());
                             addOption(newOptions, table, model);
@@ -235,20 +235,20 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             if (!recent.isEmpty()) {
                 actionGroup.addSeparator("Recent");
 
-                for (final EnvEntry entry : recent) {
+                for (final EnvVarsEntry entry : recent) {
                     String title;
                     String shortTitle;
                     if (entry instanceof EnvFileEntry) {
                         title = String.format("%s -> %s", entry.getTypeTitle(), ((EnvFileEntry) entry).getPath());
                     } else {
-                        title = String.format("%s -> %s", entry.getTypeTitle(), ((EnvVarEntry) entry).getSelectedOption());
+                        title = String.format("%s -> %s", entry.getTypeTitle(), ((EnvSingleEntry) entry).getSelectedOption());
                     }
                     shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
 
                     AnAction anAction = new AnAction(shortTitle, title, null) {
                         @Override
                         public void actionPerformed(AnActionEvent e) {
-                            ArrayList<EnvEntry> newList = new ArrayList<EnvEntry>(model.getItems());
+                            ArrayList<EnvVarsEntry> newList = new ArrayList<EnvVarsEntry>(model.getItems());
                             newList.add(entry);
                             model.setItems(newList);
                             int index = model.getRowCount() - 1;
@@ -272,8 +272,8 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         popup.show(button.getPreferredPopupPoint());
     }
 
-    private void addOption(EnvEntry newOptions, final TableView<EnvEntry> table, final ListTableModel<EnvEntry> model) {
-        ArrayList<EnvEntry> newList = new ArrayList<EnvEntry>(model.getItems());
+    private void addOption(EnvVarsEntry newOptions, final TableView<EnvVarsEntry> table, final ListTableModel<EnvVarsEntry> model) {
+        ArrayList<EnvVarsEntry> newList = new ArrayList<EnvVarsEntry>(model.getItems());
 
         newList.add(newOptions);
         model.setItems(newList);

@@ -1,14 +1,14 @@
 package net.ashald.envfile.providers.dotenv;
 
-import net.ashald.envfile.EnvProviderFactory;
-import net.ashald.envfile.EnvVarsFileProvider;
+import net.ashald.envfile.EnvFileProviderFactory;
+import net.ashald.envfile.EnvFileProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class DotEnvFileParserFactory implements EnvProviderFactory {
+public class DotEnvVarsFileParserFactory implements EnvFileProviderFactory {
 
     @Override
     public @NotNull
-    EnvVarsFileProvider createProvider(boolean shouldSubstituteEnvVar) {
+    DotEnvFileParser createProvider(boolean shouldSubstituteEnvVar) {
         return new DotEnvFileParser(shouldSubstituteEnvVar);
     }
 

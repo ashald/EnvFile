@@ -1,17 +1,16 @@
 package net.ashald.envfile.providers.ip;
 
-import net.ashald.envfile.EnvVarProviderFactory;
-import net.ashald.envfile.EnvVarsProvider;
+import net.ashald.envfile.EnvSingleProviderFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IpEnvVarProviderFactory implements EnvVarProviderFactory {
+public class IpEnvSingleProviderFactory implements EnvSingleProviderFactory {
 
     @Override
-    public @NotNull EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar) {
-        return new IpEnvVarProvider(shouldSubstituteEnvVar);
+    public @NotNull IpEnvSingleProvider createProvider(boolean shouldSubstituteEnvVar) {
+        return new IpEnvSingleProvider(shouldSubstituteEnvVar);
     }
 
     @Override

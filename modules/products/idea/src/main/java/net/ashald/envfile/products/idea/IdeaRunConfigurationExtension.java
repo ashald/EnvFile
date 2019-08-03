@@ -10,7 +10,7 @@ import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunCo
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
+import net.ashald.envfile.platform.ui.EnvVarsConfigurationEditor;
 import net.ashald.envfile.utils.ReadOnceMap;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -24,34 +24,34 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     @Nullable
     @Override
     protected String getEditorTitle() {
-        return EnvFileConfigurationEditor.getEditorTitle();
+        return EnvVarsConfigurationEditor.getEditorTitle();
     }
 
     @Nullable
     @Override
     protected <P extends RunConfigurationBase> SettingsEditor<P> createEditor(@NotNull P configuration) {
-        return new EnvFileConfigurationEditor<P>(configuration);
+        return new EnvVarsConfigurationEditor<P>(configuration);
     }
 
     @NotNull
     @Override
     protected String getSerializationId() {
-        return EnvFileConfigurationEditor.getSerializationId();
+        return EnvVarsConfigurationEditor.getSerializationId();
     }
 
     @Override
     protected void writeExternal(@NotNull RunConfigurationBase runConfiguration, @NotNull Element element) throws WriteExternalException {
-        EnvFileConfigurationEditor.writeExternal(runConfiguration, element);
+        EnvVarsConfigurationEditor.writeExternal(runConfiguration, element);
     }
 
     @Override
     protected void readExternal(@NotNull RunConfigurationBase runConfiguration, @NotNull Element element) throws InvalidDataException {
-        EnvFileConfigurationEditor.readExternal(runConfiguration, element);
+        EnvVarsConfigurationEditor.readExternal(runConfiguration, element);
     }
 
     @Override
     protected void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws Exception {
-        EnvFileConfigurationEditor.validateConfiguration(configuration, isExecution);
+        EnvVarsConfigurationEditor.validateConfiguration(configuration, isExecution);
     }
 
     /**
@@ -69,7 +69,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
                 )
                 .getEffectiveEnvironment();
 
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(sourceEnv));
+        Map<String, String> newEnv = EnvVarsConfigurationEditor.collectEnv(configuration, new HashMap<>(sourceEnv));
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(newEnv);
@@ -77,7 +77,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
         // The code below works based on assumptions about internal implementation of
         // ExternalSystemExecuteTaskTask and ExternalSystemExecutionSettings and therefore may break any time may it change
         // It seems to be the only way to get things working for run configurations such as Gradle, at least for now
-        if (EnvFileConfigurationEditor.isEnableExperimentalIntegrations(configuration)) {
+        if (EnvVarsConfigurationEditor.isEnableExperimentalIntegrations(configuration)) {
             if (configuration instanceof ExternalSystemRunConfiguration) {
                 ExternalSystemRunConfiguration ext = (ExternalSystemRunConfiguration) configuration;
 

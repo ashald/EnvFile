@@ -4,13 +4,13 @@ import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvFileErrorException;
-import net.ashald.envfile.EnvVarsFileProvider;
+import net.ashald.envfile.EnvFileProvider;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-public class EnvFileEntry extends EnvEntry<EnvVarsFileProvider> {
+public class EnvFileEntry extends EnvVarsEntry<EnvFileProvider> {
 
     private String path;
 
@@ -33,7 +33,7 @@ public class EnvFileEntry extends EnvEntry<EnvVarsFileProvider> {
     }
 
     public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException {
-        EnvVarsFileProvider parser = getProvider();
+        EnvFileProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
             File file = getFile();

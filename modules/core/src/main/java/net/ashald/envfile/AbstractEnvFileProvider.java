@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractEnvVarsFileProvider implements EnvVarsFileProvider {
+public abstract class AbstractEnvFileProvider implements EnvFileProvider {
     private boolean isEnvVarSubstitutionEnabled;
 
-    public AbstractEnvVarsFileProvider(boolean shouldSubstituteEnvVar) {
+    public AbstractEnvFileProvider(boolean shouldSubstituteEnvVar) {
         isEnvVarSubstitutionEnabled = shouldSubstituteEnvVar;
     }
 

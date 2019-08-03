@@ -7,7 +7,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.LazyInstance;
 import com.intellij.util.xmlb.annotations.Attribute;
-import net.ashald.envfile.EnvProviderFactory;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -27,13 +27,13 @@ public class EnvVarsProviderExtension extends AbstractExtensionPointBean {
     @Attribute("factory")
     public String factory;
 
-    private final LazyInstance<EnvProviderFactory> implementation = new LazyInstance<EnvProviderFactory>() {
-        protected Class<EnvProviderFactory> getInstanceClass() throws ClassNotFoundException {
+    private final LazyInstance<EnvVarsProviderFactory> implementation = new LazyInstance<EnvVarsProviderFactory>() {
+        protected Class<EnvVarsProviderFactory> getInstanceClass() throws ClassNotFoundException {
             return findClass(factory);
         }
     };
 
-    public EnvProviderFactory getFactory() {
+    public EnvVarsProviderFactory getFactory() {
         return implementation.getValue();
     }
 

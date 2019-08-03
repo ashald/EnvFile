@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class EnvVarDialog extends DialogWrapper {
+public class EnvSingleDialog extends DialogWrapper {
 
     private String description;
     private List<String> options;
@@ -18,7 +18,7 @@ public class EnvVarDialog extends DialogWrapper {
     private final JTextField jInput;
 
 
-    public EnvVarDialog(String title, String description, List<String> options) {
+    public EnvSingleDialog(String title, String description, List<String> options) {
         super(true); // use current window as parent
         setTitle(title);
         this.description = description;

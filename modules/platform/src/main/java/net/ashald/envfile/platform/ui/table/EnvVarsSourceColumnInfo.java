@@ -4,9 +4,9 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
-import net.ashald.envfile.platform.EnvEntry;
+import net.ashald.envfile.platform.EnvVarsEntry;
 import net.ashald.envfile.platform.EnvFileEntry;
-import net.ashald.envfile.platform.EnvVarEntry;
+import net.ashald.envfile.platform.EnvSingleEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,43 +16,43 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFileSourceColumnInfo extends ColumnInfo<EnvEntry, String> {
-    public EnvFileSourceColumnInfo() {
+public class EnvVarsSourceColumnInfo extends ColumnInfo<EnvVarsEntry, String> {
+    public EnvVarsSourceColumnInfo() {
         super("Source");
     }
 
     @Override
-    public boolean isCellEditable(EnvEntry envFileEntry) {
+    public boolean isCellEditable(EnvVarsEntry envFileEntry) {
         return envFileEntry.isEditable() && envFileEntry.isEnabled();
     }
 
     @Nullable
     @Override
-    public TableCellEditor getEditor(EnvEntry envFileEntry) {
+    public TableCellEditor getEditor(EnvVarsEntry envFileEntry) {
         return new DefaultCellEditor(new JBTextField());
     }
 
     @Override
-    public void setValue(EnvEntry envEntry, String value) {
-        if (envEntry instanceof EnvFileEntry) {
-            ((EnvFileEntry) envEntry).setPath(value == null ? "" : value);
+    public void setValue(EnvVarsEntry envVarsEntry, String value) {
+        if (envVarsEntry instanceof EnvFileEntry) {
+            ((EnvFileEntry) envVarsEntry).setPath(value == null ? "" : value);
         } else {
-            ((EnvVarEntry) envEntry).setSelectedOption(value == null ? "" : value);
+            ((EnvSingleEntry) envVarsEntry).setSelectedOption(value == null ? "" : value);
         }
     }
 
     @Nullable
     @Override
-    public String valueOf(EnvEntry envEntry) {
-        if (envEntry instanceof EnvFileEntry) {
-            return ((EnvFileEntry) envEntry).getPath();
+    public String valueOf(EnvVarsEntry envVarsEntry) {
+        if (envVarsEntry instanceof EnvFileEntry) {
+            return ((EnvFileEntry) envVarsEntry).getPath();
         } else {
-            return ((EnvVarEntry) envEntry).getSelectedOption();
+            return ((EnvSingleEntry) envVarsEntry).getSelectedOption();
         }
     }
 
     @Override
-    public TableCellRenderer getRenderer(final EnvEntry p0) {
+    public TableCellRenderer getRenderer(final EnvVarsEntry p0) {
         return new DefaultTableCellRenderer() {
             @NotNull
             @Override
@@ -81,7 +81,7 @@ public class EnvFileSourceColumnInfo extends ColumnInfo<EnvEntry, String> {
                 }
 
                 else {
-                    setText(((EnvVarEntry) p0).getSelectedOption());
+                    setText(((EnvSingleEntry) p0).getSelectedOption());
                 }
 
                 return renderer;

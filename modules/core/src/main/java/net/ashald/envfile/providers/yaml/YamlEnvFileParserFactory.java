@@ -1,14 +1,13 @@
 package net.ashald.envfile.providers.yaml;
 
-import net.ashald.envfile.EnvProviderFactory;
-import net.ashald.envfile.EnvVarsFileProvider;
+import net.ashald.envfile.EnvFileProviderFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class YamlEnvFileParserFactory implements EnvProviderFactory {
+public class YamlEnvFileParserFactory implements EnvFileProviderFactory {
 
     @Override
     public @NotNull
-    EnvVarsFileProvider createProvider(boolean shouldSubstituteEnvVar) {
+    YamlEnvFileParser createProvider(boolean shouldSubstituteEnvVar) {
         return new YamlEnvFileParser(shouldSubstituteEnvVar);
     }
 

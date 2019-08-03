@@ -3,7 +3,7 @@ package net.ashald.envfile.platform.ui.table;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
-import net.ashald.envfile.platform.EnvEntry;
+import net.ashald.envfile.platform.EnvVarsEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,19 +12,19 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFileTypeColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
-    public EnvFileTypeColumnInfo() {
+public class EnvVarsTypeColumnInfo extends ColumnInfo<EnvVarsEntry, EnvVarsEntry> {
+    public EnvVarsTypeColumnInfo() {
         super("Type");
     }
 
     @Nullable
     @Override
-    public EnvEntry valueOf(EnvEntry envFileEntry) {
+    public EnvVarsEntry valueOf(EnvVarsEntry envFileEntry) {
         return envFileEntry;
     }
 
     @Override
-    public TableCellRenderer getRenderer(final EnvEntry p0) {
+    public TableCellRenderer getRenderer(final EnvVarsEntry p0) {
         return new DefaultTableCellRenderer() {
             @NotNull
             @Override
@@ -35,7 +35,7 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
                                                            int row,
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                EnvEntry entry = (EnvEntry) value;
+                EnvVarsEntry entry = (EnvVarsEntry) value;
                 setText(entry.getTypeTitle());
                 setBorder(null);
 

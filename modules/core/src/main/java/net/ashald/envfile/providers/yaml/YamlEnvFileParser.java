@@ -1,6 +1,6 @@
 package net.ashald.envfile.providers.yaml;
 
-import net.ashald.envfile.AbstractEnvVarsFileProvider;
+import net.ashald.envfile.AbstractEnvFileProvider;
 import net.ashald.envfile.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YamlEnvFileParser extends AbstractEnvVarsFileProvider {
+public class YamlEnvFileParser extends AbstractEnvFileProvider {
 
     public YamlEnvFileParser(boolean shouldSubstituteEnvVar) {
         super(shouldSubstituteEnvVar);

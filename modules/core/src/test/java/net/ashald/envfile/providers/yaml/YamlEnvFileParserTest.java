@@ -1,6 +1,5 @@
 package net.ashald.envfile.providers.yaml;
 import net.ashald.envfile.EnvFileErrorException;
-import net.ashald.envfile.providers.dotenv.DotEnvFileParser;
 import org.junit.Assert;
 import org.junit.Test;
 

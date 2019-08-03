@@ -3,9 +3,9 @@ package net.ashald.envfile.platform.ui.table;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
-import net.ashald.envfile.platform.EnvEntry;
+import net.ashald.envfile.platform.EnvVarsEntry;
 import net.ashald.envfile.platform.EnvFileEntry;
-import net.ashald.envfile.platform.EnvVarEntry;
+import net.ashald.envfile.platform.EnvSingleEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,19 +14,19 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFileNameColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
-    public EnvFileNameColumnInfo() {
+public class EnvVarsNameColumnInfo extends ColumnInfo<EnvVarsEntry, EnvVarsEntry> {
+    public EnvVarsNameColumnInfo() {
         super("Name");
     }
 
     @Nullable
     @Override
-    public EnvEntry valueOf(EnvEntry envFileEntry) {
+    public EnvVarsEntry valueOf(EnvVarsEntry envFileEntry) {
         return envFileEntry;
     }
 
     @Override
-    public TableCellRenderer getRenderer(final EnvEntry p0) {
+    public TableCellRenderer getRenderer(final EnvVarsEntry p0) {
         return new DefaultTableCellRenderer() {
             @NotNull
             @Override
@@ -37,7 +37,7 @@ public class EnvFileNameColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
                                                            int row,
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                EnvEntry entry = (EnvEntry) value;
+                EnvVarsEntry entry = (EnvVarsEntry) value;
 
                 if (entry instanceof EnvFileEntry) {
                     String path = ((EnvFileEntry) entry).getPath();
@@ -46,7 +46,7 @@ public class EnvFileNameColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
                         setText(splittedPath[splittedPath.length - 1]);
                     }
                 } else {
-                    setText(((EnvVarEntry)entry).getEnvVarName());
+                    setText(((EnvSingleEntry)entry).getEnvVarName());
                 }
                 setBorder(null);
 
