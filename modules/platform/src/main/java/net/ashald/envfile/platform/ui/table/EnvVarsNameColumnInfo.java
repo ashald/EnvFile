@@ -39,7 +39,9 @@ public class EnvVarsNameColumnInfo extends ColumnInfo<EnvVarsEntry, EnvVarsEntry
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 EnvVarsEntry entry = (EnvVarsEntry) value;
 
-                if (entry instanceof EnvFileEntry) {
+                if (p0.getParserId().equals("runconfig")) { // TODO make generic
+                    setText("");
+                } else if (entry instanceof EnvFileEntry) {
                     String path = ((EnvFileEntry) entry).getPath();
                     if (path != null) {
                         String[] splittedPath = path.split("/");
