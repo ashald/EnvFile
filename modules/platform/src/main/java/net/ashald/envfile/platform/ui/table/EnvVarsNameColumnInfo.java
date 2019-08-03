@@ -21,8 +21,8 @@ public class EnvVarsNameColumnInfo extends ColumnInfo<EnvVarsEntry, EnvVarsEntry
 
     @Nullable
     @Override
-    public EnvVarsEntry valueOf(EnvVarsEntry envFileEntry) {
-        return envFileEntry;
+    public EnvVarsEntry valueOf(EnvVarsEntry envVarsEntry) {
+        return envVarsEntry;
     }
 
     @Override

@@ -22,13 +22,13 @@ public class EnvVarsSourceColumnInfo extends ColumnInfo<EnvVarsEntry, String> {
     }
 
     @Override
-    public boolean isCellEditable(EnvVarsEntry envFileEntry) {
-        return envFileEntry.isEditable() && envFileEntry.isEnabled();
+    public boolean isCellEditable(EnvVarsEntry envVarsEntry) {
+        return envVarsEntry.isEditable() && envVarsEntry.isEnabled();
     }
 
     @Nullable
     @Override
-    public TableCellEditor getEditor(EnvVarsEntry envFileEntry) {
+    public TableCellEditor getEditor(EnvVarsEntry envVarsEntry) {
         return new DefaultCellEditor(new JBTextField());
     }
 

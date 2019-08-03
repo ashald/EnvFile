@@ -18,6 +18,7 @@ public class IpEnvSingleProviderFactory implements EnvSingleProviderFactory {
         return "IP";
     }
 
+    @NotNull
     @Override
     public List<String> getOptions() {
         return NetworkInterfaceUtil.getNetworkInterfaceWithIpV4Names();
@@ -26,6 +27,6 @@ public class IpEnvSingleProviderFactory implements EnvSingleProviderFactory {
     @NotNull
     @Override
     public String getDescription() {
-        return "Set the Env-Variable to the IP of the selected Network Interface";
+        return "Set the Env-Variable to the IP (v4) of the selected Network Interface";
     }
 }

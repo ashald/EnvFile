@@ -47,7 +47,6 @@ public class EnvFileEntry extends EnvVarsEntry<EnvFileProvider> {
         return aggregatedEnv;
     }
 
-
     private File getFile() {
         if (path == null) {
             return null;

@@ -17,7 +17,7 @@ public class EnvVarsActiveColumnInfo extends ColumnInfo<EnvVarsEntry, Boolean> {
 
     @Nullable
     @Override
-    public Boolean valueOf(EnvVarsEntry envFileEntry) { return envFileEntry.isEnabled(); }
+    public Boolean valueOf(EnvVarsEntry envVarsEntry) { return envVarsEntry.isEnabled(); }
 
     @Override
     public Class getColumnClass() {
