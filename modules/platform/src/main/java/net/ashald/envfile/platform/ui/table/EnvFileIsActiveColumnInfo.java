@@ -2,7 +2,7 @@ package net.ashald.envfile.platform.ui.table;
 
 import com.intellij.ui.BooleanTableCellRenderer;
 import com.intellij.util.ui.ColumnInfo;
-import net.ashald.envfile.platform.EnvFileEntry;
+import net.ashald.envfile.platform.EnvEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,14 +10,14 @@ import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvFileEntry, Boolean> {
+public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvEntry, Boolean> {
     public EnvFileIsActiveColumnInfo() {
         super("Enabled");
     }
 
     @Nullable
     @Override
-    public Boolean valueOf(EnvFileEntry envFileEntry) { return envFileEntry.isEnabled(); }
+    public Boolean valueOf(EnvEntry envFileEntry) { return envFileEntry.isEnabled(); }
 
     @Override
     public Class getColumnClass() {
@@ -25,18 +25,18 @@ public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvFileEntry, Boolean>
     }
 
     @Override
-    public void setValue(EnvFileEntry element, Boolean checked) {
+    public void setValue(EnvEntry element, Boolean checked) {
         element.setEnable(checked);
     }
 
     @Override
-    public boolean isCellEditable(EnvFileEntry envFileEntry) {
+    public boolean isCellEditable(EnvEntry envFileEntry) {
         return envFileEntry.isEditable();
     }
 
     @Nullable
     @Override
-    public TableCellRenderer getRenderer(EnvFileEntry envFileEntry) {
+    public TableCellRenderer getRenderer(EnvEntry envFileEntry) {
         return new BooleanTableCellRenderer() {
             @NotNull
             @Override

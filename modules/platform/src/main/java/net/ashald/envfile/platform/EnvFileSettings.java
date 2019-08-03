@@ -10,13 +10,13 @@ public class EnvFileSettings {
     private final boolean pathMacroSupported;
     private final boolean ignoreMissing;
     private final boolean enableExperimentalIntegrations;
-    private final List<EnvFileEntry> entries;
+    private final List<EnvEntry> entries;
 
     public EnvFileSettings(
             boolean isEnabled,
             boolean substituteVars,
             boolean pathMacroSupported,
-            List<EnvFileEntry> envFileEntries,
+            List<EnvEntry> envFileEntries,
             boolean ignoreMissing,
             boolean experimentalInegrations
     ) {
@@ -48,7 +48,7 @@ public class EnvFileSettings {
         return enableExperimentalIntegrations;
     }
 
-    public List<EnvFileEntry> getEntries() {
+    public List<EnvEntry> getEntries() {
         return Collections.unmodifiableList(entries);
     }
 }

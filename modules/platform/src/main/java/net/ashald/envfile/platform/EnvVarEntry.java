@@ -30,4 +30,12 @@ public class EnvVarEntry extends EnvEntry<EnvVarsProvider> {
 
         return aggregatedEnv;
     }
+
+    public String getEnvVarName() {
+        return envVar;
+    }
+
+    public String getSelectedOption() {
+        return selectedOption;
+    }
 }

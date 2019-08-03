@@ -9,8 +9,6 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.Conditions;
@@ -20,17 +18,15 @@ import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
+import net.ashald.envfile.EnvVarProviderFactory;
 import net.ashald.envfile.EnvVarsFileProvider;
-import net.ashald.envfile.platform.EnvFileEntry;
-import net.ashald.envfile.platform.EnvVarsProviderExtension;
-import net.ashald.envfile.platform.EnvFileSettings;
+import net.ashald.envfile.platform.*;
 import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
-import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvFileNameColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvFileSourceColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import java.awt.*;
@@ -42,7 +38,7 @@ import java.util.List;
 
 class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private static final int MAX_RECENT = 5;
-    private static final LinkedList<EnvFileEntry> recent = new LinkedList<EnvFileEntry>();
+    private static final LinkedList<EnvEntry> recent = new LinkedList<EnvEntry>();
     private final RunConfigurationBase runConfig;
 
     private final JCheckBox useEnvFileCheckBox;
@@ -50,55 +46,56 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     private final JCheckBox supportPathMacroCheckBox;
     private final JCheckBox ignoreMissingCheckBox;
     private final JCheckBox experimentalIntegrationsCheckBox;
-    private final ListTableModel<EnvFileEntry> envFilesModel;
-    private final TableView<EnvFileEntry> envFilesTable;
+    private final ListTableModel<EnvEntry> envModel;
+    private final TableView<EnvEntry> envTable;
 
     EnvFileConfigurationPanel(T configuration) {
         runConfig = configuration;
 
         // Define Model
-        ColumnInfo<EnvFileEntry, Boolean> IS_ACTIVE = new EnvFileIsActiveColumnInfo();
-        ColumnInfo<EnvFileEntry, String> FILE = new EnvFilePathColumnInfo();
-        ColumnInfo<EnvFileEntry, EnvFileEntry> TYPE = new EnvFileTypeColumnInfo();
+        ColumnInfo<EnvEntry, Boolean> IS_ACTIVE = new EnvFileIsActiveColumnInfo();
+        ColumnInfo<EnvEntry, String> NAME = new EnvFileNameColumnInfo();
+        ColumnInfo<EnvEntry, EnvEntry> TYPE = new EnvFileTypeColumnInfo();
+        ColumnInfo<EnvEntry, EnvEntry> SOURCE = new EnvFileSourceColumnInfo();
 
-        envFilesModel = new ListTableModel<>(IS_ACTIVE, FILE, TYPE);
+        envModel = new ListTableModel<>(IS_ACTIVE, TYPE, NAME, SOURCE);
 
         // Create Table
-        envFilesTable = new TableView<>(envFilesModel);
-        envFilesTable.getEmptyText().setText("No environment variables files selected");
+        envTable = new TableView<>(envModel);
+        envTable.getEmptyText().setText("No environment variables files selected");
 
-        setUpColumnWidth(envFilesTable, 0, IS_ACTIVE, 20);
-        setUpColumnWidth(envFilesTable, 2, TYPE, 50);
+        setUpColumnWidth(envTable, 0, IS_ACTIVE, 20);
+        setUpColumnWidth(envTable, 1, TYPE, 50);
 
-        envFilesTable.setColumnSelectionAllowed(false);
-        envFilesTable.setShowGrid(false);
-        envFilesTable.setDragEnabled(true);
-        envFilesTable.setShowHorizontalLines(false);
-        envFilesTable.setShowVerticalLines(false);
-        envFilesTable.setIntercellSpacing(new Dimension(0, 0));
+        envTable.setColumnSelectionAllowed(false);
+        envTable.setShowGrid(false);
+        envTable.setDragEnabled(true);
+        envTable.setShowHorizontalLines(false);
+        envTable.setShowVerticalLines(false);
+        envTable.setIntercellSpacing(new Dimension(0, 0));
 
         // Create global activation flag
         useEnvFileCheckBox = new JCheckBox("Enable EnvFile");
         useEnvFileCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                envFilesTable.setEnabled(useEnvFileCheckBox.isSelected());
+                envTable.setEnabled(useEnvFileCheckBox.isSelected());
                 substituteEnvVarsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
                 supportPathMacroCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
                 ignoreMissingCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
             }
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
-        substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
+        substituteEnvVarsCheckBox.addActionListener(e -> envModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
         supportPathMacroCheckBox = new JCheckBox("Process JetBrains path macro references ($PROJECT_DIR$)");
         ignoreMissingCheckBox = new JCheckBox("Ignore missing files");
         experimentalIntegrationsCheckBox = new JCheckBox("Enable experimental integrations (e.g. Gradle) - may break any time!");
 
         // TODO: come up with a generic approach for this
-        envFilesModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
+        envModel.addRow(new EnvFileEntry(runConfig, "runconfig", null, true, substituteEnvVarsCheckBox.isSelected()));
 
         // Create Toolbar - Add/Remove/Move actions
-        final ToolbarDecorator envFilesTableDecorator = ToolbarDecorator.createDecorator(envFilesTable);
+        final ToolbarDecorator envFilesTableDecorator = ToolbarDecorator.createDecorator(envTable);
 
         final AnActionButtonUpdater updater = new AnActionButtonUpdater() {
             @Override
@@ -111,7 +108,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 .setAddAction(new AnActionButtonRunnable() {
             @Override
             public void run(AnActionButton button) {
-                doAddAction(button, envFilesTable, envFilesModel);
+                doAddAction(button, envTable, envModel);
             }
         })
                 .setAddActionUpdater(updater)
@@ -120,14 +117,14 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                     public boolean isEnabled(AnActionEvent e) {
                         boolean allEditable = true;
 
-                        for (EnvFileEntry entry : envFilesTable.getSelectedObjects()) {
+                        for (EnvEntry entry : envTable.getSelectedObjects()) {
                             if (!entry.isEditable()) {
                                 allEditable = false;
                                 break;
                             }
                         }
 
-                        return updater.isEnabled(e) && envFilesTable.getSelectedRowCount() >= 1 && allEditable;
+                        return updater.isEnabled(e) && envTable.getSelectedRowCount() >= 1 && allEditable;
                     }
                 });
 
@@ -158,7 +155,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         add(envFilesTableDecoratorPanel, BorderLayout.CENTER);
     }
 
-    private void setUpColumnWidth(TableView<EnvFileEntry> table, int columnIdx, ColumnInfo columnInfo, int extend) {
+    private void setUpColumnWidth(TableView<EnvEntry> table, int columnIdx, ColumnInfo columnInfo, int extend) {
         JTableHeader tableHeader = table.getTableHeader();
         FontMetrics fontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
 
@@ -172,7 +169,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         tableColumn.setMaxWidth(preferredWidth);
     }
 
-    private void doAddAction(AnActionButton button, final TableView<EnvFileEntry> table, final ListTableModel<EnvFileEntry> model) {
+    private void doAddAction(AnActionButton button, final TableView<EnvEntry> table, final ListTableModel<EnvEntry> model) {
         final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
@@ -205,19 +202,8 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                                 selectedPath = selectedPath.substring(baseDir.length() + 1);
                             }
 
-                            ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
                             final EnvFileEntry newOptions = new EnvFileEntry(runConfig, extension.getId(), selectedPath, true, substituteEnvVarsCheckBox.isSelected());
-                            newList.add(newOptions);
-                            model.setItems(newList);
-                            int index = model.getRowCount() - 1;
-                            model.fireTableRowsInserted(index, index);
-                            table.setRowSelectionInterval(index, index);
-
-                            synchronized (recent) {
-                                recent.remove(newOptions);
-                                recent.addFirst(newOptions);
-                                if (recent.size() > MAX_RECENT) recent.removeLast();
-                            }
+                            addOption(newOptions, table, model);
                         }
                     }
                 };
@@ -227,12 +213,16 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                 anAction = new AnAction(title) {
                     @Override
                     public void actionPerformed(AnActionEvent e) {
-                        List list = new LinkedList<String>();
-                        list.add("A");
-                        list.add("B");
+                        EnvVarProviderFactory factory = (EnvVarProviderFactory) extension.getFactory();
+                        List list = factory.getOptions();
+                        String description = factory.getDescription();
 
-                        if(new EnvVarDialog(extension.getFactory().getTitle(), "Description", list).showAndGet()) {
-                            // user pressed ok
+                        EnvVarDialog dialog = new EnvVarDialog(extension.getFactory().getTitle(), description, list);
+                        if(dialog.showAndGet()) {
+                            final EnvVarEntry newOptions = new EnvVarEntry(runConfig, extension.getId(),
+                                    dialog.getEnvVarName(), dialog.getSelectedOption(), true,
+                                    substituteEnvVarsCheckBox.isSelected());
+                            addOption(newOptions, table, model);
                         }
                     }
                 };
@@ -245,13 +235,20 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             if (!recent.isEmpty()) {
                 actionGroup.addSeparator("Recent");
 
-                for (final EnvFileEntry entry : recent) {
-                    String title = String.format("%s -> %s", entry.getTypeTitle(), entry.getPath());
-                    String shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
+                for (final EnvEntry entry : recent) {
+                    String title;
+                    String shortTitle;
+                    if (entry instanceof EnvFileEntry) {
+                        title = String.format("%s -> %s", entry.getTypeTitle(), ((EnvFileEntry) entry).getPath());
+                    } else {
+                        title = String.format("%s -> %s", entry.getTypeTitle(), ((EnvVarEntry) entry).getSelectedOption());
+                    }
+                    shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
+
                     AnAction anAction = new AnAction(shortTitle, title, null) {
                         @Override
                         public void actionPerformed(AnActionEvent e) {
-                            ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
+                            ArrayList<EnvEntry> newList = new ArrayList<EnvEntry>(model.getItems());
                             newList.add(entry);
                             model.setItems(newList);
                             int index = model.getRowCount() - 1;
@@ -275,12 +272,28 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         popup.show(button.getPreferredPopupPoint());
     }
 
+    private void addOption(EnvEntry newOptions, final TableView<EnvEntry> table, final ListTableModel<EnvEntry> model) {
+        ArrayList<EnvEntry> newList = new ArrayList<EnvEntry>(model.getItems());
+
+        newList.add(newOptions);
+        model.setItems(newList);
+        int index = model.getRowCount() - 1;
+        model.fireTableRowsInserted(index, index);
+        table.setRowSelectionInterval(index, index);
+
+        synchronized (recent) {
+            recent.remove(newOptions);
+            recent.addFirst(newOptions);
+            if (recent.size() > MAX_RECENT) recent.removeLast();
+        }
+    }
+
     EnvFileSettings getState() {
         return new EnvFileSettings(
                 useEnvFileCheckBox.isSelected(),
                 substituteEnvVarsCheckBox.isSelected(),
                 supportPathMacroCheckBox.isSelected(),
-                envFilesModel.getItems(),
+                envModel.getItems(),
                 ignoreMissingCheckBox.isSelected(),
                 experimentalIntegrationsCheckBox.isSelected()
         );
@@ -293,13 +306,13 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         ignoreMissingCheckBox.setSelected(state.isIgnoreMissing());
         experimentalIntegrationsCheckBox.setSelected(state.isEnableExperimentalIntegrations());
 
-        envFilesTable.setEnabled(state.isEnabled());
+        envTable.setEnabled(state.isEnabled());
         substituteEnvVarsCheckBox.setEnabled(state.isEnabled());
         supportPathMacroCheckBox.setEnabled(state.isEnabled());
         ignoreMissingCheckBox.setEnabled(state.isEnabled());
         experimentalIntegrationsCheckBox.setEnabled(state.isEnabled());
 
-        envFilesModel.setItems(new ArrayList<>(state.getEntries()));
+        envModel.setItems(new ArrayList<>(state.getEntries()));
     }
 }
 

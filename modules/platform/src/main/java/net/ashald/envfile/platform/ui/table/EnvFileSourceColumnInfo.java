@@ -4,6 +4,8 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
 import net.ashald.envfile.platform.EnvEntry;
+import net.ashald.envfile.platform.EnvFileEntry;
+import net.ashald.envfile.platform.EnvVarEntry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,9 +14,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-public class EnvFileTypeColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
-    public EnvFileTypeColumnInfo() {
-        super("Type");
+public class EnvFileSourceColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
+    public EnvFileSourceColumnInfo() {
+        super("Source");
     }
 
     @Nullable
@@ -36,7 +38,12 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
                                                            int column) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 EnvEntry entry = (EnvEntry) value;
-                setText(entry.getTypeTitle());
+
+                if (entry instanceof EnvFileEntry) {
+                    setText(((EnvFileEntry) entry).getPath());
+                } else {
+                    setText(((EnvVarEntry)entry).getSelectedOption());
+                }
                 setBorder(null);
 
                 if (entry.isEnabled()) {
@@ -44,6 +51,8 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvEntry, EnvEntry> {
                         setForeground(JBColor.RED);
                         setToolTipText("Parser not found!");
                     }
+
+
                 } else {
                     setForeground(UIUtil.getLabelDisabledForeground());
                 }

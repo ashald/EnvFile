@@ -49,8 +49,17 @@ public class EnvVarDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         if (this.getOKAction().isEnabled()) {
-
-            this.close(0);
+            if (!this.jInput.getText().isEmpty() && !(this.jComboBox.getSelectedIndex() == -1)) {
+                this.close(0);
+            }
         }
+    }
+
+    public String getEnvVarName() {
+        return this.jInput.getText();
+    }
+
+    public String getSelectedOption() {
+        return (String) this.jComboBox.getSelectedItem();
     }
 }
