@@ -1,9 +1,9 @@
 package net.ashald.envfile.providers.ip;
 
 import net.ashald.envfile.EnvSingleProviderFactory;
+import net.ashald.envfile.utils.NetworkInterfaceUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IpEnvSingleProviderFactory implements EnvSingleProviderFactory {
@@ -20,10 +20,7 @@ public class IpEnvSingleProviderFactory implements EnvSingleProviderFactory {
 
     @Override
     public List<String> getOptions() {
-        List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-        return list;
+        return NetworkInterfaceUtil.getNetworkInterfaceWithIpV4Names();
     }
 
     @NotNull
