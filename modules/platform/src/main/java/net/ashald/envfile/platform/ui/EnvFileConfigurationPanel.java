@@ -22,8 +22,8 @@ import net.ashald.envfile.EnvVarProviderFactory;
 import net.ashald.envfile.EnvVarsFileProvider;
 import net.ashald.envfile.platform.*;
 import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
-import net.ashald.envfile.platform.ui.table.EnvFileNameColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileSourceColumnInfo;
+import net.ashald.envfile.platform.ui.table.EnvFileNameColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
 
 import javax.swing.*;
@@ -54,9 +54,9 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
 
         // Define Model
         ColumnInfo<EnvEntry, Boolean> IS_ACTIVE = new EnvFileIsActiveColumnInfo();
-        ColumnInfo<EnvEntry, String> NAME = new EnvFileNameColumnInfo();
+        ColumnInfo<EnvEntry, String> SOURCE = new EnvFileSourceColumnInfo();
         ColumnInfo<EnvEntry, EnvEntry> TYPE = new EnvFileTypeColumnInfo();
-        ColumnInfo<EnvEntry, EnvEntry> SOURCE = new EnvFileSourceColumnInfo();
+        ColumnInfo<EnvEntry, EnvEntry> NAME = new EnvFileNameColumnInfo();
 
         envModel = new ListTableModel<>(IS_ACTIVE, TYPE, NAME, SOURCE);
 

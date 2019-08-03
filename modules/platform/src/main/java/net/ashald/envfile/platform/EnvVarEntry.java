@@ -38,4 +38,12 @@ public class EnvVarEntry extends EnvEntry<EnvVarsProvider> {
     public String getSelectedOption() {
         return selectedOption;
     }
+
+    public void setEnvVar(String envVar) {
+        this.envVar = envVar;
+    }
+
+    public void setSelectedOption(String selectedOption) {
+        this.selectedOption = selectedOption;
+    }
 }
