@@ -1,5 +1,6 @@
 package net.ashald.envfile;
 
+import net.ashald.envfile.exceptions.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

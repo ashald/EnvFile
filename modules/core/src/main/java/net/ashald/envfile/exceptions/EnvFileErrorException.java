@@ -1,4 +1,4 @@
-package net.ashald.envfile;
+package net.ashald.envfile.exceptions;
 
 
 public class EnvFileErrorException extends Exception {

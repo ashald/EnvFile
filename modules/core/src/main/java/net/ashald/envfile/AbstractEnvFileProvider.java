@@ -1,5 +1,6 @@
 package net.ashald.envfile;
 
+import net.ashald.envfile.exceptions.EnvFileErrorException;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
 

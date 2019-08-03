@@ -7,7 +7,8 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
-import net.ashald.envfile.EnvFileErrorException;
+import net.ashald.envfile.exceptions.EnvFileErrorException;
+import net.ashald.envfile.exceptions.EnvSingleErrorException;
 import net.ashald.envfile.platform.EnvVarsEntry;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvFileSettings;
@@ -177,7 +178,7 @@ public class EnvVarsConfigurationEditor<T extends RunConfigurationBase> extends 
             for (EnvVarsEntry entry : state.getEntries()) {
                 try {
                     result = entry.process(runConfigEnv, result, state.isIgnoreMissing());
-                } catch (EnvFileErrorException | IOException e) {
+                } catch (EnvFileErrorException | EnvSingleErrorException | IOException e) {
                     throw new ExecutionException(e);
                 }
             }

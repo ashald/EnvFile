@@ -1,8 +1,8 @@
 package net.ashald.envfile.platform;
 
 import com.intellij.execution.configurations.RunConfigurationBase;
-import net.ashald.envfile.EnvFileErrorException;
 import net.ashald.envfile.EnvSingleProvider;
+import net.ashald.envfile.exceptions.EnvSingleErrorException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class EnvSingleEntry extends EnvVarsEntry<EnvSingleProvider> {
     }
 
     @Override
-    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException {
+    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvSingleErrorException {
         EnvSingleProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {

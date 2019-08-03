@@ -1,7 +1,7 @@
 package net.ashald.envfile.providers.yaml;
 
 import net.ashald.envfile.AbstractEnvFileProvider;
-import net.ashald.envfile.EnvFileErrorException;
+import net.ashald.envfile.exceptions.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 

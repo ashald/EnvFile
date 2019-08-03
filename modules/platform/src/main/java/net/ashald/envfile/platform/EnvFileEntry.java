@@ -3,7 +3,7 @@ package net.ashald.envfile.platform;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import net.ashald.envfile.EnvFileErrorException;
+import net.ashald.envfile.exceptions.EnvFileErrorException;
 import net.ashald.envfile.EnvFileProvider;
 
 import java.io.File;

@@ -1,9 +1,10 @@
 package net.ashald.envfile.platform;
 
 import com.intellij.execution.configurations.RunConfigurationBase;
-import net.ashald.envfile.EnvFileErrorException;
+import net.ashald.envfile.exceptions.EnvFileErrorException;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
+import net.ashald.envfile.exceptions.EnvSingleErrorException;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -49,7 +50,7 @@ public abstract class EnvVarsEntry<T extends EnvVarsProvider> {
         return parserId;
     }
 
-    public abstract Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException;
+    public abstract Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException, EnvSingleErrorException;
 
     public String getTypeTitle() {
         EnvVarsProviderFactory factory = getProviderFactory();
