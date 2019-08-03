@@ -102,15 +102,15 @@ public class EnvVarsConfigurationEditor<T extends RunConfigurationBase> extends 
 
                 String parserId = envElement.getAttributeValue(FIELD_PARSER, "~");
 
-                String path = envElement.getAttributeValue(FIELD_PATH);
 
-                if (path != null) {
-                    entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled, envVarsSubstEnabled));
-                } else {
-                    String selectedOption = envElement.getAttributeValue(FIELD_SELECTED_OPTION);
-                    String envName = envElement.getAttributeValue(FIELD_ENV_NAME);
+                String selectedOption = envElement.getAttributeValue(FIELD_SELECTED_OPTION);
+                String envName = envElement.getAttributeValue(FIELD_ENV_NAME);
+                if (selectedOption != null && envName != null) {
                     entries.add(new EnvSingleEntry(configuration, parserId, envName, selectedOption, isEntryEnabled,
                             envVarsSubstEnabled));
+                } else {
+                    String path = envElement.getAttributeValue(FIELD_PATH);
+                    entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled, envVarsSubstEnabled));
                 }
             }
         }
