@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,23 +21,27 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
     @NotNull
     @Override
     protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, @NotNull String path) throws EnvFileErrorException {
-        Map<String, String> result = new LinkedHashMap<>();
 
         try {
             List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
-            for (String l: lines) {
-                String strippedLine = l.trim();
-                if (!strippedLine.startsWith("#") && strippedLine.contains("=")) {
-                    String[] tokens = strippedLine.split("=", 2);
-                    String key = tokens[0];
-                    String value = trim(tokens[1]);
-                    result.put(key, value);
-                }
-            }
+            return parseLines(lines);
         } catch (IOException ex) {
             throw new EnvFileErrorException(ex);
         }
 
+    }
+
+    protected static Map<String, String> parseLines(List<String> lines) {
+        Map<String, String> result = new LinkedHashMap<>();
+        for (String l: lines) {
+            String strippedLine = l.trim();
+            if (!strippedLine.startsWith("#") && strippedLine.contains("=")) {
+                String[] tokens = strippedLine.split("=", 2);
+                String key = tokens[0];
+                String value = trim(tokens[1]);
+                result.put(key, value);
+            }
+        }
         return result;
     }
 

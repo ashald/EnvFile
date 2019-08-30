@@ -66,6 +66,7 @@
     <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
     <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
     <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
+    <envVarsProvider id="script" factory="net.ashald.envfile.providers.scriptenv.ScriptRunnerParserFactory"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">

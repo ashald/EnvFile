@@ -1,5 +1,11 @@
 plugins {
     id "java"
+    id "org.jetbrains.intellij"
+
+}
+
+intellij {
+    version jetbrains.version
 }
 
 dependencies {

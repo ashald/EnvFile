@@ -10,6 +10,7 @@ from one or multiple files.
 - **.env**
 - **YAML** dictionary
 - **JSON** dictionary *(parsed with YAML parser since [JSON is subset of YAML][json-is-yaml])*
+- **script** execute script and parse its output as an .env file 
 
 **All formats assume that both keys and values are strings.**
 
@@ -266,6 +267,22 @@ SECRET_KEY: hip-hip-env-files
 VERSION: "1.0" # All non-string literals should be enclosed in quotes; btw this is ignored too
 ```
 
+#### Script
+```shell script
+#!/bin/bash
+
+cat <<EOL
+  # comment
+  FOO=test
+  BAR=$(date)
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+EOL
+```
+which sets following environment variables to this values:
+ - `FOO="test"`
+ - `BAR="Fr Aug 30 16:38:08 CEST 2019"`
+ - `CURRENT_BRANCH="master"` 
+ 
 #### Bash (workaround)
 
 There was a number of requests to support extracting environment variables from bash scripts like:
