@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,21 @@ public class ScriptRunnerParser extends DotEnvFileParser {
     protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, @NotNull String path) throws EnvFileErrorException {
 
         ProcessBuilder processBuilder = new ProcessBuilder(path);
+        Path scriptPath = Paths.get(path);
+        if (!(scriptPath.toFile().exists() && scriptPath.toFile().isFile())) {
+            throw new EnvFileErrorException("The EnvFile script " + path + " does not exist");
+        }
+        if (!scriptPath.toFile().canExecute()) {
+            throw new EnvFileErrorException("The EnvFile script " + path + " is not executable");
+        }
+        processBuilder.directory(scriptPath.getParent().toFile());
+        processBuilder.redirectErrorStream(true);
+
+        // provide the current idea project environment variables to the script
+        processBuilder.environment().putAll(runConfigEnv);
+
         try {
             // set the CWD to the base folder of the referenced file
-            processBuilder.directory(Paths.get(path).getParent().toFile());
-            processBuilder.redirectErrorStream(true);
-
             // start the process
             Process process = processBuilder.start();
 
@@ -46,7 +57,7 @@ public class ScriptRunnerParser extends DotEnvFileParser {
                 throw new EnvFileErrorException("EnvFile provider " + path + " returned a non-zero exit code, " + exitVal + ". \n" + allLines);
             }
 
-            Logger.getInstance(ScriptRunnerParser.class).debug(
+            Logger.getInstance(ScriptRunnerParser.class).info(
                     "Got following results from " + path + ": \n" + allLines);
 
             // parse the returned output as .env content and return it to the RunConfig
@@ -54,7 +65,7 @@ public class ScriptRunnerParser extends DotEnvFileParser {
 
 
         } catch (IOException | InterruptedException e) {
-            throw new EnvFileErrorException(e);
+            throw new EnvFileErrorException("Error while executing " + path + " as an EnvFile script", e);
         }
 
     }
