@@ -308,7 +308,7 @@ Syntax is *_derived_* from Bash but is way more primitive:
 A=${FOO}            # A=""        <- unknown variables replaced by empty strings
 B=${FOO:-default}   # B="default" <- default values can be set as in Bash
 C=${B}              # C="default" <- it's possible to refer to other variables that were previously evaluated
-D=$${C}             # D="$${C}"   <- double dollar serves as ane scape character
+D=$${C}             # D="$${C}"   <- double dollar serves as an escape character
 E=$C                $ E="$C"      <- curly brackets are required
 ```
 
