@@ -55,6 +55,7 @@
   <idea-version since-build="181"/>
 
   <depends>com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="">com.intellij.java</depends>
 
   <extensionPoints>
     <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
