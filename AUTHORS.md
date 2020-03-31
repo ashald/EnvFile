@@ -11,3 +11,4 @@ who helped with testing and provided feedback during early stages of development
 * [Dmytro Kostiuchenko](https://github.com/edio)
 * [Kelnor277](https://github.com/Kelnor277)
 * [Andy Elliott](https://github.com/andye2004)
+* [pilzm](https://github.com/pilzm)

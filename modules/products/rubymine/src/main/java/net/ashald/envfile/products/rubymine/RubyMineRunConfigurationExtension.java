@@ -26,7 +26,7 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
 
     @Nullable
     @Override
-    protected <P extends AbstractRubyRunConfiguration> SettingsEditor<P> createEditor(@NotNull P configuration) {
+    protected <P extends AbstractRubyRunConfiguration<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
         return new EnvFileConfigurationEditor<P>(configuration);
     }
 
@@ -52,7 +52,7 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
     }
 
     @Override
-    protected void patchCommandLine(@NotNull AbstractRubyRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
+    protected void patchCommandLine(@NotNull AbstractRubyRunConfiguration<?> configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
         Map<String, String> currentEnv = cmdLine.getEnvironment();
         Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(currentEnv));
         currentEnv.clear();
@@ -62,12 +62,12 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
     //
 
     @Override
-    protected boolean isApplicableFor(@NotNull AbstractRubyRunConfiguration configuration) {
+    public boolean isApplicableFor(@NotNull AbstractRubyRunConfiguration configuration) {
         return true;
     }
 
     @Override
-    protected boolean isEnabledFor(@NotNull AbstractRubyRunConfiguration applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+    public boolean isEnabledFor(@NotNull AbstractRubyRunConfiguration applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
         return true;
     }
 }

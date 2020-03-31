@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 3.2.1 - 2020-03-30
+
+### Fixed
+
+- Incompatibility with IDEA 2020 ([#38]) - special thanks to [@pilzm](https://github.com/pilzm) for contribution 
+
 ## 3.2.0 - 2019-05-24
 
 ### Added
@@ -113,6 +119,7 @@ This project adheres to [Semantic Versioning].
 [#72]: https://github.com/Ashald/EnvFile/issues/72
 [#81]: https://github.com/Ashald/EnvFile/issues/81
 [#81]: https://github.com/Ashald/EnvFile/issues/83
+[#100]: https://github.com/ashald/EnvFile/issues/100    
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/

@@ -26,7 +26,7 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
 
     @Nullable
     @Override
-    protected <P extends AbstractPythonRunConfiguration> SettingsEditor<P> createEditor(@NotNull P configuration) {
+    protected <P extends AbstractPythonRunConfiguration<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
         return new EnvFileConfigurationEditor<P>(configuration);
     }
 
@@ -62,12 +62,12 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
     //
 
     @Override
-    protected boolean isApplicableFor(@NotNull AbstractPythonRunConfiguration configuration) {
+    public boolean isApplicableFor(@NotNull AbstractPythonRunConfiguration configuration) {
         return true;
     }
 
     @Override
-    protected boolean isEnabledFor(@NotNull AbstractPythonRunConfiguration applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+    public boolean isEnabledFor(@NotNull AbstractPythonRunConfiguration applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
         return true;
     }
 }

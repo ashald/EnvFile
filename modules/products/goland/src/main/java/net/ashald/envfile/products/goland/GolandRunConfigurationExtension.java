@@ -23,7 +23,7 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
     }
 
     @Override
-    protected void patchCommandLine(@NotNull GoRunConfigurationBase goRunConfigurationBase, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine generalCommandLine, @NotNull String s) throws ExecutionException {
+    protected void patchCommandLine(@NotNull GoRunConfigurationBase<?> goRunConfigurationBase, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine generalCommandLine, @NotNull String s) throws ExecutionException {
         Map<String, String> currentEnv = generalCommandLine.getEnvironment();
         Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(goRunConfigurationBase, new HashMap<>(currentEnv));
         currentEnv.clear();
@@ -53,17 +53,17 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
 
     @Nullable
     @Override
-    protected <P extends GoRunConfigurationBase> SettingsEditor<P> createEditor(@NotNull P configuration) {
+    public <P extends GoRunConfigurationBase<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
         return new EnvFileConfigurationEditor<P>(configuration);
     }
 
     @Override
-    protected boolean isApplicableFor(@NotNull GoRunConfigurationBase goRunConfigurationBase) {
+    public boolean isApplicableFor(@NotNull GoRunConfigurationBase goRunConfigurationBase) {
         return true;
     }
 
     @Override
-    protected boolean isEnabledFor(@NotNull GoRunConfigurationBase goRunConfigurationBase, @Nullable RunnerSettings runnerSettings) {
+    public boolean isEnabledFor(@NotNull GoRunConfigurationBase goRunConfigurationBase, @Nullable RunnerSettings runnerSettings) {
         return true;
     }
 }

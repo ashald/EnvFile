@@ -29,7 +29,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
 
     @Nullable
     @Override
-    protected <P extends RunConfigurationBase> SettingsEditor<P> createEditor(@NotNull P configuration) {
+    protected <P extends RunConfigurationBase<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
         return new EnvFileConfigurationEditor<P>(configuration);
     }
 
@@ -89,12 +89,12 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     //
 
     @Override
-    protected boolean isApplicableFor(@NotNull RunConfigurationBase configuration) {
+    public boolean isApplicableFor(@NotNull RunConfigurationBase configuration) {
         return true;
     }
 
     @Override
-    protected boolean isEnabledFor(@NotNull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+    public boolean isEnabledFor(@NotNull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
         return true;
     }
 
