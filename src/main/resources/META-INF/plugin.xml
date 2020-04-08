@@ -74,6 +74,7 @@
   </extensions>
 
   <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
   <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
   <depends optional="true" config-file="envfile-goland.xml">org.jetbrains.plugins.go</depends>
