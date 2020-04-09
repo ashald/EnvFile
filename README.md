@@ -324,7 +324,7 @@ It is possible to refer to any environment variables that were evaluated previou
 ### Path Macro Substitution
 
 `EnvFile` can substitute JetBrains path macro references such as `$PROJECT_DIR$` etc. It's optional and disabled by default.
-For details - see ["Working with $PROJECT_DIR$ in plugin configuration options"].  
+For details - see ["Working with $PROJECT_DIR$ in plugin configuration options"][Working with $PROJECT_DIR$ in plugin configuration options].  
 
 # Further Development
 
