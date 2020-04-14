@@ -5,8 +5,7 @@ plugins {
 
 intellij {
     version jetbrains.version
-    plugins "gradle"
-    plugins "java"
+    plugins "java", "gradle"
 }
 
 dependencies {
