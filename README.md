@@ -1,21 +1,5 @@
 # EnvFile
 
-## 🚨 IDEA 2020 Note 🚨
-Starting from IDEA **2020.1** you'd need to update to version [3.2.1](https://github.com/ashald/EnvFile/releases/tag/v3.2.1) to be able to use the plugin.
-JetBrains disconnected my account from the plugin in their plugin marketplace and I cannot upload the latest version for an automatic update.
-You'd have to update manually by following these steps:
-
-* Download the `EnvFile-3.2.1.zip` from [v3.2.1 release page](https://github.com/ashald/EnvFile/releases/tag/v3.2.1).
-* In IDEA, open <kbd>Preferences</kbd> > <kbd>Plugins</kbd>
-* Click on <kbd>⚙</kbd> (gear) icon and select <kbd>Install Plugin from Disk...</kbd>
-* Select `EnvFile-3.2.1.zip`
-* Restart IDEA
-
-*If you're affiliated with JetBrains and can help me restore access to Plugin Marketplace - please get in touch with me
-via email associated with the plugin. I reached out via email and Twitter but haven't heard back.*
-
-![](./docs/update.png)
-
 ## Description
 
 **Env File** is a plugin for JetBrains IDEs that allows you to set environment variables for your run configurations
