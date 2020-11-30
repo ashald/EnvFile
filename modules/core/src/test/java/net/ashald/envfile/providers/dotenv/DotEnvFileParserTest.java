@@ -73,4 +73,15 @@ public class DotEnvFileParserTest {
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n", result.get("PRIVATE_KEY"));
     }
+
+    @Test
+    public void testMultiLineVariablesWithLineBreaks() throws EnvFileErrorException {
+        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multi-line-variable-with-line-breaks.env"));
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\n" +
+                "...\n" +
+                "HkVN9...\n" +
+                "...\n" +
+                "-----END DSA PRIVATE KEY-----", result.get("PRIVATE_KEY"));
+    }
 }
