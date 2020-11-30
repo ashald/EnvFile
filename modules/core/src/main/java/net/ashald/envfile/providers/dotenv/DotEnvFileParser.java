@@ -1,17 +1,17 @@
 package net.ashald.envfile.providers.dotenv;
 
-import net.ashald.envfile.AbstractEnvVarsProvider;
-import net.ashald.envfile.EnvFileErrorException;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.jetbrains.annotations.NotNull;
+
+import net.ashald.envfile.AbstractEnvVarsProvider;
+import net.ashald.envfile.EnvFileErrorException;
 
 public class DotEnvFileParser extends AbstractEnvVarsProvider {
 
@@ -46,7 +46,7 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
         String trimmed = value.trim();
 
         if ((trimmed.startsWith("\"") && trimmed.endsWith("\"")) || (trimmed.startsWith("'") && trimmed.endsWith("'")))
-            return trimmed.substring(1, trimmed.length() - 1);
+            return trimmed.substring(1, trimmed.length() - 1).replace("\\n", "\n");
 
         return trimmed.replaceAll("\\s#.*$", "").replaceAll("(\\s)\\\\#", "$1#").trim();
     }
