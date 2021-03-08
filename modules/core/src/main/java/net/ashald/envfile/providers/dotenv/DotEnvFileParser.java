@@ -44,7 +44,7 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
     }
 
     private static String trim(String value) {
-        String trimmed =StringEscapeUtils.unescapeJava(value.trim()) ;
+        String trimmed = StringEscapeUtils.unescapeJava(value.trim()) ;
 
         if ((trimmed.startsWith("\"") && trimmed.endsWith("\"")) || (trimmed.startsWith("'") && trimmed.endsWith("'")))
             return trimmed.substring(1, trimmed.length() - 1);
