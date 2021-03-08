@@ -2,6 +2,7 @@ package net.ashald.envfile.providers.dotenv;
 
 import net.ashald.envfile.AbstractEnvVarsProvider;
 import net.ashald.envfile.EnvFileErrorException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
     }
 
     private static String trim(String value) {
-        String trimmed = value.trim();
+        String trimmed =StringEscapeUtils.unescapeJava(value.trim()) ;
 
         if ((trimmed.startsWith("\"") && trimmed.endsWith("\"")) || (trimmed.startsWith("'") && trimmed.endsWith("'")))
             return trimmed.substring(1, trimmed.length() - 1);

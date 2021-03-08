@@ -67,4 +67,11 @@ public class DotEnvFileParserTest {
         Assert.assertEquals("A(B(C))", result.get("A"));
     }
 
+    @Test
+    public void testMultiLine() throws EnvFileErrorException {
+        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multiline.env"));
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals("this\nis\nmultiline", result.get("A"));
+    }
+
 }
