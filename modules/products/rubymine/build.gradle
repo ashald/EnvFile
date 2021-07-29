@@ -1,14 +1,12 @@
 plugins {
-    id "java"
     id "org.jetbrains.intellij"
 }
 
 intellij {
-    version jetbrains.version
-    plugins jetbrains.rubymine
+    version = platformVersion
+    plugins = ["org.jetbrains.plugins.ruby:$versionIdeaBuild"]
 }
 
 dependencies {
-    compile project(":envfile-platform")
-    compile "org.jetbrains:annotations:16.0.3"
+    implementation project(":envfile-platform")
 }

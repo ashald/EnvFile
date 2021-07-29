@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
         <runConfigurationExtension implementation="net.ashald.envfile.products.idea.IdeaRunConfigurationExtension" id="envfileIdea"/>
     </extensions>

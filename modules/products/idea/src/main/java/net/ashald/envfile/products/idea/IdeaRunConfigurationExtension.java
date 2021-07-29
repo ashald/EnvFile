@@ -30,7 +30,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     @Nullable
     @Override
     protected <P extends RunConfigurationBase<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
-        return new EnvFileConfigurationEditor<P>(configuration);
+        return new EnvFileConfigurationEditor<>(configuration);
     }
 
     @NotNull
@@ -60,7 +60,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
      * that we could have used to update environment variables.
      */
     @Override
-    public <T extends RunConfigurationBase> void updateJavaParameters(T configuration, JavaParameters params, RunnerSettings runnerSettings) throws ExecutionException {
+    public <T extends RunConfigurationBase<?>> void updateJavaParameters(@NotNull final T configuration, @NotNull final JavaParameters params, final RunnerSettings runnerSettings) throws ExecutionException {
         // Borrowed from com.intellij.openapi.projectRoots.JdkUtil
         Map<String, String> sourceEnv = new GeneralCommandLine()
                 .withEnvironment(params.getEnv())
@@ -92,6 +92,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     public boolean isApplicableFor(@NotNull RunConfigurationBase configuration) {
         return true;
     }
+
 
     @Override
     public boolean isEnabledFor(@NotNull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {

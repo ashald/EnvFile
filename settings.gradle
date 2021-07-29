@@ -1,6 +1,16 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://dl.bintray.com/jetbrains/intellij-plugin-service' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'envfile'
 
-include (
+include(
         'modules/core',
         'modules/platform',
         'modules/products/idea',

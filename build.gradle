@@ -1,11 +1,42 @@
 plugins {
-    id "java"
-    id "idea"
-    id "org.jetbrains.intellij" version "0.3.11"
-    id "pl.allegro.tech.build.axion-release" version "1.9.3"
+    id 'java'
+    id 'idea'
+    id "org.jetbrains.intellij" version "1.1.4"
+    id 'org.jetbrains.changelog' version '1.1.2'
+    id 'pl.allegro.tech.build.axion-release' version '1.9.3'
 }
 
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+compileJava.options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
 group "net.ashald"
+
+dependencies {
+    implementation project(":envfile-products-idea")
+    implementation project(":envfile-products-pycharm")
+    implementation project(":envfile-products-rubymine")
+    implementation project(":envfile-products-goland")
+}
+
+allprojects {
+//    project.version = scmVersion.version
+    println "project.version: $project.version"
+
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        implementation 'org.jetbrains:annotations:21.0.1'
+    }
+    clean.doFirst {
+        delete 'build', 'out'
+    }
+}
 
 scmVersion {
     tag {
@@ -14,48 +45,29 @@ scmVersion {
     }
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-    project.version = scmVersion.version
-
-    ext.jetbrains = [
-            version : "2018.3",
-            pycharm : "PythonCore:2018.3.183.4284.148",
-            rubymine: "org.jetbrains.plugins.ruby:2018.3.20181121",
-            goland  : "org.jetbrains.plugins.go:183.4284.36.1532"
-    ]
+wrapper {
+    gradleVersion = '7.1.1'
 }
 
 intellij {
-    version jetbrains.version
-    pluginName "EnvFile"
-    sameSinceUntilBuild false
-    updateSinceUntilBuild false
+    version = platformVersion
+    pluginName = "EnvFile"
+    sameSinceUntilBuild = false
+    updateSinceUntilBuild = false
+    plugins = ['com.intellij.java', 'properties', 'yaml', 'org.jetbrains.plugins.gradle', 'maven']
 }
-
-dependencies {
-    compile project(":envfile-products-idea")
-    compile project(":envfile-products-pycharm")
-    compile project(":envfile-products-rubymine")
-    compile project(":envfile-products-goland")
-}
-
-wrapper {
-    gradleVersion = "4.10.2"
-}
-
-def prj = ".idea/"
 
 idea {
     module.iml {
-      generateTo = file(prj)
-
-      withXml {
-          it.node.@type = "PLUGIN_MODULE"
-          it.node.appendNode('component', [name: 'DevKit.ModuleBuildProperties', url: 'file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml'])
-      }
+        def prj = ".idea/"
+        generateTo = file('.idea/')
+        withXml {
+            it.node.@type = "PLUGIN_MODULE"
+            it.node.appendNode('component', [
+                    name: 'DevKit.ModuleBuildProperties',
+                    url : 'file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml'
+            ])
+        }
     }
 }
 
@@ -63,12 +75,41 @@ task setup {
     dependsOn ideaModule, ideaProject
     // overriding idea.project.outputFile changes relative path calculation so it's easier to just move a file
     doLast {
-       copy {
-          from '.'
-          into prj
-          include "${project.name}.ipr"
-          rename { "modules.xml" }
-       }
-       project.delete "${project.name}.ipr"
-     }
+        copy {
+            from '.'
+            into prj
+            include "${project.name}.ipr"
+            rename { "modules.xml" }
+        }
+        project.delete "${project.name}.ipr"
+    }
 }
+
+changelog {
+    version = project.version
+    groups = []
+}
+
+patchPluginXml {
+    sinceBuild = pluginSinceBuild
+    untilBuild = pluginUntilBuild
+
+    // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
+    description = new File(rootProject.uri('README.md'))
+            .readLines().join("\n")
+}
+
+
+publishPlugin {
+    dependsOn patchChangelog
+    token = System.getenv('IJ_PLUGIN_TOKEN')
+    channels = ['eap', 'nightly', 'default']
+}
+
+runIde {
+    autoReloadPlugins = true
+}
+
+//runPluginVerifier {
+//    ideVersions.set(pluginVerifierIdeVersions).split(',').map(String::trim).filter(String::isNotEmpty)
+//}

@@ -1,13 +1,11 @@
 plugins {
-    id "java"
     id "org.jetbrains.intellij"
 }
 
 intellij {
-    version jetbrains.version
+    version = platformVersion
 }
 
 dependencies {
-    compile project(":envfile-core")
-    compile "org.jetbrains:annotations:16.0.3"
+    implementation project(":envfile-core")
 }

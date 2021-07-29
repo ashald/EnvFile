@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <extensions defaultExtensionNs="Pythonid">
         <runConfigurationExtension implementation="net.ashald.envfile.products.pycharm.PyCharmRunConfigurationExtension" id="envfilePyCharm"/>
     </extensions>

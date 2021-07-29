@@ -1,12 +1,11 @@
 <idea-plugin>
-  <id>net.ashald.envfile</id>
-  <name>EnvFile</name>
-  <version>3.2.0</version>
-  <vendor email="envfile@ashald.net">Borys Pierov</vendor>
+    <id>net.ashald.envfile</id>
+    <name>EnvFile</name>
+    <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
       <h1>EnvFile</h1>
-      <b>Compiled with Java 1.8</b>
+      <b>Compiled with Java 11</b>
       <h2>
         <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
         <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
@@ -37,7 +36,7 @@
       </ul>
     ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       <a href="https://github.com/Ashald/EnvFile/tree/v3.3.0"><b>v3.3.0</b></a> (2019-05-24)
       <br/>
       <br/>
@@ -50,33 +49,35 @@
       <br/>
 
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <idea-version since-build="183"/>
+    <!--    <idea-version since-build="203.1.0" until-build="212.*"/>-->
 
-  <depends>com.intellij.modules.lang</depends>
-  <depends optional="true" config-file="">com.intellij.java</depends>
+    <depends>com.intellij.java</depends>
+    <depends>com.intellij.properties</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+    <depends>com.intellij.modules.platform</depends>
 
-  <extensionPoints>
-    <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
-      <with attribute="factory" implements="net.ashald.envfile.EnvVarsProviderFactory"/>
-    </extensionPoint>
-  </extensionPoints>
+    <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
+    <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
+    <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
+    <depends optional="true" config-file="envfile-goland.xml">org.jetbrains.plugins.go</depends>
 
-  <extensions defaultExtensionNs="net.ashald.envfile">
-    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
-    <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
-    <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
-  </extensions>
+    <extensionPoints>
+        <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
+            <with attribute="factory" implements="net.ashald.envfile.EnvVarsProviderFactory"/>
+        </extensionPoint>
+    </extensionPoints>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
-  </extensions>
+    <extensions defaultExtensionNs="net.ashald.envfile">
+        <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
+        <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
+        <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
+    </extensions>
 
-  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
-  <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
-  <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
-  <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
-  <depends optional="true" config-file="envfile-goland.xml">org.jetbrains.plugins.go</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
+    </extensions>
 
 </idea-plugin>
