@@ -1,14 +1,14 @@
 package net.ashald.envfile.providers.dotenv;
-import net.ashald.envfile.EnvFileErrorException;
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import net.ashald.envfile.EnvFileErrorException;
 
 public class DotEnvFileParserTest {
 
@@ -67,4 +67,21 @@ public class DotEnvFileParserTest {
         Assert.assertEquals("A(B(C))", result.get("A"));
     }
 
+    @Test
+    public void testMultiLineVariables() throws EnvFileErrorException {
+        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multi-line-variable.env"));
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n", result.get("PRIVATE_KEY"));
+    }
+
+    @Test
+    public void testMultiLineVariablesWithLineBreaks() throws EnvFileErrorException {
+        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multi-line-variable-with-line-breaks.env"));
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\n" +
+                "...\n" +
+                "HkVN9...\n" +
+                "...\n" +
+                "-----END DSA PRIVATE KEY-----", result.get("PRIVATE_KEY"));
+    }
 }
