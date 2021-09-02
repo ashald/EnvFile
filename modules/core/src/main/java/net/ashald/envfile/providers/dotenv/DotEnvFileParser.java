@@ -28,6 +28,8 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
             List<String> lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
             for (String l: lines) {
                 String strippedLine = l.trim();
+                // remove `export` at the beginning of the line if a variable follows
+                strippedLine = strippedLine.replaceAll("^\\s*export\\s+(?=\\w)", "");
                 if (!strippedLine.startsWith("#") && strippedLine.contains("=")) {
                     String[] tokens = strippedLine.split("=", 2);
                     String key = tokens[0];
