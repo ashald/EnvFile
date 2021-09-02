@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.2.0</version>
+  <version>3.2.2</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -38,13 +38,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.3.0"><b>v3.3.0</b></a> (2019-05-24)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.2.2"><b>v3.2.2</b></a> (2021-09-02)
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Incompatibility with IDEA 2020</li>
+        <li>Incompatibility with IDEA 2021</li>
       </ul>
       <br/>
       <br/>
@@ -55,7 +55,8 @@
   <idea-version since-build="183"/>
 
   <depends>com.intellij.modules.lang</depends>
-  <depends optional="true">com.intellij.java</depends>
+  <!-- https://youtrack.jetbrains.com/issue/IDEA-270963 -->
+  <depends optional="true">com.intellij.modules.java</depends>
 
   <extensionPoints>
     <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
