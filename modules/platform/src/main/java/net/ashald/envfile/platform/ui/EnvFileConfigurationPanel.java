@@ -1,10 +1,11 @@
 package net.ashald.envfile.platform.ui;
 
 import com.intellij.execution.configurations.RunConfigurationBase;
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -14,6 +15,7 @@ import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.*;
+import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
@@ -168,7 +170,6 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     }
 
     private void doAddAction(AnActionButton button, final TableView<EnvFileEntry> table, final ListTableModel<EnvFileEntry> model) {
-        final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
         DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
 
         for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
@@ -240,11 +241,15 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             }
         }
 
+        final String popupPlace = ActionPlaces.getActionGroupPopupPlace(getClass().getSimpleName());
         final ListPopup popup =
-                popupFactory.createActionGroupPopup("Add...", actionGroup,
-                        SimpleDataContext.getProjectContext(runConfig.getProject()), false, false, false, null,
-                        -1, Conditions.<AnAction>alwaysTrue());
+                new PopupFactoryImpl.ActionGroupPopup(
+                        "Add...", actionGroup, DataManager.getInstance().getDataContext(this),
+                        false, false, false, false,
+                        null, -1, Conditions.<AnAction>alwaysTrue(), popupPlace);
+
         popup.show(button.getPreferredPopupPoint());
+
     }
 
     EnvFileSettings getState() {
