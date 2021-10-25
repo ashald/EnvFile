@@ -11,6 +11,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.*;
@@ -177,12 +178,16 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
             }
 
             final String title = String.format("%s file", extension.getFactory().getTitle());
+            final Condition<VirtualFile> maybeFileFilter = extension.getFactory().getFileFilter();
+            final boolean showHiddenFiles = extension.getFactory().showHiddenFiles();
             AnAction anAction = new AnAction(title) {
                 @Override
                 public void actionPerformed(AnActionEvent e) {
                     final FileChooserDescriptor chooserDescriptor = FileChooserDescriptorFactory
                             .createSingleFileNoJarsDescriptor()
-                            .withTitle(String.format("Select %s", title));
+                            .withTitle(String.format("Select %s", title))
+                            .withFileFilter(maybeFileFilter)
+                            .withShowHiddenFiles(showHiddenFiles);
 
                     Project project = runConfig.getProject();
 
