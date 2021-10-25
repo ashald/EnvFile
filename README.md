@@ -10,6 +10,7 @@ from one or multiple files.
 - **.env**
 - **YAML** dictionary
 - **JSON** dictionary *(parsed with YAML parser since [JSON is subset of YAML][json-is-yaml])*
+- **[direnv](https://direnv.net/)**
 
 **All formats assume that both keys and values are strings.**
 
@@ -226,7 +227,14 @@ In certain cases (so far, only `Gradle` has been confirmed) the implementation e
 but doesn't provide interfaces for it to actually make its work. Luckily, it was possible to make few assumptions about
 IDEA's internal implementation and make it work. Such integration is very fragile and it's not immediately clear if it
 will affect any existing integrations and when it will break. For that reason there is a special option to
-`Enable Experimental Integrations` that can be enabled when desired and should prevent other integrations from breaking. 
+`Enable Experimental Integrations` that can be enabled when desired and should prevent other integrations from breaking.
+
+#### direnv
+You need `direnv` in your `PATH` environment variable and `.envrc` file needs to be set in `Path` setting.
+`direnv allow` is run automatically if needed.
+
+Note: On macOS, you may need to add `/usr/local/bin` to the system-wide `PATH` using `launchctl` because `PATH` is not set correctly when IntelliJ is launched from Dock or Spotlight.
+https://apple.stackexchange.com/questions/106355/setting-the-system-wide-path-environment-variable-in-mavericks/106814#106814
 
 ### Examples
 
