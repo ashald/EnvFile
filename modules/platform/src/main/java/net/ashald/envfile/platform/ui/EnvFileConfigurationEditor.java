@@ -51,7 +51,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
 
     @Override
     protected void resetEditorFrom(@NotNull T configuration) {
-        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+        EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null) {
             editor.setState(state);
         }
@@ -59,7 +59,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
 
     @Override
     protected void applyEditorTo(@NotNull T configuration) throws ConfigurationException {
-        configuration.putUserData(USER_DATA_KEY, editor.getState());
+        configuration.putCopyableUserData(USER_DATA_KEY, editor.getState());
     }
 
     @NotNull
@@ -115,11 +115,11 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         // For a while to migrate old users - end
 
         EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries, ignoreMissing, experimentalIntegrations);
-        configuration.putUserData(USER_DATA_KEY, state);
+        configuration.putCopyableUserData(USER_DATA_KEY, state);
     }
 
     public static void writeExternal(@NotNull RunConfigurationBase configuration, @NotNull Element element) {
-        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+        EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null) {
             JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
@@ -143,7 +143,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     }
 
     public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> runConfigEnv) throws ExecutionException {
-        EnvFileSettings state = runConfigurationBase.getUserData(USER_DATA_KEY);
+        EnvFileSettings state = runConfigurationBase.getCopyableUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
             Map<String, String> result = new HashMap<>();
             for (EnvFileEntry entry : state.getEntries()) {
@@ -165,7 +165,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     }
 
     public static void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws ExecutionException {
-        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+        EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
                 if (entry.isEnabled()) {
@@ -182,7 +182,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     }
 
     public static boolean isEnableExperimentalIntegrations(@NotNull RunConfigurationBase configuration) {
-        EnvFileSettings state = configuration.getUserData(USER_DATA_KEY);
+        EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         return state != null && state.isEnableExperimentalIntegrations();
     }
 
