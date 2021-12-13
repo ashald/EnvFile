@@ -1,4 +1,6 @@
 <idea-plugin version="2">
+    <depends optional="true" config-file="envfile-sbt.xml">org.intellij.scala</depends>
+
     <extensions defaultExtensionNs="com.intellij">
         <runConfigurationExtension implementation="net.ashald.envfile.products.idea.IdeaRunConfigurationExtension" id="envfileIdea"/>
     </extensions>

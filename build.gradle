@@ -24,7 +24,8 @@ allprojects {
             version : "2018.3",
             pycharm : "PythonCore:2018.3.183.4284.148",
             rubymine: "org.jetbrains.plugins.ruby:2018.3.20181121",
-            goland  : "org.jetbrains.plugins.go:183.4284.36.1532"
+            goland  : "org.jetbrains.plugins.go:183.4284.36.1532",
+            scala   : "org.intellij.scala:2018.3.7"
     ]
 }
 
