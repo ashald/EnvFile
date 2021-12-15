@@ -72,6 +72,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
+    <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
 
   <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>

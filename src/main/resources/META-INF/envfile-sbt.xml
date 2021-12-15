@@ -1,0 +1,5 @@
+<idea-plugin version="2">
+    <extensions defaultExtensionNs="com.intellij">
+        <configurationType implementation="net.ashald.envfile.products.idea.scala.SbtEnvFileConfigurationType" id="envfileSbt"/>
+    </extensions>
+</idea-plugin>

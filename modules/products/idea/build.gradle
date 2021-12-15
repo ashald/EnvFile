@@ -5,7 +5,7 @@ plugins {
 
 intellij {
     version jetbrains.version
-    plugins "gradle"
+    plugins "gradle", jetbrains.scala
 }
 
 dependencies {
