@@ -54,6 +54,7 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
     @Override
     protected void patchCommandLine(@NotNull AbstractRubyRunConfiguration<?> configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
         Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, EnvUtil.getInitialEnv(cmdLine));
+        // currentEnv is the reference used by generalCommandLine, not a copy
         Map<String, String> currentEnv = cmdLine.getEnvironment();
         currentEnv.clear();
         currentEnv.putAll(newEnv);

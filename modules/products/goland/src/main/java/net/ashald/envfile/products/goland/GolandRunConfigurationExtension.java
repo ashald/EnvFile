@@ -25,7 +25,8 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
     @Override
     protected void patchCommandLine(@NotNull GoRunConfigurationBase<?> goRunConfigurationBase, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine generalCommandLine, @NotNull String s) throws ExecutionException {
         Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(goRunConfigurationBase, EnvUtil.getInitialEnv(generalCommandLine));
-        Map<String, String> currentEnv = generalCommandLine.getEffectiveEnvironment();
+        // currentEnv is the reference used by generalCommandLine, not a copy
+        Map<String, String> currentEnv = generalCommandLine.getEnvironment();
         currentEnv.clear();
         currentEnv.putAll(newEnv);
     }
