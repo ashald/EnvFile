@@ -56,7 +56,7 @@
 
   <depends>com.intellij.modules.lang</depends>
   <!-- https://youtrack.jetbrains.com/issue/IDEA-270963 -->
-  <depends optional="true">com.intellij.modules.java</depends>
+<!--  <depends optional="true">com.intellij.modules.java</depends>-->
 
   <extensionPoints>
     <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
@@ -68,17 +68,22 @@
     <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
     <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
     <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
+    <envVarsProvider id="direnv" factory="net.ashald.envfile.providers.direnv.DirenvFileParserFactory"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
+<!--    <fileType name="Env File" extensions=".env" language=".env" fileNamesCaseInsensitive="false" implementationClass="net.ashald.envfile.platform.EnvFileType"/>-->
+<!--    <fileType name="Direnv File" extensions=".envrc"  language=".envrc" fileNamesCaseInsensitive="false" implementationClass="net.ashald.envfile.platform.DirenvFileType"/>-->
     <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
     <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
 
-  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
+  <!-- https://youtrack.jetbrains.com/issue/IDEA-270963 -->
+  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
   <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
   <depends optional="true" config-file="envfile-goland.xml">org.jetbrains.plugins.go</depends>
+<!--  <depends optional="true" config-file="envfile-npm.xml">JavaScript</depends>-->
 
 </idea-plugin>

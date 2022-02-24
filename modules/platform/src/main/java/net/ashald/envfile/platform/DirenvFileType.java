@@ -7,29 +7,29 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class EnvFileType extends LanguageFileType {
-    static final EnvFileType INSTANCE = new EnvFileType();
+public class DirenvFileType extends LanguageFileType {
+    static final DirenvFileType INSTANCE = new DirenvFileType();
 
-    private EnvFileType() {
-        super(EnvFileLanguage.INSTANCE);
+    private DirenvFileType() {
+        super(DirenvFileLanguage.INSTANCE);
     }
 
     @NotNull
     @Override
     public String getName() {
-        return "Env File";
+        return "Direnv File";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Env file";
+        return "Direnv file";
     }
 
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return "env";
+        return "envrc";
     }
 
     @Nullable

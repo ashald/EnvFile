@@ -13,6 +13,6 @@ public class SbtEnvFileConfigurationType extends SbtConfigurationType {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "sbt Task EnvFile";
+        return "Sbt Task EnvFile";
     }
 }

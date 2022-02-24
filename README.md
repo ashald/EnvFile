@@ -7,6 +7,7 @@ from one or multiple files.
 
 ### Supported Formats
 
+- **.envrc** *Direnv files*
 - **.env**
 - **YAML** dictionary
 - **JSON** dictionary *(parsed with YAML parser since [JSON is subset of YAML][json-is-yaml])*

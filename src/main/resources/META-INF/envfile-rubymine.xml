@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <extensions defaultExtensionNs="org.jetbrains.plugins.ruby">
         <runConfigurationExtension implementation="net.ashald.envfile.products.rubymine.RubyMineRunConfigurationExtension" id="envfileRubyMine"/>
     </extensions>

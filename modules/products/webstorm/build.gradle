@@ -5,8 +5,9 @@ plugins {
 }
 
 intellij {
+    type = 'IU'
     version = jetbrains.version
-    plugins = [jetbrains.pycharm]
+    plugins = [jetbrains.webstorm]
 }
 buildSearchableOptions {
     enabled = false
@@ -14,4 +15,5 @@ buildSearchableOptions {
 dependencies {
     implementation project(":envfile-platform")
     implementation "org.jetbrains:annotations:16.0.3"
+    implementation 'net.bytebuddy:byte-buddy:1.12.8'
 }

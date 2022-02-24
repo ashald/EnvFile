@@ -1,11 +1,21 @@
 plugins {
-    id "java"
+    id 'java'
+//    id 'org.jetbrains.intellij'
 }
 
-dependencies {
-    compile "org.jetbrains:annotations:16.0.3"
-    compile "org.yaml:snakeyaml:1.23"
-    compile "org.apache.commons:commons-text:1.5"
+//intellij {
+//    version = jetbrains.version
+//}
+//
+//buildSearchableOptions {
+//    enabled = false
+//}
 
-    testCompile 'junit:junit:4.12'
+dependencies {
+    implementation "com.fasterxml.jackson.core:jackson-core:2.13.1"
+    implementation "org.jetbrains:annotations:16.0.3"
+    implementation "org.yaml:snakeyaml:1.23"
+    implementation "org.apache.commons:commons-text:1.5"
+
+    testImplementation 'junit:junit:4.12'
 }

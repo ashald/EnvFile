@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
-    private boolean isEnvVarSubstitutionEnabled;
+    private final boolean isEnvVarSubstitutionEnabled;
 
     public AbstractEnvVarsProvider(boolean shouldSubstituteEnvVar) {
         isEnvVarSubstitutionEnabled = shouldSubstituteEnvVar;

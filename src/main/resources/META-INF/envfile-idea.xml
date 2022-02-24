@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <depends optional="true" config-file="envfile-sbt.xml">org.intellij.scala</depends>
 
     <extensions defaultExtensionNs="com.intellij">

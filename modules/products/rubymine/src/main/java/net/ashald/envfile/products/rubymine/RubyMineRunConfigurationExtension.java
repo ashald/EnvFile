@@ -27,7 +27,7 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
     @Nullable
     @Override
     protected <P extends AbstractRubyRunConfiguration<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
-        return new EnvFileConfigurationEditor<P>(configuration);
+        return new EnvFileConfigurationEditor<>(configuration);
     }
 
     @NotNull

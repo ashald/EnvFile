@@ -13,3 +13,6 @@ lib/*.jar
 
 # Mac OS
 .DS_*
+
+# env
+.envrc.*

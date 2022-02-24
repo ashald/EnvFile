@@ -3,7 +3,7 @@ package net.ashald.envfile.platform.ui;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.components.PathMacroManager;
-import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
@@ -17,14 +17,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends SettingsEditor<T> {
-    private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<EnvFileSettings>("EnvFile Settings");
+public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> extends SettingsEditor<T> {
+    private static final Logger log = Logger.getInstance(EnvFileConfigurationEditor.class);
+
+    private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<>("EnvFile Settings");
 
     @NonNls private static final String SERIALIZATION_ID = "net.ashald.envfile";
 
@@ -39,10 +38,10 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     @NonNls private static final String FIELD_PATH = "PATH";
     @NonNls private static final String FIELD_PARSER = "PARSER";
 
-    private EnvFileConfigurationPanel editor;
+    private final EnvFileConfigurationPanel<T> editor;
 
     public EnvFileConfigurationEditor(T configuration) {
-        editor = new EnvFileConfigurationPanel<T>(configuration);
+        editor = new EnvFileConfigurationPanel<>(configuration);
     }
 
     public static String getEditorTitle() {
@@ -58,7 +57,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
     }
 
     @Override
-    protected void applyEditorTo(@NotNull T configuration) throws ConfigurationException {
+    protected void applyEditorTo(@NotNull T configuration) {
         configuration.putCopyableUserData(USER_DATA_KEY, editor.getState());
     }
 
@@ -68,7 +67,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         return editor;
     }
 
-    public static void readExternal(@NotNull RunConfigurationBase configuration, @NotNull Element element) {
+    public static void readExternal(@NotNull RunConfigurationBase<?> configuration, @NotNull Element element) {
         String isEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_IS_ENABLED);
         boolean isEnabled = Boolean.parseBoolean(isEnabledStr);
 
@@ -84,18 +83,17 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         String experimentalIntegrationsStr = JDOMExternalizerUtil.readField(element, FIELD_EXPERIMENTAL_INTEGRATIONS, "false");
         boolean experimentalIntegrations = Boolean.parseBoolean(experimentalIntegrationsStr);
 
-        List<EnvFileEntry> entries = new ArrayList<EnvFileEntry>();
+        List<EnvFileEntry> entries = new ArrayList<>();
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
         if (entriesElement != null) {
-            for (Object o : entriesElement.getChildren(ELEMENT_ENTRY_SINGLE)) {
-                Element envElement = (Element) o;
+            for (Element o : entriesElement.getChildren(ELEMENT_ENTRY_SINGLE)) {
 
-                String isEntryEnabledStr = envElement.getAttributeValue(FIELD_IS_ENABLED);
+                String isEntryEnabledStr = o.getAttributeValue(FIELD_IS_ENABLED);
                 boolean isEntryEnabled = Boolean.parseBoolean(isEntryEnabledStr);
 
-                String parserId = envElement.getAttributeValue(FIELD_PARSER, "~");
-                String path = envElement.getAttributeValue(FIELD_PATH);
+                String parserId = o.getAttributeValue(FIELD_PARSER, "~");
+                String path = o.getAttributeValue(FIELD_PATH);
 
                 entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled, envVarsSubstEnabled));
             }
@@ -118,7 +116,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         configuration.putCopyableUserData(USER_DATA_KEY, state);
     }
 
-    public static void writeExternal(@NotNull RunConfigurationBase configuration, @NotNull Element element) {
+    public static void writeExternal(@NotNull RunConfigurationBase<?> configuration, @NotNull Element element) {
         EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null) {
             JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
@@ -142,8 +140,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static Map<String, String> collectEnv(@NotNull RunConfigurationBase runConfigurationBase, Map<String, String> runConfigEnv) throws ExecutionException {
+    public static Map<String, String> collectEnv(@NotNull RunConfigurationBase<?> runConfigurationBase, Map<String, String> runConfigEnv) throws ExecutionException {
         EnvFileSettings state = runConfigurationBase.getCopyableUserData(USER_DATA_KEY);
+        log.info("EnvFileConfigurationEditor: state: " + state);
         if (state != null && state.isEnabled()) {
             Map<String, String> result = new HashMap<>();
             for (EnvFileEntry entry : state.getEntries()) {
@@ -164,7 +163,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static void validateConfiguration(@NotNull RunConfigurationBase configuration, boolean isExecution) throws ExecutionException {
+    public static void validateConfiguration(@NotNull RunConfigurationBase<?> configuration, boolean ignored) throws ExecutionException {
         EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null && state.isEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
@@ -181,7 +180,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase> extends 
         }
     }
 
-    public static boolean isEnableExperimentalIntegrations(@NotNull RunConfigurationBase configuration) {
+    public static boolean isEnableExperimentalIntegrations(@NotNull RunConfigurationBase<?> configuration) {
         EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         return state != null && state.isEnableExperimentalIntegrations();
     }

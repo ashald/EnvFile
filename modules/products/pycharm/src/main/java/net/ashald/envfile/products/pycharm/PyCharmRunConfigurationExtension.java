@@ -1,6 +1,7 @@
 package net.ashald.envfile.products.pycharm;
 
 import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.openapi.options.SettingsEditor;
@@ -27,7 +28,7 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
     @Nullable
     @Override
     protected <P extends AbstractPythonRunConfiguration<?>> SettingsEditor<P> createEditor(@NotNull P configuration) {
-        return new EnvFileConfigurationEditor<P>(configuration);
+        return new EnvFileConfigurationEditor<>(configuration);
     }
 
     @NotNull
@@ -49,6 +50,11 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
     @Override
     protected void validateConfiguration(@NotNull AbstractPythonRunConfiguration configuration, boolean isExecution) throws Exception {
         EnvFileConfigurationEditor.validateConfiguration(configuration, isExecution);
+    }
+
+    @Override
+    protected void patchCommandLine(@NotNull AbstractPythonRunConfiguration<?> configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId, @NotNull Executor executor) throws ExecutionException {
+        this.patchCommandLine(configuration, runnerSettings, cmdLine, runnerId);
     }
 
     @Override
