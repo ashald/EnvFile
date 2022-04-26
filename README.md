@@ -229,12 +229,6 @@ IDEA's internal implementation and make it work. Such integration is very fragil
 will affect any existing integrations and when it will break. For that reason there is a special option to
 `Enable Experimental Integrations` that can be enabled when desired and should prevent other integrations from breaking.
 
-#### direnv
-You need `direnv` in your `PATH` environment variable. `direnv allow` is run automatically if needed.
-
-Note: On macOS, you may need to add `/usr/local/bin` to the system-wide `PATH` using `launchctl` because `PATH` is not set correctly when IntelliJ is launched from Dock or Spotlight.
-https://apple.stackexchange.com/questions/106355/setting-the-system-wide-path-environment-variable-in-mavericks/106814#106814
-
 ### Examples
 
 #### .env
