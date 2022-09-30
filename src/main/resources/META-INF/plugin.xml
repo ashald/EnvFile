@@ -52,11 +52,7 @@
     ]]>
   </change-notes>
 
-  <idea-version since-build="183"/>
-
   <depends>com.intellij.modules.lang</depends>
-  <!-- https://youtrack.jetbrains.com/issue/IDEA-270963 -->
-  <depends optional="true">com.intellij.modules.java</depends>
 
   <extensionPoints>
     <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">

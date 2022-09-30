@@ -14,7 +14,11 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.*;
+import com.intellij.ui.AnActionButton;
+import com.intellij.ui.AnActionButtonRunnable;
+import com.intellij.ui.AnActionButtonUpdater;
+import com.intellij.ui.BooleanTableCellRenderer;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
@@ -27,20 +31,24 @@ import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JCheckBox;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 
-class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
+class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPanel {
     private static final int MAX_RECENT = 5;
     private static final LinkedList<EnvFileEntry> recent = new LinkedList<EnvFileEntry>();
-    private final RunConfigurationBase runConfig;
+    private final RunConfigurationBase<?> runConfig;
 
     private final JCheckBox useEnvFileCheckBox;
     private final JCheckBox substituteEnvVarsCheckBox;
@@ -155,7 +163,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
         add(envFilesTableDecoratorPanel, BorderLayout.CENTER);
     }
 
-    private void setUpColumnWidth(TableView<EnvFileEntry> table, int columnIdx, ColumnInfo columnInfo, int extend) {
+    private void setUpColumnWidth(TableView<EnvFileEntry> table, int columnIdx, ColumnInfo<?, ?> columnInfo, int extend) {
         JTableHeader tableHeader = table.getTableHeader();
         FontMetrics fontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
 
@@ -170,7 +178,8 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
     }
 
     private void doAddAction(AnActionButton button, final TableView<EnvFileEntry> table, final ListTableModel<EnvFileEntry> model) {
-        DefaultActionGroup actionGroup = new DefaultActionGroup(null, false);
+        final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+        DefaultActionGroup actionGroup = new DefaultActionGroup();
 
         for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
             if (!extension.getFactory().createProvider(substituteEnvVarsCheckBox.isSelected()).isEditable()) {
@@ -248,8 +257,9 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase> extends JPanel {
                         false, false, false, false,
                         null, -1, Conditions.<AnAction>alwaysTrue(), popupPlace);
 
-        popup.show(button.getPreferredPopupPoint());
-
+        if (button.getPreferredPopupPoint() != null) {
+            popup.show(button.getPreferredPopupPoint());
+        }
     }
 
     EnvFileSettings getState() {
