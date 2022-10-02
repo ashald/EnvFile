@@ -91,6 +91,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                 substituteEnvVarsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
                 supportPathMacroCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
                 ignoreMissingCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
+                experimentalIntegrationsCheckBox.setEnabled(useEnvFileCheckBox.isSelected());
             }
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
