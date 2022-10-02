@@ -1,21 +1,23 @@
 package net.ashald.envfile.providers.yaml;
+
+import lombok.val;
 import net.ashald.envfile.EnvFileErrorException;
-import net.ashald.envfile.providers.dotenv.DotEnvFileParser;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class YamlEnvFileParserTest {
+    private final YamlEnvFileParser PARSER = new YamlEnvFileParser(true);
 
-    private YamlEnvFileParser parser = new YamlEnvFileParser(true);
-
-    private String getFile(String name) {
-        return Paths.get("src","test", "resources", "providers", "yaml", name).toString();
+    private static InputStream getFile(String name) throws IOException {
+        return Files.newInputStream(Paths.get("src", "test", "resources", "providers", "yaml", name));
     }
 
     @Test
@@ -24,7 +26,16 @@ public class YamlEnvFileParserTest {
             put("FOO", "BAR");
         }};
 
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("substitutions.yaml"), context);
+        Map<String, String> result;
+
+        try (val content = getFile("substitutions.yaml")) {
+            result = PARSER.process(
+                    Collections.emptyMap(),
+                    context,
+                    content
+            );
+        }
+
         Assert.assertEquals("", result.get("A"));
         Assert.assertEquals("default", result.get("B"));
         Assert.assertEquals("BAR", result.get("C"));
@@ -34,7 +45,11 @@ public class YamlEnvFileParserTest {
 
     @Test
     public void testOrder() throws EnvFileErrorException, IOException {
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("order.yaml"), Collections.emptyMap());
+        Map<String, String> result;
+        try (val content = getFile("order.yaml")) {
+            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content);
+        }
+
         Assert.assertEquals("A(B(C))", result.get("A"));
     }
 

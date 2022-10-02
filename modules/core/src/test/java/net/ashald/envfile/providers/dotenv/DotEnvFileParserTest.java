@@ -1,38 +1,55 @@
 package net.ashald.envfile.providers.dotenv;
+
+import lombok.SneakyThrows;
+import lombok.val;
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Test;
-
-import net.ashald.envfile.EnvFileErrorException;
-
+/**
+ * TODO: cleanup - these tests are total mess
+ */
 public class DotEnvFileParserTest {
+    private static final DotEnvFileParser PARSER = new DotEnvFileParser(true);
 
-    private DotEnvFileParser parser = new DotEnvFileParser(true);
+    private static InputStream getFile(String name) throws IOException {
+        return Files.newInputStream(Paths.get("src", "test", "resources", "providers", "dotenv", name));
+    }
 
-    private String getFile(String name) {
-        return Paths.get("src","test", "resources", "providers", "dotenv", name).toString();
+    @SneakyThrows
+    private static Map<String, String> parse(String file, Map<String, String> context) {
+        try (val content = getFile(file)) {
+            return PARSER.getEnvVars(context, content);
+        }
     }
 
     @Test
-    public void testMalformedEncoding() throws EnvFileErrorException {
-        parser.getEnvVars(Collections.emptyMap(), getFile("malformed-unicode.env")); // should not fail
+    @SneakyThrows
+    public void testMalformedEncoding() {
+        parse("malformed-unicode.env", Collections.emptyMap()); // should not fail
     }
 
     @Test
-    public void testLinesStartingWithHasAreIgnored() throws EnvFileErrorException {
-        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("full-line-comments.env"));
+    @SneakyThrows
+    public void testLinesStartingWithHasAreIgnored() {
+        Map<String, String> result = parse("full-line-comments.env", Collections.emptyMap());
+
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("value", result.get("key"));
     }
 
     @Test
-    public void testInlineComments() throws EnvFileErrorException {
-        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("inline-comments.env"));
+    @SneakyThrows
+    public void testInlineComments() {
+        Map<String, String> result = parse("inline-comments.env", Collections.emptyMap());
+
         Assert.assertEquals("foo#bar", result.get("key1"));
         Assert.assertEquals("foo", result.get("key2"));
         Assert.assertEquals("foo #bar", result.get("key3"));
@@ -41,19 +58,25 @@ public class DotEnvFileParserTest {
     }
 
     @Test
-    public void testBackslashesArePreserved() throws EnvFileErrorException {
-        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("backslashes.env"));
+    @SneakyThrows
+    public void testBackslashesArePreserved() {
+        Map<String, String> result = parse("backslashes.env", Collections.emptyMap());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("value\\1", result.get("TEST_VAR"));
     }
 
     @Test
-    public void testSubstitutions() throws EnvFileErrorException, IOException {
+    @SneakyThrows
+    public void testSubstitutions() {
         Map<String, String> context = new HashMap<String, String>() {{
             put("FOO", "BAR");
         }};
 
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("substitutions.env"), context);
+        Map<String, String> result;
+
+        try (val content = getFile("substitutions.env")) {
+            result = PARSER.process(Collections.emptyMap(), context, content);
+        }
         Assert.assertEquals("", result.get("A"));
         Assert.assertEquals("default", result.get("B"));
         Assert.assertEquals("BAR", result.get("C"));
@@ -62,21 +85,28 @@ public class DotEnvFileParserTest {
     }
 
     @Test
-    public void testOrder() throws EnvFileErrorException, IOException {
-        Map<String, String> result = parser.process(Collections.emptyMap(), getFile("order.env"), Collections.emptyMap());
+    @SneakyThrows
+    public void testOrder() {
+        Map<String, String> result;
+        try (val content = getFile("order.env")) {
+            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content);
+        }
+
         Assert.assertEquals("A(B(C))", result.get("A"));
     }
 
     @Test
-    public void testMultiLineVariables() throws EnvFileErrorException {
-        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multi-line-variable.env"));
+    @SneakyThrows
+    public void testMultiLineVariables() {
+        Map<String, String> result = parse("multi-line-variable.env", Collections.emptyMap());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n", result.get("PRIVATE_KEY"));
     }
 
     @Test
-    public void testMultiLineVariablesWithLineBreaks() throws EnvFileErrorException {
-        Map<String, String> result = parser.getEnvVars(Collections.emptyMap(), getFile("multi-line-variable-with-line-breaks.env"));
+    @SneakyThrows
+    public void testMultiLineVariablesWithLineBreaks() {
+        Map<String, String> result = parse("multi-line-variable-with-line-breaks.env", Collections.emptyMap());
         Assert.assertEquals(1, result.size());
         Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\n" +
                 "...\n" +

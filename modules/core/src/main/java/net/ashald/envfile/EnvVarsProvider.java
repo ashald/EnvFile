@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 
@@ -12,7 +13,7 @@ public interface EnvVarsProvider {
     /**
      * @param runConfigEnv  - env vars provided by run config originally
      * @param aggregatedEnv - env vars rendered so far
-     * @param path          - path to the file
+     * @param content       - content to parse
      * @throws EnvFileErrorException
      * @throws IOException
      */
@@ -20,7 +21,7 @@ public interface EnvVarsProvider {
     Map<String, String> process(
             @NotNull Map<String, String> runConfigEnv,
             @NotNull Map<String, String> aggregatedEnv,
-            String path
+            InputStream content
     )
             throws EnvFileErrorException, IOException;
 

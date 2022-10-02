@@ -1,22 +1,23 @@
 package net.ashald.envfile;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+@AllArgsConstructor
 public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
-    private boolean isEnvVarSubstitutionEnabled;
+    private final boolean isEnvVarSubstitutionEnabled;
 
-    public AbstractEnvVarsProvider(boolean shouldSubstituteEnvVar) {
-        isEnvVarSubstitutionEnabled = shouldSubstituteEnvVar;
-    }
-
-    @NotNull
-    protected abstract Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, String path) throws EnvFileErrorException, IOException;
+    protected abstract Map<String, String> getEnvVars(
+            Map<String, String> runConfigEnv,
+            InputStream content
+    ) throws EnvFileErrorException, IOException;
 
     @Override
     public boolean isEditable() {
@@ -28,10 +29,10 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
     public Map<String, String> process(
             @NotNull Map<String, String> runConfigEnv,
             @NotNull Map<String, String> aggregatedEnv,
-            String path
+            InputStream content
     ) throws EnvFileErrorException, IOException {
         Map<String, String> result = new HashMap<>(aggregatedEnv);
-        Map<String, String> overrides = getEnvVars(runConfigEnv, path);
+        Map<String, String> overrides = getEnvVars(runConfigEnv, content);
 
         for (Map.Entry<String, String> entry : overrides.entrySet()) {
             result.put(entry.getKey(), renderValue(entry.getValue(), result));

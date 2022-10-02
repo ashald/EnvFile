@@ -5,14 +5,16 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
 import net.ashald.envfile.platform.EnvFileEntry;
+import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import java.awt.Component;
 
 public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
     public EnvFilePathColumnInfo() {
@@ -21,7 +23,7 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
 
     @Override
     public boolean isCellEditable(EnvFileEntry envFileEntry) {
-        return envFileEntry.isEditable() && envFileEntry.isEnabled();
+        return envFileEntry.isEditable() && envFileEntry.getEnabled();
     }
 
     @Nullable
@@ -46,15 +48,17 @@ public class EnvFilePathColumnInfo extends ColumnInfo<EnvFileEntry, String> {
         return new DefaultTableCellRenderer() {
             @NotNull
             @Override
-            public Component getTableCellRendererComponent(@NotNull JTable table,
-                                                           Object value,
-                                                           boolean isSelected,
-                                                           boolean hasFocus,
-                                                           int row,
-                                                           int column) {
+            public Component getTableCellRendererComponent(
+                    @NotNull JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column
+            ) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 setBorder(null);
-                if (p0.getParserId().equals("runconfig")) { // TODO make generic
+                if (p0.getParserId().equals(RunConfigEnvVarsProvider.PARSER_ID)) { // TODO make generic
                     setText("<Run Configuration Env Vars>");
                     setForeground(UIUtil.getLabelDisabledForeground());
                 } else {

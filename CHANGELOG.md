@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning].
 - Multi-line variable support in `.env` files ([#127]) - special thanks to [@ledoyen](https://github.com/ledoyen)
 - Ignore for `export ` prefix in `.env` files
 - Include parent environment variables (when enabled) into environment substitution ([#165]) - special thanks to [@jansorg](https://github.com/jansorg)
+- An option to execute file and parse content from standard output
 
 ### Fixed
 

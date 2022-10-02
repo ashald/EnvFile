@@ -39,28 +39,32 @@ public class EnvFileEnvironmentVariables {
 
         baseEnv.putAll(runConfigEnv);
 
-        if (envFileSettings == null || !envFileSettings.isEnabled()) {
+        if (envFileSettings == null || !envFileSettings.isPluginEnabledEnabled()) {
             return new HashMap<>(baseEnv);
         }
+
+        PathMacroManager macroManager = PathMacroManager.getInstance(project);
 
         Map<String, String> result = new HashMap<>();
         for (EnvFileEntry entry : envFileSettings.getEntries()) {
             try {
-                result = entry.process(baseEnv, result, envFileSettings.isIgnoreMissing());
+                result = entry.process(baseEnv, result, envFileSettings.isIgnoreMissing(), entry.isExecutable());
+
+                if (envFileSettings.isPathMacroSupported()) {
+                    // replace $PROJECT_DIR$ by project path
+                    result = result.entrySet()
+                            .stream()
+                            .collect(Collectors.toMap(
+                                    Map.Entry::getKey,
+                                    o -> macroManager.expandPath(o.getValue())
+                            ));
+                }
+
             } catch (EnvFileErrorException | IOException e) {
                 throw new ExecutionException(e);
             }
         }
-        if (envFileSettings.isPathMacroSupported()) {
-            // replace $PROJECT_DIR$ by project path
-            PathMacroManager macroManager = PathMacroManager.getInstance(project);
-            result = result.entrySet()
-                    .stream()
-                    .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            o -> macroManager.expandPath(o.getValue())
-                    ));
-        }
+
         return result;
     }
 }
