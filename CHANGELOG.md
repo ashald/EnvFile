@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
-## Unreleased
+## 3.3.0 - 2022-10-02
 
 ### Added
 
@@ -14,7 +14,7 @@ This project adheres to [Semantic Versioning].
 ### Fixed
 
 - Incompatibility with IDEA 2022.2 ([#151]) - special thanks to [@HassanAbouelela](https://github.com/HassanAbouelela)
-- Experimental features checkbox is is properly enabled/disabled when plugin is enabled/disabled
+- Experimental features checkbox is properly enabled/disabled when plugin is enabled/disabled
 
 ## 3.2.2 - 2021-09-02
 
