@@ -346,15 +346,10 @@ $ ls -1 build/distributions
   Env File-2.1.1-SNAPSHOT.zip
 ```
 
-In order to open plugin's project in IDE one should generate skeleton and then open it and import Gradle project:
-```bash
-$ ./gradlew setup
-  
-  BUILD SUCCESSFUL in 1s
-  3 actionable tasks: 3 executed
-```
-This generates a very basic `.idea` project definition that is sufficient enough to ensure that IDEA would recognize
-this as a plugin after Gradle import.
+In order to open plugin's project in IDE, just open it as a Gradle project.
+Then use `intelij:runId` on the root of the project to launch an IDEA instance.
+You can set `IDE` env var for the run configuration pointing at IDE folder (`IDE Folder/Content` on macOS) to test
+plugin with different versions.
 
 # Feedback
 
