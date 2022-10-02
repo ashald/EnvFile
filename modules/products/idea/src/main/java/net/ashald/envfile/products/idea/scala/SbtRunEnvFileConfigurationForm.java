@@ -2,6 +2,7 @@ package net.ashald.envfile.products.idea.scala;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.project.Project;
+import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import org.jetbrains.sbt.runner.SbtRunConfiguration;
 import org.jetbrains.sbt.runner.SbtRunConfigurationForm;
@@ -19,10 +20,16 @@ public class SbtRunEnvFileConfigurationForm extends SbtRunConfigurationForm {
     @Override
     public Map<String, String> getEnvironmentVariables() {
         try {
-            return EnvFileConfigurationEditor.collectEnv(configuration, super.getEnvironmentVariables());
+            return new EnvFileEnvironmentVariables(
+                    EnvFileConfigurationEditor.getEnvFileSetting(configuration)
+            )
+                    .render(
+                            configuration.getProject(),
+                            super.getEnvironmentVariables(),
+                            true // can we get it dynamically?
+                    );
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return super.getEnvironmentVariables();
     }
 }

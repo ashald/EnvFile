@@ -2,12 +2,10 @@ package net.ashald.envfile.platform.ui;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.openapi.components.PathMacroManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
-import net.ashald.envfile.EnvFileErrorException;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvFileSettings;
 import org.jdom.Element;
@@ -15,13 +13,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.JComponent;
-import java.io.IOException;
+import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> extends SettingsEditor<T> {
     private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<EnvFileSettings>("EnvFile Settings");
@@ -143,26 +137,8 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
         }
     }
 
-    public static Map<String, String> collectEnv(@NotNull RunConfigurationBase<?> runConfigurationBase, Map<String, String> runConfigEnv) throws ExecutionException {
-        EnvFileSettings state = runConfigurationBase.getCopyableUserData(USER_DATA_KEY);
-        if (state != null && state.isEnabled()) {
-            Map<String, String> result = new HashMap<>();
-            for (EnvFileEntry entry : state.getEntries()) {
-                try {
-                    result = entry.process(runConfigEnv, result, state.isIgnoreMissing());
-                } catch (EnvFileErrorException | IOException e) {
-                    throw new ExecutionException(e);
-                }
-            }
-            if (state.isPathMacroSupported()) {
-                // replace $PROJECT_DIR$ by project path
-                PathMacroManager macroManager = PathMacroManager.getInstance(runConfigurationBase.getProject());
-                result = result.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, o -> macroManager.expandPath(o.getValue())));
-            }
-            return result;
-        } else {
-            return runConfigEnv;
-        }
+    public static EnvFileSettings getEnvFileSetting(@NotNull RunConfigurationBase<?> runConfigurationBase) {
+        return runConfigurationBase.getCopyableUserData(USER_DATA_KEY);
     }
 
     public static void validateConfiguration(@NotNull RunConfigurationBase<?> configuration, boolean isExecution) throws ExecutionException {

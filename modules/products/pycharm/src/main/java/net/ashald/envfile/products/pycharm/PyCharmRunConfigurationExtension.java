@@ -8,6 +8,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.jetbrains.python.run.AbstractPythonRunConfiguration;
 import com.jetbrains.python.run.PythonRunConfigurationExtension;
+import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -52,11 +53,23 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
     }
 
     @Override
-    protected void patchCommandLine(@NotNull AbstractPythonRunConfiguration configuration, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine cmdLine, @NotNull String runnerId) throws ExecutionException {
-        Map<String, String> currentEnv = cmdLine.getEnvironment();
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(currentEnv));
-        currentEnv.clear();
-        currentEnv.putAll(newEnv);
+    protected void patchCommandLine(
+            @NotNull AbstractPythonRunConfiguration configuration,
+            @Nullable RunnerSettings runnerSettings,
+            @NotNull GeneralCommandLine cmdLine,
+            @NotNull String runnerId
+    ) throws ExecutionException {
+        Map<String, String> newEnv = new EnvFileEnvironmentVariables(
+                EnvFileConfigurationEditor.getEnvFileSetting(configuration)
+        )
+                .render(
+                        configuration.getProject(),
+                        cmdLine.getEnvironment(),
+                        cmdLine.isPassParentEnvironment()
+                );
+
+        cmdLine.getEnvironment().clear();
+        cmdLine.getEnvironment().putAll(newEnv);
     }
 
     //

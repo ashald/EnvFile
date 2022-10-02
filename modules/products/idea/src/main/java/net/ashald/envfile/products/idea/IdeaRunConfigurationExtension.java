@@ -2,7 +2,6 @@ package net.ashald.envfile.products.idea;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.RunConfigurationExtension;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.JavaParameters;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.configurations.RunnerSettings;
@@ -10,6 +9,7 @@ import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunCo
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
+import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import net.ashald.envfile.utils.ReadOnceMap;
 import org.jdom.Element;
@@ -65,18 +65,18 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
             @NotNull final JavaParameters params,
             @NotNull final RunnerSettings runnerSettings
     ) throws ExecutionException {
-        // Borrowed from com.intellij.openapi.projectRoots.JdkUtil
-        Map<String, String> sourceEnv = new GeneralCommandLine()
-                .withEnvironment(params.getEnv())
-                .withParentEnvironmentType(
-                        params.isPassParentEnvs() ? GeneralCommandLine.ParentEnvironmentType.CONSOLE : GeneralCommandLine.ParentEnvironmentType.NONE
-                )
-                .getEffectiveEnvironment();
+        Map<String, String> newEnv = new EnvFileEnvironmentVariables(
+                EnvFileConfigurationEditor.getEnvFileSetting(configuration)
+        )
+                .render(
+                        configuration.getProject(),
+                        params.getEnv(),
+                        params.isPassParentEnvs()
+                );
 
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(configuration, new HashMap<>(sourceEnv));
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
-        params.setEnv(newEnv);
+        params.setEnv(new HashMap<>(newEnv));
 
         // The code below works based on assumptions about internal implementation of
         // ExternalSystemExecuteTaskTask and ExternalSystemExecutionSettings and therefore may break any time may it change

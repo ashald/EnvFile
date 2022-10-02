@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class EnvFileEntry {
@@ -67,7 +68,11 @@ public class EnvFileEntry {
         return getProvider() != null;
     }
 
-    public Map<String, String> process(Map<String, String> runConfigEnv, Map<String, String> aggregatedEnv, boolean ignoreMissing) throws IOException, EnvFileErrorException {
+    public Map<String, String> process(
+            Map<String, String> runConfigEnv,
+            Map<String, String> aggregatedEnv,
+            boolean ignoreMissing
+    ) throws IOException, EnvFileErrorException {
         EnvVarsProvider parser = getProvider();
 
         if (isEnabled() && parser != null) {
@@ -75,7 +80,7 @@ public class EnvFileEntry {
             if (!parser.isFileLocationValid(file) && ignoreMissing) {
                 return aggregatedEnv;
             } else {
-                return parser.process(runConfigEnv, file == null ? null : file.getPath(), aggregatedEnv);
+                return parser.process(runConfigEnv, aggregatedEnv, file == null ? null : file.getPath());
             }
         }
 
