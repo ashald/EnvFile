@@ -1,5 +1,6 @@
 <idea-plugin version="2">
     <extensions defaultExtensionNs="Pythonid">
         <runConfigurationExtension implementation="net.ashald.envfile.products.pycharm.PyCharmRunConfigurationExtension" id="envfilePyCharm"/>
+        <pythonCommandLineTargetEnvironmentProvider implementation="net.ashald.envfile.products.pycharm.EnvFileProvider"/>
     </extensions>
 </idea-plugin>

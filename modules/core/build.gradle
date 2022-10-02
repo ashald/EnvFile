@@ -8,9 +8,9 @@ intellij {
 }
 
 dependencies {
-    compile "org.jetbrains:annotations:16.0.3"
-    compile "org.yaml:snakeyaml:1.23"
-    compile "org.apache.commons:commons-text:1.5"
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.yaml:snakeyaml:1.30'
+    implementation 'org.apache.commons:commons-text:1.9'
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 }

@@ -4,11 +4,17 @@ plugins {
 }
 
 intellij {
-    version jetbrains.version
-    plugins "gradle"
+    version = jetbrains.version
+    plugins = [
+        "java",
+        "gradle",
+        jetbrains.scala
+    ]
 }
+buildSearchableOptions.enabled = false
 
 dependencies {
-    compile project(":envfile-platform")
-    compile "org.jetbrains:annotations:16.0.3"
+    implementation project(":envfile-core")
+    implementation project(":envfile-platform")
+    implementation 'org.jetbrains:annotations:23.0.0'
 }

@@ -6,12 +6,12 @@ import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.configurations.RunnerSettings;
 import com.intellij.openapi.options.SettingsEditor;
+import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GolandRunConfigurationExtension extends GoRunConfigurationExtension {
@@ -23,11 +23,25 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
     }
 
     @Override
-    protected void patchCommandLine(@NotNull GoRunConfigurationBase<?> goRunConfigurationBase, @Nullable RunnerSettings runnerSettings, @NotNull GeneralCommandLine generalCommandLine, @NotNull String s) throws ExecutionException {
-        Map<String, String> currentEnv = generalCommandLine.getEnvironment();
-        Map<String, String> newEnv = EnvFileConfigurationEditor.collectEnv(goRunConfigurationBase, new HashMap<>(currentEnv));
-        currentEnv.clear();
-        currentEnv.putAll(newEnv);
+    protected void patchCommandLine(
+            @NotNull GoRunConfigurationBase<?> goRunConfigurationBase,
+            @Nullable RunnerSettings runnerSettings,
+            @NotNull GeneralCommandLine generalCommandLine,
+            @NotNull String runnerId
+    )
+            throws ExecutionException
+    {
+        Map<String, String> newEnv = new EnvFileEnvironmentVariables(
+                EnvFileConfigurationEditor.getEnvFileSetting(goRunConfigurationBase)
+        )
+                .render(
+                        goRunConfigurationBase.getProject(),
+                        generalCommandLine.getEnvironment(),
+                        generalCommandLine.isPassParentEnvironment()
+                );
+
+        generalCommandLine.getEnvironment().clear();
+        generalCommandLine.getEnvironment().putAll(newEnv);
     }
 
     @Override
