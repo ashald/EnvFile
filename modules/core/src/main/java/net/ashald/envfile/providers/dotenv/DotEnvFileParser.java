@@ -48,6 +48,9 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
                 } else if (strippedLine.contains("=")) {
                     String[] tokens = strippedLine.split("=", 2);
                     String key = tokens[0];
+                    if (key.startsWith("export ")) {
+                        key = key.substring(7).trim();
+                    }
                     String rawValue = tokens[1].trim();
                     if(rawValue.startsWith("\"") && !rawValue.endsWith("\"")) {
                         multiLineKey = key;
