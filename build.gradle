@@ -39,6 +39,11 @@ intellij {
     sameSinceUntilBuild = false
     updateSinceUntilBuild = false
     downloadSources = true
+    plugins = [
+            // This doesn't make any sense as this plugin supposed to be only required on IDEA sub-module
+            // but it doesn't build without it. Suspect a validation bug in JetBrains Gradle plugin.
+            "java",
+    ]
 }
 buildSearchableOptions.enabled = false
 
