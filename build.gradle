@@ -71,6 +71,7 @@ runIde {
         autoReloadPlugins = true
     }
 }
+runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::new).orElse(null)
 
 tasks {
     patchPluginXml {
