@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Added
+
+- Multi-line variable support in `.env` files ([#127]) - special thanks to [@ledoyen](https://github.com/ledoyen)
+- Ignore for `export ` prefix in `.env` files
+- Include parent environment variables (when enabled) into environment substitution ([#165]) - special thanks to [@jansorg](https://github.com/jansorg)
+
+### Fixed
+
+- Incompatibility with IDEA 2022.2 ([#151]) - special thanks to [@HassanAbouelela](https://github.com/HassanAbouelela)
+- Experimental features checkbox is is properly enabled/disabled when plugin is enabled/disabled
+
 ## 3.2.2 - 2021-09-02
 
 ### Fixed
@@ -126,7 +139,9 @@ This project adheres to [Semantic Versioning].
 [#81]: https://github.com/Ashald/EnvFile/issues/81
 [#81]: https://github.com/Ashald/EnvFile/issues/83
 [#100]: https://github.com/ashald/EnvFile/issues/100
+[#127]: https://github.com/ashald/EnvFile/issues/127
 [#151]: https://github.com/ashald/EnvFile/issues/151
+[#165]: https://github.com/ashald/EnvFile/issues/165
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/
