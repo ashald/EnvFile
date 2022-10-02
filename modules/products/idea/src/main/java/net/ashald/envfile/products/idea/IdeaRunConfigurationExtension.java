@@ -60,7 +60,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
      * that we could have used to update environment variables.
      */
     @Override
-    public <T extends RunConfigurationBase> void updateJavaParameters(
+    public <T extends RunConfigurationBase<?>> void updateJavaParameters(
             @NotNull final T configuration,
             @NotNull final JavaParameters params,
             @NotNull final RunnerSettings runnerSettings
