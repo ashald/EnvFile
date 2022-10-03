@@ -5,11 +5,12 @@ import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class RunConfigEnvVarsProviderFactory implements EnvVarsProviderFactory {
 
     @Override
-    public EnvVarsProvider createProvider(Map<String, String> baseEnvVars) {
+    public EnvVarsProvider createProvider(Map<String, String> baseEnvVars, Consumer<String> logger) {
         return new RunConfigEnvVarsProvider(baseEnvVars);
     }
 

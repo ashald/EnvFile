@@ -79,6 +79,7 @@
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <notificationGroup displayType="NONE" id="net.ashald.envfile"/>
     <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
     <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
