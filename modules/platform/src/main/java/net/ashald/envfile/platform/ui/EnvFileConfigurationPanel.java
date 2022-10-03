@@ -44,6 +44,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.function.Predicate;
 
 
 class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPanel {
@@ -189,7 +190,11 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
             }
 
             final String title = String.format("%s file", extension.getFactory().getTitle());
-            final Condition<VirtualFile> maybeFileFilter = extension.getFactory().getFileFilter();
+            final Predicate<String> fileNamePredicate = extension.getFactory().getFileNamePredicate();
+            final Condition<VirtualFile> maybeFileFilter = fileNamePredicate != null ?
+                    file -> fileNamePredicate.test(file.getName()) :
+                    null;
+
             final boolean showHiddenFiles = extension.getFactory().showHiddenFiles();
             AnAction anAction = new AnAction(title) {
                 @Override

@@ -1,12 +1,12 @@
 package net.ashald.envfile.providers.direnv;
 
 
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 public class DirenvProviderFactory implements EnvVarsProviderFactory {
 
@@ -22,8 +22,8 @@ public class DirenvProviderFactory implements EnvVarsProviderFactory {
     }
 
     @Override
-    public @Nullable Condition<VirtualFile> getFileFilter() {
-        return file -> file.getName().equals(".envrc");
+    public @Nullable Predicate<String> getFileNamePredicate() {
+        return name -> name.equals(".envrc");
     }
 
     @Override

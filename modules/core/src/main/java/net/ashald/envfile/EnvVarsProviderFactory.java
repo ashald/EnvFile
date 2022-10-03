@@ -1,9 +1,9 @@
 package net.ashald.envfile;
 
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 
 public interface EnvVarsProviderFactory {
@@ -13,7 +13,7 @@ public interface EnvVarsProviderFactory {
 
     @NotNull String getTitle();
 
-    @Nullable Condition<VirtualFile> getFileFilter();
+    @Nullable Predicate<String> getFileNamePredicate();
 
     boolean showHiddenFiles();
 }

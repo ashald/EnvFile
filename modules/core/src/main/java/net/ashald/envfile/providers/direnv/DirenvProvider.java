@@ -1,14 +1,13 @@
 package net.ashald.envfile.providers.direnv;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
 import net.ashald.envfile.AbstractEnvVarsProvider;
 import net.ashald.envfile.EnvFileErrorException;
-import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -62,12 +61,13 @@ public class DirenvProvider extends AbstractEnvVarsProvider {
         }
     }
 
-    private Process executeDirenv(String workingDir, String... args) throws ExecutionException {
-        Object[] newArgs = ArrayUtils.add(args, 0, "direnv");
-
-        return (new GeneralCommandLine((String[]) newArgs))
-                .withWorkDirectory(workingDir)
-                .createProcess();
+    private Process executeDirenv(String workingDir, String... args) throws IOException {
+        String[] newArgs = new String[args.length + 1];
+        System.arraycopy(args, 0, newArgs, 1, args.length);
+        newArgs[0] = "direnv";
+        ProcessBuilder pb = new ProcessBuilder(newArgs);
+        pb.directory(new File(workingDir));
+        return pb.start();
     }
 
 }

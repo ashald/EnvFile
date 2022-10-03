@@ -1,11 +1,11 @@
 package net.ashald.envfile.providers.yaml;
 
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 public class YamlEnvFileParserFactory implements EnvVarsProviderFactory {
 
@@ -21,7 +21,7 @@ public class YamlEnvFileParserFactory implements EnvVarsProviderFactory {
     }
 
     @Override
-    public @Nullable Condition<VirtualFile> getFileFilter() {
+    public @Nullable Predicate<String> getFileNamePredicate() {
         return null;
     }
 

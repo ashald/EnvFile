@@ -1,12 +1,12 @@
 package net.ashald.envfile.providers.runconfig;
 
 
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
 
 public class RunConfigEnvVarsProviderFactory implements EnvVarsProviderFactory {
 
@@ -23,7 +23,7 @@ public class RunConfigEnvVarsProviderFactory implements EnvVarsProviderFactory {
     }
 
     @Override
-    public @Nullable Condition<VirtualFile> getFileFilter() {
+    public @Nullable Predicate<String> getFileNamePredicate() {
         return null;
     }
 
