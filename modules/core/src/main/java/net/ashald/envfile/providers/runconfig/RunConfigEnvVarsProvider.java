@@ -17,7 +17,7 @@ public class RunConfigEnvVarsProvider extends AbstractEnvVarsProvider {
 
     @NotNull
     @Override
-    protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, InputStream content) {
+    protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, InputStream content, String path) {
         return new HashMap<>(runConfigEnv);
     }
 

@@ -14,6 +14,7 @@ public interface EnvVarsProvider {
      * @param runConfigEnv  - env vars provided by run config originally
      * @param aggregatedEnv - env vars rendered so far
      * @param content       - content to parse
+     * @param path          - path to the file
      * @throws EnvFileErrorException
      * @throws IOException
      */
@@ -21,7 +22,8 @@ public interface EnvVarsProvider {
     Map<String, String> process(
             @NotNull Map<String, String> runConfigEnv,
             @NotNull Map<String, String> aggregatedEnv,
-            InputStream content
+            InputStream content,
+            String path
     )
             throws EnvFileErrorException, IOException;
 

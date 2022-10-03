@@ -26,7 +26,7 @@ public class DotEnvFileParserTest {
     @SneakyThrows
     private static Map<String, String> parse(String file, Map<String, String> context) {
         try (val content = getFile(file)) {
-            return PARSER.getEnvVars(context, content);
+            return PARSER.getEnvVars(context, content, null);
         }
     }
 
@@ -75,7 +75,7 @@ public class DotEnvFileParserTest {
         Map<String, String> result;
 
         try (val content = getFile("substitutions.env")) {
-            result = PARSER.process(Collections.emptyMap(), context, content);
+            result = PARSER.process(Collections.emptyMap(), context, content, null);
         }
         Assert.assertEquals("", result.get("A"));
         Assert.assertEquals("default", result.get("B"));
@@ -89,7 +89,7 @@ public class DotEnvFileParserTest {
     public void testOrder() {
         Map<String, String> result;
         try (val content = getFile("order.env")) {
-            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content);
+            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content, null);
         }
 
         Assert.assertEquals("A(B(C))", result.get("A"));

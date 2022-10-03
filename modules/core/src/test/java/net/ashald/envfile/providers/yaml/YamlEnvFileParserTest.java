@@ -32,7 +32,8 @@ public class YamlEnvFileParserTest {
             result = PARSER.process(
                     Collections.emptyMap(),
                     context,
-                    content
+                    content,
+                    null
             );
         }
 
@@ -47,7 +48,7 @@ public class YamlEnvFileParserTest {
     public void testOrder() throws EnvFileErrorException, IOException {
         Map<String, String> result;
         try (val content = getFile("order.yaml")) {
-            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content);
+            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content, null);
         }
 
         Assert.assertEquals("A(B(C))", result.get("A"));

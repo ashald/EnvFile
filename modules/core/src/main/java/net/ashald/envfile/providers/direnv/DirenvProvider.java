@@ -1,5 +1,6 @@
 package net.ashald.envfile.providers.direnv;
 
+import lombok.NonNull;
 import net.ashald.envfile.AbstractEnvVarsProvider;
 import net.ashald.envfile.EnvFileErrorException;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,11 @@ public class DirenvProvider extends AbstractEnvVarsProvider {
 
     @NotNull
     @Override
-    protected Map<String, String> getEnvVars(@NotNull Map<String, String> runConfigEnv, String path) throws EnvFileErrorException {
+    protected Map<String, String> getEnvVars(
+            Map<String, String> runConfigEnv,
+            @NonNull InputStream content,
+            @NonNull String path
+    ) throws EnvFileErrorException {
         Path envrcPath = Paths.get(path);
         String workingDir = envrcPath.getParent().toString();
         return importDirenv(workingDir);

@@ -36,7 +36,8 @@ public class DotEnvFileParser extends AbstractEnvVarsProvider {
     @Override
     protected Map<String, String> getEnvVars(
             Map<String, String> runConfigEnv,
-            @NonNull InputStream content
+            @NonNull InputStream content,
+            @NonNull String path
     ) throws IOException {
         Map<String, String> result = new LinkedHashMap<>();
         List<String> lines = readAllLines(content);

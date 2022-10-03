@@ -92,7 +92,7 @@ public class EnvFileEntry {
                 if (!parser.isFileLocationValid(file) && ignoreMissing) {
                     return aggregatedEnv;
                 } else {
-                    return parser.process(runConfigEnv, aggregatedEnv, content);
+                    return parser.process(runConfigEnv, aggregatedEnv, content, filePath);
                 }
             }
         } finally {

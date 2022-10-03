@@ -15,7 +15,7 @@ public class YamlEnvFileParser extends AbstractEnvVarsProvider {
 
     @NotNull
     @Override
-    public Map<String, String> getEnvVars(Map<String, String> runConfigEnv, @NotNull InputStream content) {
+    public Map<String, String> getEnvVars(Map<String, String> runConfigEnv, @NotNull InputStream content, @NotNull String path) {
         return new Yaml().load(content);
     }
 }

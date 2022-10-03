@@ -16,7 +16,8 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
 
     protected abstract Map<String, String> getEnvVars(
             Map<String, String> runConfigEnv,
-            InputStream content
+            InputStream content,
+            String path
     ) throws EnvFileErrorException, IOException;
 
     @Override
@@ -29,10 +30,11 @@ public abstract class AbstractEnvVarsProvider implements EnvVarsProvider {
     public Map<String, String> process(
             @NotNull Map<String, String> runConfigEnv,
             @NotNull Map<String, String> aggregatedEnv,
-            InputStream content
+            InputStream content,
+            String path
     ) throws EnvFileErrorException, IOException {
         Map<String, String> result = new HashMap<>(aggregatedEnv);
-        Map<String, String> overrides = getEnvVars(runConfigEnv, content);
+        Map<String, String> overrides = getEnvVars(runConfigEnv, content, path);
 
         for (Map.Entry<String, String> entry : overrides.entrySet()) {
             result.put(entry.getKey(), renderValue(entry.getValue(), result));
