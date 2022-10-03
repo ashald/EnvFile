@@ -2,7 +2,6 @@ package net.ashald.envfile;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;

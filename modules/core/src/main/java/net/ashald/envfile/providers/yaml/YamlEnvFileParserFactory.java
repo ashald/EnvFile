@@ -6,12 +6,11 @@ import net.ashald.envfile.providers.EnvFileExecutor;
 import net.ashald.envfile.providers.EnvFileReader;
 import net.ashald.envfile.providers.SingleFileEnvVarsProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.function.Predicate;
 
 public class YamlEnvFileParserFactory implements EnvVarsProviderFactory {
