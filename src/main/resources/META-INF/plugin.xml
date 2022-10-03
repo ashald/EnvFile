@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.2.2</version>
+  <version>3.4.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -38,26 +38,16 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.3.0"><b>v3.3.0</b></a> (2022-10-02)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.0"><b>v3.4.0</b></a> (2022-10-03)
       <br/>
       <br/>
 
       <b>Added</b>:
       <ul>
-        <li>Multi-line variable support in `.env` files</li>
-        <li>Ignore for `export ` prefix in `.env` files</li>
-        <li>Include parent environment variables (when enabled) into environment substitution</li>
-        <li>An option to execute file and parse content from standard output</li>
+        <li>When environment variables file is executed, it now receives all environment variables accumulated by previous entries</li>
+        <li>Log stderr from execution of environment variables files into IDE event console</li>
       </ul>
 
-      <br/>
-      <br/>
-
-      <b>Fixed</b>:
-      <ul>
-        <li>Incompatibility with PyCharm 2022.2</li>
-        <li>Experimental features checkbox is properly enabled/disabled when plugin is enabled/disabled</li>
-      </ul>
       <br/>
       <br/>
 
