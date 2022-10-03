@@ -63,7 +63,7 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
     public <T extends RunConfigurationBase<?>> void updateJavaParameters(
             @NotNull final T configuration,
             @NotNull final JavaParameters params,
-            @NotNull final RunnerSettings runnerSettings
+            final RunnerSettings runnerSettings
     ) throws ExecutionException {
         Map<String, String> newEnv = new EnvFileEnvironmentVariables(
                 EnvFileConfigurationEditor.getEnvFileSetting(configuration)

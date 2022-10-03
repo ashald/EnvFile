@@ -1,49 +1,25 @@
 package net.ashald.envfile.providers.dotenv;
 
-import lombok.NonNull;
-import net.ashald.envfile.AbstractEnvVarsProvider;
-import org.jetbrains.annotations.NotNull;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import net.ashald.envfile.providers.EnvFileParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-public class DotEnvFileParser extends AbstractEnvVarsProvider {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class DotEnvFileParser implements EnvFileParser {
+    public static final DotEnvFileParser INSTANCE = new DotEnvFileParser();
+    private static final String ANY_NEW_LINE = "\\R";
 
-    public DotEnvFileParser(boolean shouldSubstituteEnvVar) {
-        super(shouldSubstituteEnvVar);
-    }
-
-    private static List<String> readAllLines(InputStream inputStream) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        List<String> data = new ArrayList<>();
-        for (String line; (line = br.readLine()) != null; ) {
-            data.add(line);
-        }
-        return data;
-    }
-
-    @NotNull
     @Override
-    protected Map<String, String> getEnvVars(
-            Map<String, String> runConfigEnv,
-            @NonNull InputStream content
-    ) throws IOException {
+    public Map<String, String> parse(String data) {
         Map<String, String> result = new LinkedHashMap<>();
-        List<String> lines = readAllLines(content);
+
         String multiLineKey = null;
         StringBuilder multiLineValueAccumulator = null;
 
-        for (String l : lines) {
+        for (String l : data.split(ANY_NEW_LINE)) {
             String strippedLine = l.trim();
             if (strippedLine.startsWith("#")) {
                 continue;

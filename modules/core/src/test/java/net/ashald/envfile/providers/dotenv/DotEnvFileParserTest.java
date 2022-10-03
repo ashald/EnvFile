@@ -1,117 +1,127 @@
 package net.ashald.envfile.providers.dotenv;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-/**
- * TODO: cleanup - these tests are total mess
- */
+import static org.junit.Assert.assertEquals;
+
 public class DotEnvFileParserTest {
-    private static final DotEnvFileParser PARSER = new DotEnvFileParser(true);
+    private static final DotEnvFileParser PARSER = DotEnvFileParser.INSTANCE;
 
-    private static InputStream getFile(String name) throws IOException {
-        return Files.newInputStream(Paths.get("src", "test", "resources", "providers", "dotenv", name));
-    }
-
+    /**
+     * TODO: generalize
+     */
     @SneakyThrows
-    private static Map<String, String> parse(String file, Map<String, String> context) {
-        try (val content = getFile(file)) {
-            return PARSER.getEnvVars(context, content);
-        }
-    }
-
-    @Test
-    @SneakyThrows
-    public void testMalformedEncoding() {
-        parse("malformed-unicode.env", Collections.emptyMap()); // should not fail
+    private static String getFile(String name) {
+        val bytes = Files.readAllBytes(Paths.get("src", "test", "resources", "providers", "dotenv", name));
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     @Test
-    @SneakyThrows
-    public void testLinesStartingWithHasAreIgnored() {
-        Map<String, String> result = parse("full-line-comments.env", Collections.emptyMap());
+    public void GIVEN_parse_WEHN_charSequenceLooksLikeMalformedUnicode_THEN_doesNotFail() {
+        val result = PARSER.parse(
+                getFile("malformed-unicode.env")
+        );
 
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals("value", result.get("key"));
+        assertEquals(ImmutableMap.of("FOO", "\\usr"), result);
     }
 
     @Test
-    @SneakyThrows
-    public void testInlineComments() {
-        Map<String, String> result = parse("inline-comments.env", Collections.emptyMap());
+    public void GIVEN_parse_WHEN_fullLineComment_THEN_ignored() {
+        val result = PARSER.parse(
+                getFile("full-line-comments.env")
+        );
 
-        Assert.assertEquals("foo#bar", result.get("key1"));
-        Assert.assertEquals("foo", result.get("key2"));
-        Assert.assertEquals("foo #bar", result.get("key3"));
-        Assert.assertEquals("foo #bar", result.get("key4"));
-        Assert.assertEquals("foo #bar", result.get("key5"));
+        assertEquals(
+                ImmutableMap.of("key", "value"),
+                result
+        );
     }
 
     @Test
-    @SneakyThrows
-    public void testBackslashesArePreserved() {
-        Map<String, String> result = parse("backslashes.env", Collections.emptyMap());
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals("value\\1", result.get("TEST_VAR"));
+    public void GIVEN_parse_WHEN_poundSignPresentInline_THEN_ignoredOnlyWhenUnescapedWithPrecedingBlankSpace() {
+        val result = PARSER.parse(
+                getFile("inline-comments.env")
+        );
+
+        assertEquals(
+                ImmutableMap.of(
+                        "key1", "foo#bar",
+                        "key2", "foo",
+                        "key3", "foo #bar",
+                        "key4", "foo #bar",
+                        "key5", "foo #bar"
+                ),
+                result
+        );
     }
 
     @Test
-    @SneakyThrows
-    public void testSubstitutions() {
-        Map<String, String> context = new HashMap<String, String>() {{
-            put("FOO", "BAR");
-        }};
+    public void GIVEN_parse_WEHN_backslahesPresent_THEN_preserved() {
+        val result = PARSER.parse(
+                getFile("backslashes.env")
+        );
 
-        Map<String, String> result;
-
-        try (val content = getFile("substitutions.env")) {
-            result = PARSER.process(Collections.emptyMap(), context, content);
-        }
-        Assert.assertEquals("", result.get("A"));
-        Assert.assertEquals("default", result.get("B"));
-        Assert.assertEquals("BAR", result.get("C"));
-        Assert.assertEquals("BAR default", result.get("D"));
-        Assert.assertEquals("BAR", result.get("E"));
+        assertEquals(
+                ImmutableMap.of(
+                        "TEST_VAR", "value\\1"
+                ),
+                result
+        );
     }
 
     @Test
-    @SneakyThrows
-    public void testOrder() {
-        Map<String, String> result;
-        try (val content = getFile("order.env")) {
-            result = PARSER.process(Collections.emptyMap(), Collections.emptyMap(), content);
-        }
+    public void GIVEN_parse_WHEN_parses_THEN_preservesOrder() {
+        val result = PARSER.parse(
+                getFile("order.env")
+        );
 
-        Assert.assertEquals("A(B(C))", result.get("A"));
+        val keys = ImmutableList.copyOf(
+                result.keySet()
+        );
+
+        assertEquals(
+                ImmutableList.of("C", "B", "A"),
+                keys
+        );
     }
 
     @Test
-    @SneakyThrows
-    public void testMultiLineVariables() {
-        Map<String, String> result = parse("multi-line-variable.env", Collections.emptyMap());
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n", result.get("PRIVATE_KEY"));
+    public void GIVEN_parse_WHEN_multilineVariable_THEN_preserved() {
+        val result = PARSER.parse(
+                getFile("multi-line-variable.env")
+        );
+
+        assertEquals(
+                ImmutableMap.of(
+                        "PRIVATE_KEY", "-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n"
+                ),
+                result
+        );
     }
 
     @Test
-    @SneakyThrows
-    public void testMultiLineVariablesWithLineBreaks() {
-        Map<String, String> result = parse("multi-line-variable-with-line-breaks.env", Collections.emptyMap());
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals("-----BEGIN RSA PRIVATE KEY-----\n" +
-                "...\n" +
-                "HkVN9...\n" +
-                "...\n" +
-                "-----END DSA PRIVATE KEY-----", result.get("PRIVATE_KEY"));
+    public void GIVEN_parse_WHEN_multilineVariableWithLineBreaks_THEN_preserved() {
+        val result = PARSER.parse(
+                getFile("multi-line-variable-with-line-breaks.env")
+        );
+
+        assertEquals(
+                ImmutableMap.of(
+                        "PRIVATE_KEY", "-----BEGIN RSA PRIVATE KEY-----\n" +
+                                "...\n" +
+                                "HkVN9...\n" +
+                                "...\n" +
+                                "-----END DSA PRIVATE KEY-----"
+                ),
+                result
+        );
     }
 }

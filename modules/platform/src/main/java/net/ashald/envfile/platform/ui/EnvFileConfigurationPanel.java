@@ -10,7 +10,6 @@ import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,9 +22,11 @@ import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.ListTableModel;
+import lombok.val;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import net.ashald.envfile.platform.EnvFileEntry;
-import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.EnvFileSettings;
+import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileIsExecutableColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
@@ -33,8 +34,8 @@ import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
 import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 
 import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import java.awt.BorderLayout;
@@ -65,7 +66,7 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         // Define Model
         ColumnInfo<EnvFileEntry, Boolean> columnIsActive = new EnvFileIsActiveColumnInfo();
         ColumnInfo<EnvFileEntry, Boolean> columnIsExecutable = new EnvFileIsExecutableColumnInfo();
-        ColumnInfo<EnvFileEntry, String> columnFile = new EnvFilePathColumnInfo();
+        ColumnInfo<EnvFileEntry, String> columnFile = new EnvFilePathColumnInfo(runConfig.getProject());
         ColumnInfo<EnvFileEntry, EnvFileEntry> columnType = new EnvFileTypeColumnInfo();
 
         envFilesModel = new ListTableModel<>(columnIsActive, columnIsExecutable, columnFile, columnType);
@@ -98,7 +99,6 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
             }
         });
         substituteEnvVarsCheckBox = new JCheckBox("Substitute Environment Variables (${FOO} / ${BAR:-default} / $${ESCAPED})");
-        substituteEnvVarsCheckBox.addActionListener(e -> envFilesModel.getItems().forEach(envFileEntry -> envFileEntry.setSubstitutionEnabled(substituteEnvVarsCheckBox.isSelected())));
         supportPathMacroCheckBox = new JCheckBox("Process JetBrains path macro references ($PROJECT_DIR$)");
         ignoreMissingCheckBox = new JCheckBox("Ignore missing files");
         experimentalIntegrationsCheckBox = new JCheckBox("Enable experimental integrations (e.g. Gradle) - may break any time!");
@@ -106,10 +106,8 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         // TODO: come up with a generic approach for this
         envFilesModel.addRow(
                 EnvFileEntry.builder()
-                        .runConfig(runConfig)
                         .parserId(RunConfigEnvVarsProvider.PARSER_ID)
                         .enabled(true)
-                        .substitutionEnabled(true)
                         .executable(false)
                         .build()
         );
@@ -126,7 +124,12 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                     boolean allEditable = true;
 
                     for (EnvFileEntry entry : envFilesTable.getSelectedObjects()) {
-                        if (!entry.isEditable()) {
+                        val editable =
+                                EnvVarsProviderExtension.getParserFactoryById(entry.getParserId())
+                                        .map(EnvVarsProviderFactory::isEditable)
+                                        .orElse(true);
+
+                        if (!editable) {
                             allEditable = false;
                             break;
                         }
@@ -176,12 +179,15 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
         tableColumn.setMaxWidth(preferredWidth);
     }
 
-    private void doAddAction(AnActionButton button, final TableView<EnvFileEntry> table, final ListTableModel<EnvFileEntry> model) {
-        final JBPopupFactory popupFactory = JBPopupFactory.getInstance();
+    private void doAddAction(
+            AnActionButton button,
+            final TableView<EnvFileEntry> table,
+            final ListTableModel<EnvFileEntry> model
+    ) {
         DefaultActionGroup actionGroup = new DefaultActionGroup();
 
         for (final EnvVarsProviderExtension extension : EnvVarsProviderExtension.getParserExtensions()) {
-            if (!extension.getFactory().createProvider(substituteEnvVarsCheckBox.isSelected()).isEditable()) {
+            if (!extension.getFactory().isEditable()) {
                 continue;
             }
 
@@ -206,11 +212,9 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
 
                         ArrayList<EnvFileEntry> newList = new ArrayList<EnvFileEntry>(model.getItems());
                         final EnvFileEntry newOptions = EnvFileEntry.builder()
-                                .runConfig(runConfig)
                                 .parserId(extension.getId())
                                 .path(selectedPath)
                                 .enabled(true)
-                                .substitutionEnabled(substituteEnvVarsCheckBox.isSelected())
                                 .executable(false)
                                 .build();
 
@@ -235,7 +239,11 @@ class EnvFileConfigurationPanel<T extends RunConfigurationBase<?>> extends JPane
                 actionGroup.addSeparator("Recent");
 
                 for (final EnvFileEntry entry : RECENT) {
-                    String title = String.format("%s -> %s", entry.getTypeTitle(), entry.getPath());
+                    val typeTitle = EnvVarsProviderExtension.getParserFactoryById(entry.getParserId())
+                            .map(EnvVarsProviderFactory::getTitle)
+                            .orElse(String.format("<%s>", entry.getParserId()));
+
+                    String title = String.format("%s -> %s", typeTitle, entry.getPath());
                     String shortTitle = title.length() < 81 ? title : title.replaceFirst("(.{39}).+(.{39})", "$1...$2");
                     AnAction anAction = new AnAction(shortTitle, title, null) {
                         @Override

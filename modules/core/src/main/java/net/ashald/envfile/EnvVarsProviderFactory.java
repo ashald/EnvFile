@@ -1,13 +1,17 @@
 package net.ashald.envfile;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.Map;
 
 
 public interface EnvVarsProviderFactory {
 
-    @NotNull
-    EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar);
+    /**
+     * @param baseEnvVars env vars defined in the run configuration
+     */
+    EnvVarsProvider createProvider(Map<String, String> baseEnvVars);
 
-    @NotNull String getTitle();
+    String getTitle();
+
+    boolean isEditable();
 
 }

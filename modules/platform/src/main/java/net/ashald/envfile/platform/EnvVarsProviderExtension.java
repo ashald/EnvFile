@@ -7,6 +7,8 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.LazyInstance;
 import com.intellij.util.xmlb.annotations.Attribute;
+import lombok.NonNull;
+import lombok.val;
 import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class EnvVarsProviderExtension extends AbstractExtensionPointBean {
@@ -37,7 +40,7 @@ public class EnvVarsProviderExtension extends AbstractExtensionPointBean {
         return implementation.getValue();
     }
 
-    static EnvVarsProviderExtension getParserExtensionById(@NotNull String parserId) {
+    public static Optional<EnvVarsProviderFactory> getParserFactoryById(@NonNull String parserId) {
         Map<String, EnvVarsProviderExtension> parsers = new HashMap<>();
         for (EnvVarsProviderExtension extension: Extensions.getExtensions(EP_NAME)) {
             if (parsers.containsKey(extension.getId())) {
@@ -50,7 +53,9 @@ public class EnvVarsProviderExtension extends AbstractExtensionPointBean {
                 parsers.put(extension.getId(), extension);
             }
         }
-        return parsers.get(parserId);
+        val extension =  parsers.get(parserId);
+        return Optional.ofNullable(extension)
+                .map(EnvVarsProviderExtension::getFactory);
     }
 
     public static List<EnvVarsProviderExtension> getParserExtensions() {
@@ -72,6 +77,6 @@ public class EnvVarsProviderExtension extends AbstractExtensionPointBean {
 
     @Override
     public String toString() {
-        return getFactory().getTitle();
+        return implementation.getValue().getTitle();
     }
 }
