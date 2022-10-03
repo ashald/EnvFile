@@ -39,6 +39,11 @@ intellij {
     sameSinceUntilBuild = false
     updateSinceUntilBuild = false
     downloadSources = true
+    plugins = [
+            // This doesn't make any sense as this plugin supposed to be only required on IDEA sub-module
+            // but it doesn't build without it. Suspect a validation bug in JetBrains Gradle plugin.
+            "java",
+    ]
 }
 buildSearchableOptions.enabled = false
 
@@ -53,24 +58,6 @@ wrapper {
     gradleVersion = "7.5.1"
 }
 
-def prj = ".idea/"
-
-idea {
-    module.iml {
-        generateTo = file(prj)
-
-        withXml {
-            it.node.@type = "PLUGIN_MODULE"
-            it.node.appendNode('component', [name: 'DevKit.ModuleBuildProperties', url: 'file://$MODULE_DIR$/src/main/resources/META-INF/plugin.xml'])
-        }
-    }
-}
-
-runIde {
-    intellij {
-        autoReloadPlugins = true
-    }
-}
 runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::new).orElse(null)
 
 tasks {
@@ -78,18 +65,4 @@ tasks {
         sinceBuild.set("201")
     }
 
-}
-
-task setup {
-    dependsOn ideaModule, ideaProject
-    // overriding idea.project.outputFile changes relative path calculation so it's easier to just move a file
-    doLast {
-        copy {
-            from '.'
-            into prj
-            include "${project.name}.ipr"
-            rename { "modules.xml" }
-        }
-        project.delete "${project.name}.ipr"
-    }
 }

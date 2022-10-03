@@ -1,51 +1,47 @@
 package net.ashald.envfile.platform;
 
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.Value;
+
 import java.util.Collections;
 import java.util.List;
 
+@Value
+@Builder
 public class EnvFileSettings {
 
-    private final boolean pluginEnabled;
-    private final boolean envVarsSubstitutionEnabled;
-    private final boolean pathMacroSupported;
-    private final boolean ignoreMissing;
-    private final boolean enableExperimentalIntegrations;
+    @NonNull
+    private final Boolean pluginEnabled;
+    @NonNull
+    private final Boolean envVarsSubstitutionEnabled;
+    @NonNull
+    private final Boolean pathMacroSupported;
+    @NonNull
+    private final Boolean ignoreMissing;
+    @NonNull
+    private final Boolean enableExperimentalIntegrations;
+    @NonNull
     private final List<EnvFileEntry> entries;
 
-    public EnvFileSettings(
-            boolean isEnabled,
-            boolean substituteVars,
-            boolean pathMacroSupported,
-            List<EnvFileEntry> envFileEntries,
-            boolean ignoreMissing,
-            boolean experimentalInegrations
-    ) {
-        pluginEnabled = isEnabled;
-        envVarsSubstitutionEnabled = substituteVars;
-        this.pathMacroSupported = pathMacroSupported;
-        this.ignoreMissing = ignoreMissing;
-        entries = envFileEntries;
-        enableExperimentalIntegrations = experimentalInegrations;
-    }
-
-    public boolean isEnabled() {
-        return pluginEnabled;
+    public boolean isPluginEnabledEnabled() {
+        return Boolean.TRUE.equals(getPluginEnabled());
     }
 
     public boolean isSubstituteEnvVarsEnabled() {
-        return envVarsSubstitutionEnabled;
+        return Boolean.TRUE.equals(getEnvVarsSubstitutionEnabled());
     }
 
     public boolean isPathMacroSupported() {
-        return pathMacroSupported;
+        return Boolean.TRUE.equals(getPathMacroSupported());
     }
 
     public boolean isIgnoreMissing() {
-        return ignoreMissing;
+        return Boolean.TRUE.equals(getIgnoreMissing());
     }
 
     public boolean isEnableExperimentalIntegrations() {
-        return enableExperimentalIntegrations;
+        return Boolean.TRUE.equals(getEnableExperimentalIntegrations());
     }
 
     public List<EnvFileEntry> getEntries() {

@@ -8,30 +8,32 @@ import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvFileSettings;
+import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 import org.jdom.Element;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> extends SettingsEditor<T> {
     private static final Key<EnvFileSettings> USER_DATA_KEY = new Key<EnvFileSettings>("EnvFile Settings");
 
-    @NonNls private static final String SERIALIZATION_ID = "net.ashald.envfile";
+    private static final String SERIALIZATION_ID = "net.ashald.envfile";
 
-    @NonNls private static final String ELEMENT_ENTRY_LIST = "ENTRIES";
-    @NonNls private static final String ELEMENT_ENTRY_SINGLE = "ENTRY";
+    private static final String ELEMENT_ENTRY_LIST = "ENTRIES";
+    private static final String ELEMENT_ENTRY_SINGLE = "ENTRY";
 
-    @NonNls private static final String FIELD_IS_ENABLED = "IS_ENABLED";
-    @NonNls private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
-    @NonNls private static final String FIELD_PATH_MACRO_VARS = "IS_PATH_MACRO_SUPPORTED";
-    @NonNls private static final String FIELD_IGNORE_MISSING = "IS_IGNORE_MISSING_FILES";
-    @NonNls private static final String FIELD_EXPERIMENTAL_INTEGRATIONS = "IS_ENABLE_EXPERIMENTAL_INTEGRATIONS";
-    @NonNls private static final String FIELD_PATH = "PATH";
-    @NonNls private static final String FIELD_PARSER = "PARSER";
+    private static final String FIELD_IS_ENABLED = "IS_ENABLED";
+    private static final String FIELD_SUBSTITUTE_VARS = "IS_SUBST";
+    private static final String FIELD_PATH_MACRO_VARS = "IS_PATH_MACRO_SUPPORTED";
+    private static final String FIELD_IGNORE_MISSING = "IS_IGNORE_MISSING_FILES";
+    private static final String FIELD_EXPERIMENTAL_INTEGRATIONS = "IS_ENABLE_EXPERIMENTAL_INTEGRATIONS";
+    private static final String FIELD_PATH = "PATH";
+    private static final String FIELD_PARSER = "PARSER";
+
+    private static final String FIELD_IS_EXECUTABLE = "IS_EXECUTABLE";
 
     private final EnvFileConfigurationPanel<T> editor;
 
@@ -67,7 +69,7 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
         boolean isEnabled = Boolean.parseBoolean(isEnabledStr);
 
         String envVarsSubstEnabledStr = JDOMExternalizerUtil.readField(element, FIELD_SUBSTITUTE_VARS, "false");
-        boolean envVarsSubstEnabled  = Boolean.parseBoolean(envVarsSubstEnabledStr);
+        boolean envVarsSubstEnabled = Boolean.parseBoolean(envVarsSubstEnabledStr);
 
         String pathMacroSupportedStr = JDOMExternalizerUtil.readField(element, FIELD_PATH_MACRO_VARS, "false");
         boolean pathMacroSupported = Boolean.parseBoolean(pathMacroSupportedStr);
@@ -82,41 +84,67 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
 
         final Element entriesElement = element.getChild(ELEMENT_ENTRY_LIST);
         if (entriesElement != null) {
-            for (Object o : entriesElement.getChildren(ELEMENT_ENTRY_SINGLE)) {
-                Element envElement = (Element) o;
+            for (Element envFileEntry : entriesElement.getChildren(ELEMENT_ENTRY_SINGLE)) {
 
-                String isEntryEnabledStr = envElement.getAttributeValue(FIELD_IS_ENABLED);
+                String isEntryEnabledStr = envFileEntry.getAttributeValue(FIELD_IS_ENABLED);
                 boolean isEntryEnabled = Boolean.parseBoolean(isEntryEnabledStr);
 
-                String parserId = envElement.getAttributeValue(FIELD_PARSER, "~");
-                String path = envElement.getAttributeValue(FIELD_PATH);
+                String parserId = envFileEntry.getAttributeValue(FIELD_PARSER, "~");
+                String path = envFileEntry.getAttributeValue(FIELD_PATH);
 
-                entries.add(new EnvFileEntry(configuration, parserId, path, isEntryEnabled, envVarsSubstEnabled));
+                String isExecutableStr = envFileEntry.getAttributeValue(FIELD_IS_EXECUTABLE);
+                boolean isExecutable = Boolean.parseBoolean(isExecutableStr);
+
+                entries.add(
+                        EnvFileEntry.builder()
+                                .runConfig(configuration)
+                                .parserId(parserId)
+                                .path(path)
+                                .enabled(isEntryEnabled)
+                                .substitutionEnabled(envVarsSubstEnabled)
+                                .executable(isExecutable)
+                                .build()
+                );
             }
         }
 
         // For a while to migrate old users - begin
         boolean hasConfigEntry = false;
         for (EnvFileEntry e : entries) {
-            if (e.getParserId().equals("runconfig")) {
+            if (e.getParserId().equals(RunConfigEnvVarsProvider.PARSER_ID)) {
                 hasConfigEntry = true;
                 break;
             }
         }
         if (!hasConfigEntry) {
-            entries.add(new EnvFileEntry(configuration, "runconfig", null, true, envVarsSubstEnabled));
+            entries.add(
+                    EnvFileEntry.builder()
+                            .runConfig(configuration)
+                            .parserId(RunConfigEnvVarsProvider.PARSER_ID)
+                            .enabled(true)
+                            .substitutionEnabled(true)
+                            .executable(false)
+                            .build()
+            );
         }
         // For a while to migrate old users - end
+        EnvFileSettings settings = EnvFileSettings.builder()
+                .pluginEnabled(isEnabled)
+                .envVarsSubstitutionEnabled(envVarsSubstEnabled)
+                .pathMacroSupported(pathMacroSupported)
+                .ignoreMissing(ignoreMissing)
+                .enableExperimentalIntegrations(experimentalIntegrations)
+                .entries(entries)
+                .build();
 
-        EnvFileSettings state = new EnvFileSettings(isEnabled, envVarsSubstEnabled, pathMacroSupported, entries, ignoreMissing, experimentalIntegrations);
-        configuration.putCopyableUserData(USER_DATA_KEY, state);
+        configuration.putCopyableUserData(USER_DATA_KEY, settings);
     }
 
 
     public static void writeExternal(@NotNull RunConfigurationBase<?> configuration, @NotNull Element element) {
         EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
         if (state != null) {
-            JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isEnabled()));
+            JDOMExternalizerUtil.writeField(element, FIELD_IS_ENABLED, Boolean.toString(state.isPluginEnabledEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_SUBSTITUTE_VARS, Boolean.toString(state.isSubstituteEnvVarsEnabled()));
             JDOMExternalizerUtil.writeField(element, FIELD_PATH_MACRO_VARS, Boolean.toString(state.isPathMacroSupported()));
             JDOMExternalizerUtil.writeField(element, FIELD_IGNORE_MISSING, Boolean.toString(state.isIgnoreMissing()));
@@ -125,8 +153,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
             final Element entriesElement = new Element(ELEMENT_ENTRY_LIST);
             for (EnvFileEntry entry : state.getEntries()) {
                 final Element entryElement = new Element(ELEMENT_ENTRY_SINGLE);
-                entryElement.setAttribute(FIELD_IS_ENABLED, Boolean.toString(entry.isEnabled()));
+                entryElement.setAttribute(FIELD_IS_ENABLED, Boolean.toString(entry.getEnabled()));
                 entryElement.setAttribute(FIELD_PARSER, entry.getParserId());
+                entryElement.setAttribute(FIELD_IS_EXECUTABLE, Boolean.toString(entry.isExecutable()));
                 String path = entry.getPath();
                 if (path != null) {
                     entryElement.setAttribute(FIELD_PATH, entry.getPath());
@@ -143,9 +172,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
 
     public static void validateConfiguration(@NotNull RunConfigurationBase<?> configuration, boolean isExecution) throws ExecutionException {
         EnvFileSettings state = configuration.getCopyableUserData(USER_DATA_KEY);
-        if (state != null && state.isEnabled()) {
+        if (state != null && state.isPluginEnabledEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
-                if (entry.isEnabled()) {
+                if (entry.getEnabled()) {
                     if (!entry.validatePath() && !state.isIgnoreMissing()) {
                         throw new ExecutionException(String.format("EnvFile: invalid path - %s", entry.getPath()));
                     }

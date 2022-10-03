@@ -28,12 +28,14 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
         return new DefaultTableCellRenderer() {
             @NotNull
             @Override
-            public Component getTableCellRendererComponent(@NotNull JTable table,
-                                                           Object value,
-                                                           boolean isSelected,
-                                                           boolean hasFocus,
-                                                           int row,
-                                                           int column) {
+            public Component getTableCellRendererComponent(
+                    @NotNull JTable table,
+                    Object value,
+                    boolean isSelected,
+                    boolean hasFocus,
+                    int row,
+                    int column
+            ) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 EnvFileEntry entry = (EnvFileEntry) value;
                 setText(entry.getTypeTitle());

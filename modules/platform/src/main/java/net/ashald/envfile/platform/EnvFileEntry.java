@@ -3,6 +3,9 @@ package net.ashald.envfile.platform;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 import net.ashald.envfile.EnvFileErrorException;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.EnvVarsProviderFactory;
@@ -10,53 +13,46 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Map;
+import java.util.Optional;
 
+@Data
+@Builder
 public class EnvFileEntry {
+    @NonNull
+    private final RunConfigurationBase<?> runConfig;
 
-    private final RunConfigurationBase runConfig;
-
+    @NonNull
     private final String parserId;
+
     private String path;
-    private boolean isEnabled;
-    private boolean isSubstitutionEnabled;
 
-    public EnvFileEntry(RunConfigurationBase envFileRunConfig, String envFileParserId, String envFilePath, boolean enabled, boolean substitutionEnabled) {
-        runConfig = envFileRunConfig;
-        parserId = envFileParserId;
-        path = envFilePath;
-        setEnable(enabled);
-        setSubstitutionEnabled(substitutionEnabled);
-    }
+    @NonNull
+    private Boolean enabled;
 
-    public void setSubstitutionEnabled(boolean enable) {
-        isSubstitutionEnabled = enable;
-    }
+    @NonNull
+    private Boolean substitutionEnabled;
+
+    @NonNull
+    private Boolean executable;
 
     public boolean isEnabled() {
-        return isEnabled;
+        return Boolean.TRUE.equals(getEnabled());
     }
 
-    public void setEnable(boolean enable) {
-        isEnabled = enable;
+    public boolean isSubstitutionEnabled() {
+        return Boolean.TRUE.equals(getSubstitutionEnabled());
+    }
+
+    public boolean isExecutable() {
+        return Boolean.TRUE.equals(getExecutable());
     }
 
     public String getTypeTitle() {
         EnvVarsProviderFactory factory = getProviderFactory();
         return factory == null ? String.format("<%s>", parserId) : factory.getTitle();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String value) {
-        path = value;
-    }
-
-    public String getParserId() {
-        return parserId;
     }
 
     public boolean validatePath() {
@@ -71,16 +67,37 @@ public class EnvFileEntry {
     public Map<String, String> process(
             Map<String, String> runConfigEnv,
             Map<String, String> aggregatedEnv,
-            boolean ignoreMissing
+            boolean ignoreMissing,
+            boolean isExecutable
     ) throws IOException, EnvFileErrorException {
-        EnvVarsProvider parser = getProvider();
+        InputStream content = null;
+        String filePath = Optional.ofNullable(
+                        getFile()
+                ).map(File::getPath)
+                .orElse(null);
 
-        if (isEnabled() && parser != null) {
-            File file = getFile();
-            if (!parser.isFileLocationValid(file) && ignoreMissing) {
-                return aggregatedEnv;
-            } else {
-                return parser.process(runConfigEnv, aggregatedEnv, file == null ? null : file.getPath());
+        if (isExecutable) {
+            content = Runtime.getRuntime().exec(filePath).getInputStream();
+        } else {
+            if (filePath != null) {
+                content = Files.newInputStream(new File(filePath).toPath());
+            }
+        }
+
+        try {
+            EnvVarsProvider parser = getProvider();
+
+            if (getEnabled() && parser != null) {
+                File file = getFile();
+                if (!parser.isFileLocationValid(file) && ignoreMissing) {
+                    return aggregatedEnv;
+                } else {
+                    return parser.process(runConfigEnv, aggregatedEnv, content);
+                }
+            }
+        } finally {
+            if (content != null) {
+                content.close();
             }
         }
 
@@ -101,7 +118,7 @@ public class EnvFileEntry {
     @Nullable
     private EnvVarsProvider getProvider() {
         EnvVarsProviderFactory factory = getProviderFactory();
-        return factory == null ? null : factory.createProvider(isSubstitutionEnabled);
+        return factory == null ? null : factory.createProvider(substitutionEnabled);
     }
 
     private File getFile() {

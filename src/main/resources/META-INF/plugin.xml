@@ -38,13 +38,25 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.2.2"><b>v3.2.2</b></a> (2021-09-02)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.3.0"><b>v3.3.0</b></a> (2022-10-02)
+      <br/>
+      <br/>
+
+      <b>Added</b>:
+      <ul>
+        <li>Multi-line variable support in `.env` files</li>
+        <li>Ignore for `export ` prefix in `.env` files</li>
+        <li>Include parent environment variables (when enabled) into environment substitution</li>
+        <li>An option to execute file and parse content from standard output</li>
+      </ul>
+
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Incompatibility with IDEA 2021</li>
+        <li>Incompatibility with PyCharm 2022.2</li>
+        <li>Experimental features checkbox is properly enabled/disabled when plugin is enabled/disabled</li>
       </ul>
       <br/>
       <br/>
@@ -72,7 +84,8 @@
     <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
 
-  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.lang</depends>
+  <depends optional="true" config-file="envfile-sbt.xml">org.intellij.scala</depends>
+  <depends optional="true" config-file="envfile-idea.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="envfile-gradle.xml">com.intellij.gradle</depends>
   <depends optional="true" config-file="envfile-pycharm.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="envfile-rubymine.xml">com.intellij.modules.ruby</depends>
