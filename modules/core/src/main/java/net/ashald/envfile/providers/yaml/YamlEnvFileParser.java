@@ -1,21 +1,17 @@
 package net.ashald.envfile.providers.yaml;
 
-import net.ashald.envfile.AbstractEnvVarsProvider;
-import org.jetbrains.annotations.NotNull;
+import lombok.AllArgsConstructor;
+import net.ashald.envfile.providers.EnvFileParser;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.InputStream;
 import java.util.Map;
 
-public class YamlEnvFileParser extends AbstractEnvVarsProvider {
+@AllArgsConstructor
+public class YamlEnvFileParser implements EnvFileParser {
+    private final Yaml yaml;
 
-    public YamlEnvFileParser(boolean shouldSubstituteEnvVar) {
-        super(shouldSubstituteEnvVar);
-    }
-
-    @NotNull
     @Override
-    public Map<String, String> getEnvVars(Map<String, String> runConfigEnv, @NotNull InputStream content, @NotNull String path) {
-        return new Yaml().load(content);
+    public Map<String, String> parse(String content) {
+        return yaml.load(content);
     }
 }

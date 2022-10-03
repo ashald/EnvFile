@@ -1,8 +1,7 @@
 package net.ashald.envfile.providers.direnv;
 
-import lombok.NonNull;
-import net.ashald.envfile.AbstractEnvVarsProvider;
-import net.ashald.envfile.EnvFileErrorException;
+import net.ashald.envfile.EnvVarsProvider;
+import net.ashald.envfile.exceptions.EnvFileException;
 import org.jetbrains.annotations.NotNull;
 import org.yaml.snakeyaml.Yaml;
 
@@ -13,32 +12,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class DirenvProvider extends AbstractEnvVarsProvider {
+public class DirenvProvider implements EnvVarsProvider {
 
-    public DirenvProvider(boolean shouldSubstituteEnvVar) {
-        super(shouldSubstituteEnvVar);
-    }
-
-    @NotNull
     @Override
-    protected Map<String, String> getEnvVars(
-            Map<String, String> runConfigEnv,
-            @NonNull InputStream content,
-            @NonNull String path
-    ) throws EnvFileErrorException {
-        Path envrcPath = Paths.get(path);
+    public Map<String, String> getEnvVars(
+            File file,
+            boolean isExecutable,
+            Map<String, String> context) throws EnvFileException {
+        Path envrcPath = file.toPath();
         String workingDir = envrcPath.getParent().toString();
         return importDirenv(workingDir);
     }
 
     @NotNull
-    private Map<String, String> importDirenv(String workingDir) throws EnvFileErrorException {
+    private Map<String, String> importDirenv(String workingDir) throws EnvFileException {
         try {
             Process process = executeDirenv(workingDir, "export", "json");
             int exitValue = process.waitFor();
@@ -50,7 +42,7 @@ public class DirenvProvider extends AbstractEnvVarsProvider {
                     if (error.contains(" is blocked")) {
                         executeDirenv(workingDir, "allow").waitFor();
                     } else {
-                        throw new EnvFileErrorException(error);
+                        throw new EnvFileException(error);
                     }
                 }
 
@@ -62,7 +54,7 @@ public class DirenvProvider extends AbstractEnvVarsProvider {
                 }
             }
         } catch (Exception ex) {
-            throw new EnvFileErrorException(ex);
+            throw new EnvFileException(ex);
         }
     }
 
@@ -74,5 +66,4 @@ public class DirenvProvider extends AbstractEnvVarsProvider {
         pb.directory(new File(workingDir));
         return pb.start();
     }
-
 }

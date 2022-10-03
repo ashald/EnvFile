@@ -1,33 +1,20 @@
 package net.ashald.envfile;
 
-import org.jetbrains.annotations.NotNull;
+import net.ashald.envfile.exceptions.EnvFileException;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-
 
 public interface EnvVarsProvider {
 
     /**
-     * @param runConfigEnv  - env vars provided by run config originally
-     * @param aggregatedEnv - env vars rendered so far
-     * @param content       - content to parse
-     * @param path          - path to the file
-     * @throws EnvFileErrorException
-     * @throws IOException
+     * @param file         file to process
+     * @param isExecutable if true, file should be executed and its output should be parsed
+     * @param context      environment variables that were generated so far by other providers
+     * @return environment variables defined by files, does not need to merge with context
+     * @throws EnvFileException if something goes wrong
      */
-    @NotNull
-    Map<String, String> process(
-            @NotNull Map<String, String> runConfigEnv,
-            @NotNull Map<String, String> aggregatedEnv,
-            InputStream content,
-            String path
-    )
-            throws EnvFileErrorException, IOException;
+    Map<String, String> getEnvVars(File file, boolean isExecutable, Map<String, String> context)
+            throws EnvFileException;
 
-    boolean isEditable();
-
-    boolean isFileLocationValid(File file);
 }

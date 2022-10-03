@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 3.4.0 - 2022-10-03
+
+### Added
+
+- When environment variables file is executed, it now receives all environment variables accumulated by previous entries
+- Log stderr from execution of environment variables files into IDE event console
+
 ## 3.3.0 - 2022-10-02
 
 ### Added

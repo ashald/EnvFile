@@ -6,14 +6,18 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.Key;
+import lombok.val;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvFileSettings;
+import net.ashald.envfile.platform.EnvVarsProviderExtension;
+import net.ashald.envfile.platform.ProjectFileResolver;
 import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 import org.jdom.Element;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JComponent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,11 +101,9 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
 
                 entries.add(
                         EnvFileEntry.builder()
-                                .runConfig(configuration)
                                 .parserId(parserId)
                                 .path(path)
                                 .enabled(isEntryEnabled)
-                                .substitutionEnabled(envVarsSubstEnabled)
                                 .executable(isExecutable)
                                 .build()
                 );
@@ -119,10 +121,8 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
         if (!hasConfigEntry) {
             entries.add(
                     EnvFileEntry.builder()
-                            .runConfig(configuration)
                             .parserId(RunConfigEnvVarsProvider.PARSER_ID)
                             .enabled(true)
-                            .substitutionEnabled(true)
                             .executable(false)
                             .build()
             );
@@ -175,12 +175,19 @@ public class EnvFileConfigurationEditor<T extends RunConfigurationBase<?>> exten
         if (state != null && state.isPluginEnabledEnabled()) {
             for (EnvFileEntry entry : state.getEntries()) {
                 if (entry.getEnabled()) {
-                    if (!entry.validatePath() && !state.isIgnoreMissing()) {
+                    val validPath = ProjectFileResolver.DEFAULT
+                            .resolvePath(configuration.getProject(), entry.getPath())
+                            .map(File::exists)
+                            .orElse(true);
+
+                    if (!validPath && !state.isIgnoreMissing()) {
                         throw new ExecutionException(String.format("EnvFile: invalid path - %s", entry.getPath()));
                     }
 
-                    if (!entry.validateType()) {
-                        throw new ExecutionException(String.format("EnvFile: cannot load parser '%s' for '%s'", entry.getParserId(), entry.getPath()));
+                    if (!EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isPresent()) {
+                        throw new ExecutionException(String.format(
+                                "EnvFile: cannot load parser '%s' for '%s'", entry.getParserId(), entry.getPath()
+                        ));
                     }
                 }
             }

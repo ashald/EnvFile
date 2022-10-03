@@ -2,7 +2,9 @@ package net.ashald.envfile.platform.ui.table;
 
 import com.intellij.ui.BooleanTableCellRenderer;
 import com.intellij.util.ui.ColumnInfo;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import net.ashald.envfile.platform.EnvFileEntry;
+import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +35,9 @@ public class EnvFileIsActiveColumnInfo extends ColumnInfo<EnvFileEntry, Boolean>
 
     @Override
     public boolean isCellEditable(EnvFileEntry envFileEntry) {
-        return envFileEntry.isEditable();
+        return EnvVarsProviderExtension.getParserFactoryById(envFileEntry.getParserId())
+                .map(EnvVarsProviderFactory::isEditable)
+                .orElse(true);
     }
 
     @Nullable

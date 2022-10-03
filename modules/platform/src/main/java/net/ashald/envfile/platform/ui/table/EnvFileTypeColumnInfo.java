@@ -3,7 +3,10 @@ package net.ashald.envfile.platform.ui.table;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.UIUtil;
+import lombok.val;
+import net.ashald.envfile.EnvVarsProviderFactory;
 import net.ashald.envfile.platform.EnvFileEntry;
+import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,11 +41,14 @@ public class EnvFileTypeColumnInfo extends ColumnInfo<EnvFileEntry, EnvFileEntry
             ) {
                 final Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 EnvFileEntry entry = (EnvFileEntry) value;
-                setText(entry.getTypeTitle());
+                val typeTitle = EnvVarsProviderExtension.getParserFactoryById(entry.getParserId())
+                        .map(EnvVarsProviderFactory::getTitle)
+                        .orElse(String.format("<%s>", entry.getParserId()));
+                setText(typeTitle);
                 setBorder(null);
 
                 if (entry.isEnabled()) {
-                    if (!entry.validateType()) {
+                    if (!EnvVarsProviderExtension.getParserFactoryById(entry.getParserId()).isPresent()) {
                         setForeground(JBColor.RED);
                         setToolTipText("Parser not found!");
                     }

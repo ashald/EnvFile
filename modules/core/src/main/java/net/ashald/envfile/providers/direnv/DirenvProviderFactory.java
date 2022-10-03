@@ -6,19 +6,25 @@ import net.ashald.envfile.EnvVarsProviderFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class DirenvProviderFactory implements EnvVarsProviderFactory {
 
-    @NotNull
     @Override
-    public EnvVarsProvider createProvider(boolean shouldSubstituteEnvVar) {
-        return new DirenvProvider(shouldSubstituteEnvVar);
+    public EnvVarsProvider createProvider(Map<String, String> baseEnvVars, Consumer<String> logger) {
+        return new DirenvProvider();
     }
 
     @Override
     public @NotNull String getTitle() {
         return ".envrc";
+    }
+
+    @Override
+    public boolean isEditable() {
+        return true;
     }
 
     @Override
