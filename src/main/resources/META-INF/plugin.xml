@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.4.0</version>
+  <version>3.4.1</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -38,14 +38,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.0"><b>v3.4.0</b></a> (2022-10-03)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.1"><b>v3.4.1</b></a> (2022-10-04)
       <br/>
       <br/>
 
-      <b>Added</b>:
+      <b>Fixed</b>:
       <ul>
-        <li>When environment variables file is executed, it now receives all environment variables accumulated by previous entries</li>
-        <li>Log stderr from execution of environment variables files into IDE event console</li>
+        <li>Plugin affecting env vars even when disabled</li>
       </ul>
 
       <br/>
