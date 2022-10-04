@@ -40,6 +40,10 @@ public class GolandRunConfigurationExtension extends GoRunConfigurationExtension
                         generalCommandLine.isPassParentEnvironment()
                 );
 
+        if (newEnv == null) {
+            return;
+        }
+
         generalCommandLine.getEnvironment().clear();
         generalCommandLine.getEnvironment().putAll(newEnv);
     }

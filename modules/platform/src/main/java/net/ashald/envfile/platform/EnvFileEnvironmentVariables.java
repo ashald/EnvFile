@@ -33,6 +33,10 @@ public class EnvFileEnvironmentVariables {
             @NotNull Map<String, String> runConfigEnv,
             boolean includeParentEnv
     ) throws ExecutionException {
+        if (envFileSettings == null || !envFileSettings.isPluginEnabledEnabled()) {
+            return null;
+        }
+
         Map<String, String> baseEnv = new HashMap<>();
 
         if (includeParentEnv) {
@@ -46,10 +50,6 @@ public class EnvFileEnvironmentVariables {
         }
 
         baseEnv.putAll(runConfigEnv);
-
-        if (envFileSettings == null || !envFileSettings.isPluginEnabledEnabled()) {
-            return new HashMap<>(baseEnv);
-        }
 
         PathMacroManager macroManager = PathMacroManager.getInstance(project);
 

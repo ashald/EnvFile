@@ -11,6 +11,8 @@ import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class EnvFileProvider implements PythonCommandLineTargetEnvironmentProvider {
     @Override
     public void extendTargetEnvironment(
@@ -23,15 +25,18 @@ public class EnvFileProvider implements PythonCommandLineTargetEnvironmentProvid
             try {
                 final AbstractPythonRunConfiguration<?> runConfiguration = (AbstractPythonRunConfiguration<?>) pythonRunParams;
 
-                new EnvFileEnvironmentVariables(
+                Map<String, String> newEnv = new EnvFileEnvironmentVariables(
                         EnvFileConfigurationEditor.getEnvFileSetting(runConfiguration)
                 )
                         .render(
                                 runConfiguration.getProject(),
                                 pythonRunParams.getEnvs(),
                                 pythonRunParams.isPassParentEnvs()
-                        )
-                        .forEach(pythonExecution::addEnvironmentVariable);
+                        );
+
+                if (newEnv != null) {
+                    newEnv.forEach(pythonExecution::addEnvironmentVariable);
+                }
 
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);

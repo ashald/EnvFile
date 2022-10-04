@@ -68,6 +68,10 @@ public class PyCharmRunConfigurationExtension extends PythonRunConfigurationExte
                         cmdLine.isPassParentEnvironment()
                 );
 
+        if (newEnv == null) {
+            return;
+        }
+
         cmdLine.getEnvironment().clear();
         cmdLine.getEnvironment().putAll(newEnv);
     }

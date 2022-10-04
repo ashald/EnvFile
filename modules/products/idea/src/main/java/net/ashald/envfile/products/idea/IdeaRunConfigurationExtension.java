@@ -74,6 +74,10 @@ public class IdeaRunConfigurationExtension extends RunConfigurationExtension {
                         params.isPassParentEnvs()
                 );
 
+        if (newEnv == null) {
+            return;
+        }
+
         // there is a chance that env is an immutable map,
         // that is why it is safer to replace it instead of updating it
         params.setEnv(new HashMap<>(newEnv));

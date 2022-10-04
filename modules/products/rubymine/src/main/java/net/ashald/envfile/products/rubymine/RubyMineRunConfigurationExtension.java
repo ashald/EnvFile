@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.ruby.ruby.run.configuration.AbstractRubyRunConfiguration;
 import org.jetbrains.plugins.ruby.ruby.run.configuration.RubyRunConfigurationExtension;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExtension {
@@ -67,6 +66,10 @@ public class RubyMineRunConfigurationExtension extends RubyRunConfigurationExten
                         cmdLine.getEnvironment(),
                         cmdLine.isPassParentEnvironment()
                 );
+
+        if (newEnv == null) {
+            return;
+        }
 
         cmdLine.getEnvironment().clear();
         cmdLine.getEnvironment().putAll(newEnv);

@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Fixed
+
+- Plugin affecting env vars even when disabled
+
 ## 3.4.0 - 2022-10-03
 
 ### Added

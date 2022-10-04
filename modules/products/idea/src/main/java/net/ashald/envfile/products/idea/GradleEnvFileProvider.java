@@ -57,6 +57,10 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
             throw new RuntimeException(e);
         }
 
+        if (newEnv == null) {
+            return;
+        }
+
         targetConfig.getSettings().setEnv(new HashMap<>(newEnv));
     }
 

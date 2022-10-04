@@ -10,7 +10,7 @@ import org.jetbrains.sbt.runner.SbtRunConfigurationForm;
 import java.util.Map;
 
 public class SbtRunEnvFileConfigurationForm extends SbtRunConfigurationForm {
-    private SbtRunConfiguration configuration;
+    private final SbtRunConfiguration configuration;
 
     public SbtRunEnvFileConfigurationForm(Project project, SbtRunConfiguration sbtRunConfiguration) {
         super(project, sbtRunConfiguration);
@@ -19,17 +19,23 @@ public class SbtRunEnvFileConfigurationForm extends SbtRunConfigurationForm {
 
     @Override
     public Map<String, String> getEnvironmentVariables() {
+        Map<String, String> baseEnv = super.getEnvironmentVariables();
+        Map<String, String> newEnv;
         try {
-            return new EnvFileEnvironmentVariables(
+            newEnv = new EnvFileEnvironmentVariables(
                     EnvFileConfigurationEditor.getEnvFileSetting(configuration)
             )
                     .render(
                             configuration.getProject(),
-                            super.getEnvironmentVariables(),
+                            baseEnv,
                             true // can we get it dynamically?
                     );
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+
+        return newEnv == null
+                ? super.getEnvironmentVariables()
+                : newEnv;
     }
 }
