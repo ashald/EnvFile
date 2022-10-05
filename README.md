@@ -229,6 +229,9 @@ IDEA's internal implementation and make it work. Such integration is very fragil
 will affect any existing integrations and when it will break. For that reason there is a special option to
 `Enable Experimental Integrations` that can be enabled when desired and should prevent other integrations from breaking.
 
+#### direnv
+You need `direnv` in your `PATH` environment variable. `direnv allow` is run automatically if needed.
+
 ### Examples
 
 #### .env
