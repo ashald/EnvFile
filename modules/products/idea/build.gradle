@@ -8,6 +8,7 @@ intellij {
     plugins = [
         "java",
         "gradle",
+        "maven",
         jetbrains.scala
     ]
 }
