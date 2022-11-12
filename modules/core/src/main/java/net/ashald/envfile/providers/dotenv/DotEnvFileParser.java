@@ -1,5 +1,7 @@
 package net.ashald.envfile.providers.dotenv;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.ashald.envfile.providers.EnvFileParser;
@@ -15,6 +17,8 @@ public class DotEnvFileParser implements EnvFileParser {
     @Override
     public Map<String, String> parse(String data) {
         Map<String, String> result = new LinkedHashMap<>();
+        Pattern doublequote = Pattern.compile("^(.*[^\\\\])?\"");
+        Pattern quotedValue = Pattern.compile("^\"(.*[^\\\\])?\"$");
 
         String multiLineKey = null;
         StringBuilder multiLineValueAccumulator = null;
@@ -27,14 +31,15 @@ public class DotEnvFileParser implements EnvFileParser {
 
             if (multiLineValueAccumulator != null) {
                 String strippedLineWithoutComments = removeComments(strippedLine);
-                int doubleQuoteIndex = strippedLineWithoutComments.indexOf('"');
-                if (doubleQuoteIndex > -1) {
-                    multiLineValueAccumulator.append("\n").append(strippedLineWithoutComments, 0, doubleQuoteIndex);
+                Matcher valueEndMatcher = doublequote.matcher(strippedLineWithoutComments);
+                if(valueEndMatcher.find()){
+                    int doubleQuoteIndex = valueEndMatcher.end() - 1;
+                    multiLineValueAccumulator.append("\n").append(removeEscapedDoubleQuotes(strippedLineWithoutComments), 0, doubleQuoteIndex);
                     result.put(multiLineKey, multiLineValueAccumulator.toString());
                     multiLineKey = null;
                     multiLineValueAccumulator = null;
                 } else {
-                    multiLineValueAccumulator.append("\n").append(strippedLineWithoutComments);
+                    multiLineValueAccumulator.append("\n").append(removeEscapedDoubleQuotes(strippedLineWithoutComments));
                 }
             } else if (strippedLine.contains("=")) {
                 String[] tokens = strippedLine.split("=", 2);
@@ -43,12 +48,15 @@ public class DotEnvFileParser implements EnvFileParser {
                     key = key.substring(7).trim();
                 }
                 String rawValue = tokens[1].trim();
-                if (rawValue.startsWith("\"") && !rawValue.endsWith("\"")) {
-                    multiLineKey = key;
-                    multiLineValueAccumulator = new StringBuilder(removeComments(rawValue.substring(1)));
-                } else {
+                Matcher quotedValueMatcher = quotedValue.matcher(rawValue);
+                if (!rawValue.startsWith("\"") || quotedValueMatcher.find()) {
                     String value = trim(rawValue);
-                    result.put(key, value);
+                    result.put(key, removeEscapedDoubleQuotes(value));
+                } else {
+                    multiLineKey = key;
+                    String value = removeComments(rawValue.substring(1));
+                    value = removeEscapedDoubleQuotes(value);
+                    multiLineValueAccumulator = new StringBuilder(value);
                 }
             }
         }
@@ -67,5 +75,9 @@ public class DotEnvFileParser implements EnvFileParser {
 
     private static String removeComments(String trimmed) {
         return trimmed.replaceAll("\\s#.*$", "").replaceAll("(\\s)\\\\#", "$1#").trim();
+    }
+
+    private static String removeEscapedDoubleQuotes(String value) {
+        return value.replaceAll("\\\\\"", "\"");
     }
 }
