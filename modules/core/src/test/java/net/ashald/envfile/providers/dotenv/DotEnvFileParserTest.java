@@ -124,4 +124,21 @@ public class DotEnvFileParserTest {
                 result
         );
     }
+
+    @Test
+    public void GIVEN_parse_WHEN_multilineVariableWithLineBreaksAndQuotes_THEN_preserved() {
+        val result = PARSER.parse(
+                getFile("multi-line-variable-with-line-breaks-and-quotes.env")
+        );
+
+        assertEquals(
+                ImmutableMap.of(
+                        "JSON", "{\n" +
+                                "\"foo\": \"bar\",\n" +
+                                "\"fizz\": \"fuzz\"\n" +
+                                "}"
+                ),
+                result
+        );
+    }
 }
