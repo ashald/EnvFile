@@ -127,7 +127,7 @@ public class EnvFileEnvironmentVariables {
             return postMacro;
         }
         // resolve taking into account default values
-        String stage1 = new StringSubstitutor(context).replace(template);
+        String stage1 = new StringSubstitutor(context).replace(postMacro);
 
         // if ${FOO} was not resolved - replace it with empty string as it would've worked in bash
         String stage2 = new StringSubstitutor(key -> context.getOrDefault(key, "")).replace(stage1);
