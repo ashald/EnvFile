@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 3.4.3 - 2023-03-12
+Support for gradle unit test
+
 ## 3.4.1 - 2022-10-04
 
 ### Fixed
