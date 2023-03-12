@@ -19,7 +19,8 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
 
     @Override
     public boolean isApplicable(final ExecuteRunConfigurationTask executeRunConfigurationTask) {
-        return executeRunConfigurationTask.getRunProfile() instanceof ApplicationConfiguration;
+        return executeRunConfigurationTask.getRunProfile() instanceof ApplicationConfiguration ||
+                executeRunConfigurationTask.getRunProfile() instanceof GradleRunConfiguration;
     }
 
     @Override
