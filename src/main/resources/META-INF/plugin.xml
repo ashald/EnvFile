@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.4.1</version>
+  <version>3.4.2</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
@@ -38,13 +38,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.1"><b>v3.4.1</b></a> (2022-10-04)
+      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.2"><b>v3.4.1</b></a> (2022-10-04)
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Plugin affecting env vars even when disabled</li>
+        <li>Bump `org.apache.commons:commons-text` to `1.10.0'</li>
       </ul>
 
       <br/>

@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 3.4.2 - 2023-12-25
+
+### Fixed
+
+- Bump `org.apache.commons:commons-text` to `1.10.0'
+
 ## 3.4.1 - 2022-10-04
 
 ### Fixed
