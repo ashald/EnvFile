@@ -266,6 +266,31 @@ SECRET_KEY: hip-hip-env-files
 VERSION: "1.0" # All non-string literals should be enclosed in quotes; btw this is ignored too
 ```
 
+#### Helm/YAML
+
+```helm
+# This line is ignored since it's a comment
+env:
+  - name: "VARIABLE_NAME_A"
+    value: "VARIABLE_VALUE_A"
+  - name: "VARIABLE_NAME_B"
+    value: "VARIABLE_VALUE_B"
+```
+
+#### CredentialManager/YAML
+
+Windows CredentialMamager for generic credentials is used 
+ - "Variable Name" will be the "username" of the credential
+ - "Variable Value" will be the "password" of the credential
+ 
+```CredentialManager
+# This line is ignored since it's a comment
+credential:
+  - TEST_CREDENTIAL_A
+  - TEST_CREDENTIAL_B
+```
+
+
 #### Bash (workaround)
 
 There was a number of requests to support extracting environment variables from bash scripts like:

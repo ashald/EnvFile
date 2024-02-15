@@ -65,6 +65,7 @@
     <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
     <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
     <envVarsProvider id="helm" factory="net.ashald.envfile.providers.helm.HelmEnvFileParserFactory"/>
+    <envVarsProvider id="credentialmanager" factory="net.ashald.envfile.providers.credentialmanager.CredentialManagerEnvFileParserFactory"/>
     <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
   </extensions>
 

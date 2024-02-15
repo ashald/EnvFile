@@ -8,6 +8,8 @@ dependencies {
 
     implementation 'com.google.guava:guava:31.1-jre'
 
+    implementation 'com.microsoft:credential-secure-storage:1.0.0'
+
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
