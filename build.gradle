@@ -35,7 +35,7 @@ allprojects {
 
 intellij {
     version = jetbrains.version
-    pluginName = "EnvFile"
+    pluginName = "EnvFileX"
     sameSinceUntilBuild = false
     updateSinceUntilBuild = false
     downloadSources = true
