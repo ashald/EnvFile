@@ -4,9 +4,9 @@ plugins {
 
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
-    implementation 'org.yaml:snakeyaml:1.32'
+    implementation 'org.yaml:snakeyaml:2.2'
 
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.guava:guava:33.0.0-jre'
 
     implementation 'com.microsoft:credential-secure-storage:1.0.0'
 
@@ -17,4 +17,6 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.24'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 }

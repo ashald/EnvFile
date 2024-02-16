@@ -1,0 +1,14 @@
+foo:
+  bar: test
+
+env:
+  - name: "NAME_A"
+    value: "VALUE_A"
+  - invalid: "NAME_B1"
+    value: "VALUE_B1"
+  - name: "NAME_B2"
+    invalid: "VALUE_B2"
+#  - name: "NAME_X"
+#    value: "VALUE_XX"
+  - name: "NAME_C"
+    value: "VALUE_C"
