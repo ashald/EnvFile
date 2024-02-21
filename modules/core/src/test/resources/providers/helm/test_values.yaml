@@ -10,3 +10,9 @@ env:
 #    value: "VALUE_XX"
   - name: "NAME_C"
     value: "VALUE_C"
+
+secret:
+  - name: "SECRET_A"
+    value: "SECRET_VALUE_A"
+  - name: "SECRET_B"
+    value: "SECRET_VALUE_B"
