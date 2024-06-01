@@ -25,7 +25,7 @@ public class DotEnvFileParserTest {
     }
 
     @Test
-    public void GIVEN_parse_WEHN_charSequenceLooksLikeMalformedUnicode_THEN_doesNotFail() {
+    public void GIVEN_parse_WHEN_charSequenceLooksLikeMalformedUnicode_THEN_doesNotFail() {
         val result = PARSER.parse(
                 getFile("malformed-unicode.env")
         );

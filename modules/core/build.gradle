@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.yaml:snakeyaml:1.32'
+    implementation 'com.moandjiezana.toml:toml4j:0.7.2'
 
     implementation 'com.google.guava:guava:31.1-jre'
 

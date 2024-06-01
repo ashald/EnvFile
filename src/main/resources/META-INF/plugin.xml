@@ -21,6 +21,7 @@
         <li><b>.env</b></li>
         <li><b>YAML</b> dictionary</li>
         <li><b>JSON</b> dictionary</li>
+        <li><b>TOML</b> env table dictionary</li>
       </ul>
 
       <br/>
@@ -64,6 +65,7 @@
   <extensions defaultExtensionNs="net.ashald.envfile">
     <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
     <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
+    <envVarsProvider id="toml" factory="net.ashald.envfile.providers.toml.TomlEnvFileParserFactory"/>
     <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
   </extensions>
 

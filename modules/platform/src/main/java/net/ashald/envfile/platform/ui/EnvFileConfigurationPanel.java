@@ -31,6 +31,7 @@ import net.ashald.envfile.platform.ui.table.EnvFileIsActiveColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileIsExecutableColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFilePathColumnInfo;
 import net.ashald.envfile.platform.ui.table.EnvFileTypeColumnInfo;
+import net.ashald.envfile.providers.toml.TomlEnvFileParser;
 import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 
 import javax.swing.BoxLayout;

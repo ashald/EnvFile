@@ -11,6 +11,7 @@ import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvFileSettings;
 import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.ProjectFileResolver;
+import net.ashald.envfile.providers.toml.TomlEnvFileParser;
 import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 import org.jdom.Element;
 import org.jetbrains.annotations.Contract;

@@ -13,6 +13,7 @@ import net.ashald.envfile.EnvVarsProviderFactory;
 import net.ashald.envfile.platform.EnvFileEntry;
 import net.ashald.envfile.platform.EnvVarsProviderExtension;
 import net.ashald.envfile.platform.ProjectFileResolver;
+import net.ashald.envfile.providers.toml.TomlEnvFileParser;
 import net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

@@ -10,6 +10,7 @@ from one or multiple files.
 - **.env**
 - **YAML** dictionary
 - **JSON** dictionary *(parsed with YAML parser since [JSON is subset of YAML][json-is-yaml])*
+- **TOML** env table dictionary
 
 **All formats assume that both keys and values are strings.**
 
