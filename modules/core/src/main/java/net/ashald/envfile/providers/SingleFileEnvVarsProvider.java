@@ -5,6 +5,7 @@ import lombok.val;
 import net.ashald.envfile.EnvVarsProvider;
 import net.ashald.envfile.exceptions.EnvFileException;
 import net.ashald.envfile.exceptions.InvalidEnvFileException;
+import net.ashald.envfile.providers.sops.SopsUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -34,9 +35,15 @@ public class SingleFileEnvVarsProvider implements EnvVarsProvider {
     )
             throws EnvFileException {
 
-        val content = isExecutable
-                ? execute(file.getAbsolutePath(), context)
-                : reader.read(file);
+        String content;
+        if (isExecutable) {
+            content = execute(file.getAbsolutePath(), context);
+        } else {
+            content = reader.read(file);
+            if (file.getName().toLowerCase().contains(".enc.") && SopsUtils.isSopsFile(content)) {
+                content = SopsUtils.decrypt(file);
+            }
+        }
 
         return parser.parse(content);
     }
