@@ -17,7 +17,7 @@ scmVersion {
 allprojects {
     apply plugin: 'java'
     sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    targetCompatibility = 1.17
 
     repositories {
         mavenCentral()
@@ -25,11 +25,11 @@ allprojects {
     project.version = scmVersion.version
 
     ext.jetbrains = [
-            version : "2022.2",
-            pycharm : "PythonCore:222.3345.40",
-            rubymine: "org.jetbrains.plugins.ruby:222.3345.16",
-            goland  : "org.jetbrains.plugins.go:222.3345.90",
-            scala   : "org.intellij.scala:2022.2.3"
+            version : "2024.2.1",
+            pycharm : "PythonCore:242.21829.142",
+            rubymine: "org.jetbrains.plugins.ruby:242.21829.142",
+            goland  : "org.jetbrains.plugins.go:242.21829.142",
+            scala   : "org.intellij.scala:2024.2.25"
     ]
 }
 
