@@ -62,7 +62,7 @@ runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::n
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("201")
+        sinceBuild.set("242")
+        untilBuild.set("999")
     }
-
 }
