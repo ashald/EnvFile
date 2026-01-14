@@ -1,12 +1,12 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>3.5.0</version>
+  <version>4.0.0</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
       <h1>EnvFile</h1>
-      <b>Compiled with Java 1.8</b>
+      <b>Compiled with Java 16</b>
       <h2>
         <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
         <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
@@ -38,13 +38,13 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v3.4.2"><b>v3.4.1</b></a> (2022-10-04)
+      <a href="https://github.com/Ashald/EnvFile/tree/v4.0.0"><b>v4.0.0</b></a> (2026-01-15)
       <br/>
       <br/>
 
       <b>Fixed</b>:
       <ul>
-        <li>Bump `org.apache.commons:commons-text` to `1.10.0'</li>
+        <li>Compatibility with latest IDE version</li>
       </ul>
 
       <br/>

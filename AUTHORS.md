@@ -6,6 +6,7 @@ Special thanks to [Oleg Khromov](https://github.com/olgert) and [Rostyslav Bryzg
 who helped with testing and provided feedback during early stages of development.
 
 # Contributors
+* [aviyam181199](https://github.com/aviyam181199)
 * [Yoan Thiebault](https://github.com/yoanthiebault)
 * [Stanislav Savulchik](https://github.com/savulchik)
 * [Dmytro Kostiuchenko](https://github.com/edio)
