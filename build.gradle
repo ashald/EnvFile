@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "idea"
-    id "org.jetbrains.intellij" version "1.9.0"
+    id "org.jetbrains.intellij" version "1.17.4"
     id "pl.allegro.tech.build.axion-release" version "1.14.1"
 }
 
@@ -55,14 +55,15 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.5"
 }
 
 runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::new).orElse(null)
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("201")
+        sinceBuild.set("222")
+        untilBuild.set("253.*")
     }
 
 }
