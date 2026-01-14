@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "idea"
-    id "org.jetbrains.intellij" version "1.9.0"
+    id "org.jetbrains.intellij" version "1.17.4"
     id "pl.allegro.tech.build.axion-release" version "1.14.1"
 }
 
@@ -25,11 +25,11 @@ allprojects {
     project.version = scmVersion.version
 
     ext.jetbrains = [
-            version : "2022.2",
-            pycharm : "PythonCore:222.3345.40",
-            rubymine: "org.jetbrains.plugins.ruby:222.3345.16",
-            goland  : "org.jetbrains.plugins.go:222.3345.90",
-            scala   : "org.intellij.scala:2022.2.3"
+            version : "2024.1",
+            pycharm : "PythonCore:241.14494.240",
+            rubymine: "org.jetbrains.plugins.ruby:241.14494.150",
+            goland  : "org.jetbrains.plugins.go:241.14494.234",
+            scala   : "org.intellij.scala:2024.1.4"
     ]
 }
 
@@ -62,7 +62,8 @@ runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::n
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("201")
+        sinceBuild.set("241")
+        untilBuild.set("253.*")
     }
 
 }
