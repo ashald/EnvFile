@@ -25,11 +25,11 @@ allprojects {
     project.version = scmVersion.version
 
     ext.jetbrains = [
-            version : "2024.1",
-            pycharm : "PythonCore:241.14494.240",
-            rubymine: "org.jetbrains.plugins.ruby:241.14494.150",
-            goland  : "org.jetbrains.plugins.go:241.14494.234",
-            scala   : "org.intellij.scala:2024.1.4"
+            version : "2022.2",
+            pycharm : "PythonCore:222.3345.40",
+            rubymine: "org.jetbrains.plugins.ruby:222.3345.16",
+            goland  : "org.jetbrains.plugins.go:222.3345.90",
+            scala   : "org.intellij.scala:2022.2.3"
     ]
 }
 
@@ -55,14 +55,14 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = "7.5.1"
+    gradleVersion = "8.5"
 }
 
 runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::new).orElse(null)
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("241")
+        sinceBuild.set("222")
         untilBuild.set("253.*")
     }
 
