@@ -13,3 +13,4 @@ lib/*.jar
 
 # Mac OS
 .DS_*
+.intellijPlatform

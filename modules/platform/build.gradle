@@ -1,14 +1,20 @@
 plugins {
     id "java"
-    id "org.jetbrains.intellij"
+    id "org.jetbrains.intellij.platform.module"
 }
 
-intellij {
-    version = jetbrains.version
+repositories {
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
-buildSearchableOptions.enabled = false
 
 dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity(jetbrains.version)
+        instrumentationTools()
+    }
+
     implementation project(":envfile-core")
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'org.apache.commons:commons-text:1.15.0'

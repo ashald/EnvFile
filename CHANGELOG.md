@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 4.1.0 - 2026-01-15
+
+### Changed
+
+- Upgraded Gradle IntelliJ plugin to v2
+- Updated platform version from 2022.2 to 2022.3 as it's the minimum version for v2 of the Gradle IntelliJ plugin
+
 ## 4.0.0 - 2026-01-15
 
 ### Changed
