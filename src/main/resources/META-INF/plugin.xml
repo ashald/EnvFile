@@ -1,8 +1,8 @@
 <idea-plugin>
-  <id>net.ashald.envfile</id>
-  <name>EnvFile</name>
+  <id>com.cmmoran.envfile</id>
+  <name>EnvFile-CM</name>
   <version>4.1.0</version>
-  <vendor email="envfile@ashald.net">Borys Pierov</vendor>
+  <vendor email="chris@chrismoran.com">chris moran</vendor>
 
   <description><![CDATA[
       <h1>EnvFile</h1>
@@ -56,21 +56,27 @@
   <depends>com.intellij.modules.lang</depends>
 
   <extensionPoints>
-    <extensionPoint name="envVarsProvider" beanClass="net.ashald.envfile.platform.EnvVarsProviderExtension">
-      <with attribute="factory" implements="net.ashald.envfile.EnvVarsProviderFactory"/>
+    <extensionPoint name="envVarsProvider" beanClass="com.cmmoran.envfile.platform.EnvVarsProviderExtension">
+      <with attribute="factory" implements="com.cmmoran.envfile.EnvVarsProviderFactory"/>
     </extensionPoint>
   </extensionPoints>
 
-  <extensions defaultExtensionNs="net.ashald.envfile">
-    <envVarsProvider id="env" factory="net.ashald.envfile.providers.dotenv.DotEnvFileParserFactory"/>
-    <envVarsProvider id="yaml" factory="net.ashald.envfile.providers.yaml.YamlEnvFileParserFactory"/>
-    <envVarsProvider id="runconfig" factory="net.ashald.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
+  <extensions defaultExtensionNs="com.cmmoran.envfile">
+    <envVarsProvider id="env" factory="com.cmmoran.envfile.providers.dotenv.DotEnvFileParserFactory"/>
+    <envVarsProvider id="yaml" factory="com.cmmoran.envfile.providers.yaml.YamlEnvFileParserFactory"/>
+    <envVarsProvider id="runconfig" factory="com.cmmoran.envfile.providers.runconfig.RunConfigEnvVarsProviderFactory"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
-    <notificationGroup displayType="NONE" id="net.ashald.envfile"/>
-    <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
-    <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
+    <notificationGroup displayType="NONE" id="com.cmmoran.envfile"/>
+    <fileType
+          name="Env file"
+          implementationClass="com.cmmoran.envfile.platform.EnvFileType"
+          fieldName="INSTANCE"
+          language=".env"
+          extensions="myext;oth"
+      />
+    <applicationService serviceImplementation="com.cmmoran.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
 
   <depends optional="true" config-file="envfile-sbt.xml">org.intellij.scala</depends>
