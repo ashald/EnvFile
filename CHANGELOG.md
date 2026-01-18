@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## 4.1.0 - 2026-01-15
+
+### Changed
+
+- Upgraded Gradle IntelliJ plugin to v2
+- Updated platform version from 2022.2 to 2022.3 as it's the minimum version for v2 of the Gradle IntelliJ plugin
+
+## 4.0.0 - 2026-01-15
+
+### Changed
+
+- Updated Gradle plugin from 1.9.0 to 1.17.4
+- Updated platform version from 2022.2 to 2024.1
+- Extended IDE compatibility range to support versions 241-253.* (2024.1 through 2025.3.x)
+- Upgraded Gradle wrapper from 7.5.1 to 8.5
+
+### Fixed
+
+- Compatibility with IntelliJ IDEA 2025.x versions ([#248])
+
+## 3.4.2 - 2023-12-25
+
+### Fixed
+
+- Bump `org.apache.commons:commons-text` to `1.10.0'
+
 ## 3.4.1 - 2022-10-04
 
 ### Fixed
@@ -156,6 +182,7 @@ This project adheres to [Semantic Versioning].
 [#127]: https://github.com/ashald/EnvFile/issues/127
 [#151]: https://github.com/ashald/EnvFile/issues/151
 [#165]: https://github.com/ashald/EnvFile/issues/165
+[#248]: https://github.com/ashald/EnvFile/issues/248
 
 [Keep a CHANGELOG]:     http://keepachangelog.com
 [Semantic Versioning]:  http://semver.org/
