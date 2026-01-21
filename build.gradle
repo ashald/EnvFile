@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "idea"
-    id "org.jetbrains.intellij" version "1.17.4"
+    id "org.jetbrains.intellij.platform" version "2.2.1"
     id "pl.allegro.tech.build.axion-release" version "1.14.1"
 }
 
@@ -22,32 +22,48 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
     project.version = scmVersion.version
 
     ext.jetbrains = [
-            version : "2022.2",
-            pycharm : "PythonCore:222.3345.40",
-            rubymine: "org.jetbrains.plugins.ruby:222.3345.16",
-            goland  : "org.jetbrains.plugins.go:222.3345.90",
-            scala   : "org.intellij.scala:2022.2.3"
+            version : "2022.3",
+            scala   : "org.intellij.scala:2022.3.13"
     ]
 }
 
-intellij {
-    version = jetbrains.version
-    pluginName = "EnvFile"
-    sameSinceUntilBuild = false
-    updateSinceUntilBuild = false
-    downloadSources = true
-    plugins = [
-            // This doesn't make any sense as this plugin supposed to be only required on IDEA sub-module
-            // but it doesn't build without it. Suspect a validation bug in JetBrains Gradle plugin.
-            "java",
-    ]
+repositories {
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
-buildSearchableOptions.enabled = false
+
+intellijPlatform {
+    projectName = "EnvFile"
+    buildSearchableOptions = false
+
+    pluginConfiguration {
+        name = "EnvFile"
+
+        ideaVersion {
+            sinceBuild = "223"
+            untilBuild = "253.*"
+        }
+    }
+
+    pluginVerification {
+        ides {
+            ide("IC", jetbrains.version)
+        }
+    }
+}
 
 dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity(jetbrains.version)
+        bundledPlugin("com.intellij.java")
+        instrumentationTools()
+    }
+
     implementation project(":envfile-products-idea")
     implementation project(":envfile-products-pycharm")
     implementation project(":envfile-products-rubymine")
@@ -56,14 +72,4 @@ dependencies {
 
 wrapper {
     gradleVersion = "8.5"
-}
-
-runIde.ideDir =  java.util.Optional.ofNullable(System.getenv("IDE")).map(File::new).orElse(null)
-
-tasks {
-    patchPluginXml {
-        sinceBuild.set("222")
-        untilBuild.set("253.*")
-    }
-
 }
