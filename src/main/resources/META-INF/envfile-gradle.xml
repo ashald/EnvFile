@@ -1,5 +1,5 @@
 <idea-plugin>
     <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
-        <executionEnvironmentProvider implementation="net.ashald.envfile.products.idea.GradleEnvFileProvider" order="first"/>
+        <executionEnvironmentProvider implementation="com.cmmoran.envfile.products.idea.GradleEnvFileProvider" order="first"/>
     </extensions>
 </idea-plugin>

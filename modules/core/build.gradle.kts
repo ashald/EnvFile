@@ -1,0 +1,18 @@
+plugins {
+    id("java")
+}
+
+dependencies {
+    implementation("org.jetbrains:annotations:23.0.0")
+    implementation("org.yaml:snakeyaml:2.5")
+
+    implementation("com.google.guava:guava:33.5.0-jre")
+
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+
+    testImplementation("junit:junit:4.13.2")
+
+    testCompileOnly("org.projectlombok:lombok:1.18.42")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
+}
