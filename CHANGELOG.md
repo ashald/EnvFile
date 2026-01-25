@@ -8,6 +8,10 @@ This project adheres to [Semantic Versioning].
 
 - Upgraded Gradle IntelliJ plugin to v2
 - Updated platform version from 2022.2 to 2022.3 as it's the minimum version for v2 of the Gradle IntelliJ plugin
+- Fixed an issue where environment variables weren't applied on Kotlin projects in 2025.2+
+- Bumped minimum version from 2022.2 to 2024.3
+- Updated Gradle wrapper from 8.5 to 8.14.3
+- Bumped Java version from 17 to 21
 
 ## 4.0.0 - 2026-01-15
 
