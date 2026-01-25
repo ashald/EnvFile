@@ -1,12 +1,14 @@
 package net.ashald.envfile.products.idea;
 
+import com.intellij.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
-import com.intellij.execution.application.ApplicationConfiguration;
+import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.project.Project;
 import com.intellij.task.ExecuteRunConfigurationTask;
 import net.ashald.envfile.platform.EnvFileEnvironmentVariables;
+import net.ashald.envfile.platform.EnvFileSettings;
 import net.ashald.envfile.platform.ui.EnvFileConfigurationEditor;
 import org.jetbrains.plugins.gradle.execution.build.GradleExecutionEnvironmentProvider;
 import org.jetbrains.plugins.gradle.service.execution.GradleRunConfiguration;
@@ -19,7 +21,16 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
 
     @Override
     public boolean isApplicable(final ExecuteRunConfigurationTask executeRunConfigurationTask) {
-        return executeRunConfigurationTask.getRunProfile() instanceof ApplicationConfiguration;
+        Object runProfile = executeRunConfigurationTask.getRunProfile();
+
+        // Check if the run profile is a RunConfigurationBase with EnvFile settings
+        // and implements CommonJavaRunConfigurationParameters (for getEnvs/isPassParentEnvs)
+        if (runProfile instanceof RunConfigurationBase<?> config && runProfile instanceof CommonJavaRunConfigurationParameters) {
+            EnvFileSettings settings = EnvFileConfigurationEditor.getEnvFileSetting(config);
+            return settings != null && settings.isPluginEnabledEnabled();
+        }
+
+        return false;
     }
 
     @Override
@@ -32,16 +43,21 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
                 .map(provider -> provider.createExecutionEnvironment(project, executeRunConfigurationTask, executor))
                 .orElse(null);
 
-        if (environment != null && environment.getRunProfile() instanceof GradleRunConfiguration) {
-            final ApplicationConfiguration sourceConfig = (ApplicationConfiguration) executeRunConfigurationTask.getRunProfile();
-            final GradleRunConfiguration targetConfig = (GradleRunConfiguration) environment.getRunProfile();
-            applyEnvFile(sourceConfig, targetConfig);
+        if (environment != null && environment.getRunProfile() instanceof GradleRunConfiguration targetConfig) {
+            Object runProfile = executeRunConfigurationTask.getRunProfile();
+            if (runProfile instanceof RunConfigurationBase<?> sourceConfig && runProfile instanceof CommonJavaRunConfigurationParameters sourceParams) {
+                applyEnvFile(sourceConfig, sourceParams, targetConfig);
+            }
         }
 
         return environment;
     }
 
-    private void applyEnvFile(final ApplicationConfiguration sourceConfig, final GradleRunConfiguration targetConfig) {
+    private void applyEnvFile(
+            final RunConfigurationBase<?> sourceConfig,
+            final CommonJavaRunConfigurationParameters sourceParams,
+            final GradleRunConfiguration targetConfig
+    ) {
         Map<String, String> newEnv;
         try {
             newEnv = new EnvFileEnvironmentVariables(
@@ -49,8 +65,8 @@ public class GradleEnvFileProvider implements GradleExecutionEnvironmentProvider
             )
                     .render(
                             sourceConfig.getProject(),
-                            sourceConfig.getEnvs(),
-                            sourceConfig.isPassParentEnvs()
+                            sourceParams.getEnvs(),
+                            sourceParams.isPassParentEnvs()
                     );
 
         } catch (ExecutionException e) {

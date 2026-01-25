@@ -69,7 +69,13 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <notificationGroup displayType="NONE" id="net.ashald.envfile"/>
-    <fileTypeFactory implementation="net.ashald.envfile.platform.EnvFileTypeFactory"/>
+    <fileType name="Env File"
+              implementationClass="net.ashald.envfile.platform.EnvFileType"
+              fieldName="INSTANCE"
+              language=".env"
+              extensions="env"
+              fileNames=".env"
+              patterns=".env.*"/>
     <applicationService serviceImplementation="net.ashald.envfile.products.idea.scala.SbtRunConfigurationExtensionManager"/>
   </extensions>
 
