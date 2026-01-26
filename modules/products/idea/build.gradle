@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity(jetbrains.version)
+        intellijIdea(jetbrains.version)
         bundledPlugins(
             "com.intellij.java",
             "com.intellij.gradle",
