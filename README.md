@@ -337,7 +337,7 @@ For details - see ["Working with $PROJECT_DIR$ in plugin configuration options"]
 EnvFile uses Gradle for building.
 
 ```bash
-$ ./gradlew clean test build
+$ ./gradlew clean test build buildPlugin
   
   BUILD SUCCESSFUL in 22s
   59 actionable tasks: 59 executed

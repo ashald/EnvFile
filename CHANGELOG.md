@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
-## 4.1.0 - 2026-01-15
+## 5.0.0 - 2026-01-26
 
 ### Changed
 
