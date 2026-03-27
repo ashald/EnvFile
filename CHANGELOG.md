@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning].
 
+## Unreleased
+
+### Changed
+
+- Remove upper boundary on platform version for optimistic compatibility with future releases
+
 ## 5.0.0 - 2026-01-26
 
 ### Changed
