@@ -13,7 +13,6 @@ dependencies {
     intellijPlatform {
         pycharm(jetbrains.version)
         bundledPlugin("PythonCore")
-        instrumentationTools()
     }
 
     implementation project(":envfile-platform")

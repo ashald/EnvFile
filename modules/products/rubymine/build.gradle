@@ -13,7 +13,6 @@ dependencies {
     intellijPlatform {
         rubymine(jetbrains.version)
         bundledPlugin("org.jetbrains.plugins.ruby")
-        instrumentationTools()
     }
 
     implementation project(":envfile-platform")

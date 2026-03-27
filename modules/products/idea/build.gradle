@@ -18,7 +18,6 @@ dependencies {
             "org.jetbrains.idea.maven"
         )
         plugin(jetbrains.scala)
-        instrumentationTools()
     }
 
     implementation project(":envfile-core")

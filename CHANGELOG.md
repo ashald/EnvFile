@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning].
 ### Changed
 
 - Remove upper boundary on platform version for optimistic compatibility with future releases
+- Migrate from Gradle 8 to Gradle 9
 
 ## 5.0.0 - 2026-01-26
 

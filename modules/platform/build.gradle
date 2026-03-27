@@ -12,7 +12,6 @@ repositories {
 dependencies {
     intellijPlatform {
         intellijIdea(jetbrains.version)
-        instrumentationTools()
     }
 
     implementation project(":envfile-core")

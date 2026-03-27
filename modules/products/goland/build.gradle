@@ -13,7 +13,6 @@ dependencies {
     intellijPlatform {
         goland(jetbrains.version)
         bundledPlugin("org.jetbrains.plugins.go")
-        instrumentationTools()
     }
 
     implementation project(":envfile-platform")

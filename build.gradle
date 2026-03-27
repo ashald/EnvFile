@@ -1,8 +1,8 @@
 plugins {
     id "java"
     id "idea"
-    id "org.jetbrains.intellij.platform" version "2.10.5"
-    id "pl.allegro.tech.build.axion-release" version "1.14.1"
+    id "org.jetbrains.intellij.platform" version "2.13.1"
+    id "pl.allegro.tech.build.axion-release" version "1.21.1"
 }
 
 group "net.ashald"
@@ -16,8 +16,10 @@ scmVersion {
 
 allprojects {
     apply plugin: 'java'
-    sourceCompatibility = 21
-    targetCompatibility = 21
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
     repositories {
         mavenCentral()
@@ -52,7 +54,7 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide("IC", jetbrains.version)
+            recommended()
         }
     }
 }
@@ -61,7 +63,6 @@ dependencies {
     intellijPlatform {
         intellijIdea(jetbrains.version)
         bundledPlugin("com.intellij.java")
-        instrumentationTools()
     }
 
     implementation project(":envfile-products-idea")
@@ -71,5 +72,5 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = "8.5"
+    gradleVersion = "9.2.1"
 }
