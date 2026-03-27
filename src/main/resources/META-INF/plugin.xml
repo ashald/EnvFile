@@ -1,12 +1,12 @@
 <idea-plugin>
   <id>net.ashald.envfile</id>
   <name>EnvFile</name>
-  <version>5.0.0</version>
+  <version>5.0.1</version>
   <vendor email="envfile@ashald.net">Borys Pierov</vendor>
 
   <description><![CDATA[
       <h1>EnvFile</h1>
-      <b>Compiled with Java 16</b>
+      <b>Requires Java 21</b>
       <h2>
         <a href="https://github.com/Ashald/EnvFile">GitHub</a> |
         <a href="https://github.com/Ashald/EnvFile/issues">Issues</a>
@@ -38,13 +38,14 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <a href="https://github.com/Ashald/EnvFile/tree/v5.0.0"><b>v4.0.0</b></a> (2026-01-26)
+      <a href="https://github.com/Ashald/EnvFile/tree/v5.0.1"><b>v5.0.1</b></a> (2026-03-27)
       <br/>
       <br/>
 
-      <b>Fixed</b>:
+      <b>Changed</b>:
       <ul>
-        <li>Compatibility with latest IDE version</li>
+        <li>Remove upper boundary on platform version for optimistic compatibility with future releases</li>
+        <li>Migrate from Gradle 8 to Gradle 9</li>
       </ul>
 
       <br/>
