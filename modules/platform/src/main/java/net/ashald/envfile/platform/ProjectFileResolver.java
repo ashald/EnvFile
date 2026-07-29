@@ -15,7 +15,7 @@ public class ProjectFileResolver {
     public static final ProjectFileResolver DEFAULT = new ProjectFileResolver();
 
     public Optional<File> resolvePath(@NonNull final Project project, final String path) {
-        if (path == null) {
+        if (path == null || project.getBaseDir() == null) {
             return Optional.empty();
         }
 
@@ -36,4 +36,3 @@ public class ProjectFileResolver {
         );
     }
 }
-
